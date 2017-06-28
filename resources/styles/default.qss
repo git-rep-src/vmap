@@ -1,0 +1,156 @@
+QWidget {
+    color: white;
+    background-color: rgb(26, 29, 33);
+}
+
+QLabel[type = "header"] {
+    color: rgb(61, 66, 77);
+}
+
+QLabel[type = "title"] {
+    color: white;
+    background-color: rgb(61, 66, 77);
+}
+QLabel[type = "title"]:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
+
+QLabel[type = "gray"] {
+    color: gray;
+    background-color: rgb(30, 33, 37);
+}
+QLabel[type = "gray"]:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
+
+QLabel[type = "gray-light"] {
+    color: rgb(165, 165, 165);
+    background-color: rgb(30, 33, 37);
+}
+QLabel[type = "gray-light"]:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
+
+QLabel[type = "gray-dark"] {
+    color: rgb(61, 66, 77);
+    background-color: rgb(30, 33, 37);
+}
+QLabel[type = "gray-dark"]:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
+
+QTextEdit[type = "source-data"] {
+    color: rgb(220, 220, 220);
+}
+QTextEdit[type = "source-data"]:disabled {
+    color: rgb(26, 29, 33);
+}
+
+/*
+QLabel[type = "data_empty"] {
+    color: white;
+    background-color: rgb(30, 33, 37);
+    border-style: solid;
+    border-right-width: 1px;
+    border-right-color: rgb(61, 66, 77);
+    padding-left: -1px;
+}
+*/
+
+QLineEdit {
+    color: white;
+    background-color: rgb(30, 33, 37);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(26, 29, 33);
+}
+QLineEdit:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(26, 29, 33);
+}
+
+QTextEdit {
+    color: white;
+    background-color: rgb(30, 33, 37);
+}
+QTextEdit:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
+
+QComboBox {
+    color: white;
+    background-color: rgb(61, 66, 77);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(26, 29, 33);
+    padding-left: 10px;
+    font-size: 15px;
+}
+QComboBox:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(26, 29, 33);
+    padding-left: 10px;
+    font-size: 15px;
+}
+QComboBox::drop-down {
+    color: white;
+    background-color: rgb(61, 66, 77);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(61, 66, 77);
+}
+QComboBox::drop-down:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(30, 33, 37);
+}
+/*
+QComboBox::down-arrow {
+    image: url(":/icon-open-disabled");
+    width: 16px;
+    height: 16px;
+}
+*/
+QComboBox QAbstractItemView::item {
+    color: white;
+    background-color: rgb(30, 33, 37);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(26, 29, 33);
+    min-height: 29px;
+    padding-left: 10px;
+}
+QListView::item:selected {
+    color: white;
+    background-color: rgb(165, 165, 165);
+    padding-left: 10px;
+}
+
+QPushButton {
+    color: white;
+    background-color: rgb(18, 21, 25);
+}
+QPushButton:disabled {
+    color: rgb(61, 66, 77);
+    background-color: rgb(18, 21, 25);
+}
+
+
+
+QToolTip {
+    color: white;
+    background-color: rgb(26, 29, 33);
+}

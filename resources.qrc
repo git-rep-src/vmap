@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="icon-vmap">resources/images/global/vmap.svg</file>
+        <file>resources/images/global/icon.ico</file>
+        <file>resources/images/global/icon.jpg</file>
+        <file>resources/images/global/icon.rc</file>
+        <file alias="font-default">resources/fonts/default.ttf</file>
+        <file alias="style-default">resources/styles/default.qss</file>
+    </qresource>
+</RCC>
