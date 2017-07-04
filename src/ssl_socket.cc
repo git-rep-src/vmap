@@ -40,7 +40,7 @@ bool SSL_socket::start()
         return false;
     
     is_started = true;
-    
+
     return true;
 }
  
@@ -59,6 +59,8 @@ bool SSL_socket::write_read(std::string req, std::string *ret)
     } else {
         return false;
     }
+
+    BIO_reset(bio);
 
     return true;
 }
