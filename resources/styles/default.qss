@@ -16,6 +16,22 @@ QLabel[type = "title"]:disabled {
     background-color: rgb(30, 33, 37);
 }
 
+QLabel[type = "white"] {
+    color: white;
+}
+QLabel[type = "white"]:disabled {
+    color: rgb(26, 29, 33);
+}
+
+QLabel[type = "white2"] {
+    color: white;
+    background-color: rgb(30, 33, 37);
+}
+QLabel[type = "white2"]:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
+
 QLabel[type = "gray"] {
     color: gray;
     background-color: rgb(30, 33, 37);
@@ -43,23 +59,41 @@ QLabel[type = "gray-dark"]:disabled {
     background-color: rgb(30, 33, 37);
 }
 
-QTextEdit[type = "source-data"] {
-    color: rgb(220, 220, 220);
-}
-QTextEdit[type = "source-data"]:disabled {
-    color: rgb(26, 29, 33);
-}
-
-/*
-QLabel[type = "data_empty"] {
-    color: white;
+QLabel[type = "score-low"] {
+    color: gray;
     background-color: rgb(30, 33, 37);
     border-style: solid;
-    border-right-width: 1px;
-    border-right-color: rgb(61, 66, 77);
-    padding-left: -1px;
+    border-left-width: 1px;
+    border-left-color: rgba(128, 128, 128, 70);
 }
-*/
+QLabel[type = "score-low"]:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
+
+QLabel[type = "score-medium"] {
+    color: gray;
+    background-color: rgb(30, 33, 37);
+    border-style: solid;
+    border-left-width: 1px;
+    border-left-color: rgba(255, 246, 0, 70);
+}
+QLabel[type = "score-medium"]:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
+
+QLabel[type = "score-high"] {
+    color: gray;
+    background-color: rgb(30, 33, 37);
+    border-style: solid;
+    border-left-width: 1px;
+    border-left-color: rgba(255, 0, 0, 70);
+}
+QLabel[type = "score-high"]:disabled {
+    color: rgb(26, 29, 33);
+    background-color: rgb(30, 33, 37);
+}
 
 QLineEdit {
     color: white;
@@ -85,45 +119,21 @@ QTextEdit:disabled {
     background-color: rgb(30, 33, 37);
 }
 
+QTextEdit[type = "source-data"] {
+    color: rgb(220, 220, 220);
+}
+QTextEdit[type = "source-data"]:disabled {
+    color: rgb(26, 29, 33);
+}
+
 QComboBox {
     color: white;
-    background-color: rgb(61, 66, 77);
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(26, 29, 33);
-    padding-left: 10px;
-    font-size: 15px;
+    background-color: rgb(30, 33, 37);
 }
 QComboBox:disabled {
     color: rgb(26, 29, 33);
     background-color: rgb(30, 33, 37);
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(26, 29, 33);
-    padding-left: 10px;
-    font-size: 15px;
 }
-QComboBox::drop-down {
-    color: white;
-    background-color: rgb(61, 66, 77);
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(61, 66, 77);
-}
-QComboBox::drop-down:disabled {
-    color: rgb(26, 29, 33);
-    background-color: rgb(30, 33, 37);
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(30, 33, 37);
-}
-/*
-QComboBox::down-arrow {
-    image: url(":/icon-open-disabled");
-    width: 16px;
-    height: 16px;
-}
-*/
 QComboBox QAbstractItemView::item {
     color: white;
     background-color: rgb(30, 33, 37);
@@ -131,12 +141,10 @@ QComboBox QAbstractItemView::item {
     border-width: 1px;
     border-color: rgb(26, 29, 33);
     min-height: 29px;
-    padding-left: 10px;
 }
 QListView::item:selected {
     color: white;
     background-color: rgb(165, 165, 165);
-    padding-left: 10px;
 }
 
 QPushButton {
@@ -147,8 +155,6 @@ QPushButton:disabled {
     color: rgb(61, 66, 77);
     background-color: rgb(18, 21, 25);
 }
-
-
 
 QToolTip {
     color: white;
