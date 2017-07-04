@@ -19,7 +19,7 @@ public:
     ~View();
 
 public slots:
-    void show_data(std::string *ret);
+    void show_data(std::string *ret, int max);
 
 signals:
     void build_request_signal();
@@ -28,6 +28,8 @@ private:
     Ui::View *ui;
 
     bool has_offset;
+
+    int offset;
 
     QVector<Element*> response_vector;
 };
