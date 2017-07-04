@@ -25,7 +25,7 @@ Highlighter::Highlighter(QTextDocument *parent) :
     keyword.setForeground(QColor(0, 95, 0));
     patterns.clear();
     patterns << "\\bexplicit\\b" << "\\bpublic\\b" << "\\bprivate\\b" << "\\bvirtual\\b"
-             << "\\bprotected\\b" << "\\bsignals\\b" << "\\bslots\\b" << "true";
+             << "\\bprotected\\b" << "\\bsignals\\b" << "\\bslots\\b";
     foreach (const QString &pattern, patterns) {
         rule.pattern = QRegularExpression(pattern);
         rule.format = keyword;
@@ -68,10 +68,7 @@ Highlighter::Highlighter(QTextDocument *parent) :
     rules.append(rule);
 
     quote.setForeground(Qt::darkGray);
-    rule.pattern = QRegularExpression("\".*\"");
-    rule.format = quote;
-    rules.append(rule);
-    rule.pattern = QRegularExpression("\'.*\'");//TODO
+    rule.pattern = QRegularExpression("(\".*\")|(\'.*\')");
     rule.format = quote;
     rules.append(rule);
 
@@ -86,8 +83,8 @@ Highlighter::Highlighter(QTextDocument *parent) :
     rule.format = comment;
     rules.append(rule);
 
-    start_comment = QRegularExpression("(/\\*)|(<!--)|(\""")");//TODO
-    end_comment = QRegularExpression("(\\*/)|(-->)|(\""")");
+    start_comment = QRegularExpression("(/\\*)|(<!--)"); // TODO: PERL
+    end_comment = QRegularExpression("(\\*/)|(-->)");
 }
 
 void Highlighter::highlightBlock(const QString &str)
