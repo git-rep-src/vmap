@@ -1,7 +1,5 @@
 #include "vmap.h"
 
-#include <iostream>
-
 Vmap::Vmap(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Vmap),
@@ -18,8 +16,8 @@ Vmap::Vmap(QWidget *parent) :
     ui->main_layout->addWidget(view);
     ui->main_layout->addStretch();
 
-    QObject::connect(finder, &Finder::send_request_signal, [&] (std::string &req) {
-        if (!api(req)) {
+    QObject::connect(finder, &Finder::send_request_signal, [&] (const std::string &req, int max) {
+        if (!api(req, max)) {
             //ERROR
         }
     });
@@ -39,7 +37,7 @@ Vmap::~Vmap()
     delete ui;
 }
 
-bool Vmap::api(std::string &req)
+bool Vmap::api(const std::string &req, int max)
 {
     if (socket == NULL) {
         socket = new SSL_socket;
@@ -53,21 +51,9 @@ bool Vmap::api(std::string &req)
     if (!socket->write_read(req, &ret))
         return false;
 
-    view->show_data(&ret);
+    view->show_data(&ret, max);
 
     ret.clear();
 
     return true;
 }
-
-/*
-affectedSoftware.name:apache affectedSoftware.version:2.2.1
-type:packetstorm
-
-" OR affectedPackage.packageName:" +
-name +
-" OR cpe:" +
-name +
-" AND affectedSoftware.version:" +
-version +
-*/

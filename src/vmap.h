@@ -30,7 +30,7 @@ private:
     std::string ret;
 
 private slots:
-    bool api(std::string &req);
+    bool api(const std::string &req, int max);
 };
 
 #endif // VMAP_H
