@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/">
+        <file alias="icon-find">resources/images/global/icon-find.svg</file>
+        <file alias="icon-more">resources/images/global/icon-more.svg</file>
+        <file alias="icon-less">resources/images/global/icon-less.svg</file>
+        <file alias="icon-save">resources/images/global/icon-save.svg</file>
+        <file alias="icon-combo">resources/images/global/icon-combo.svg</file>
         <file alias="icon-vmap">resources/images/global/vmap.svg</file>
         <file>resources/images/global/icon.ico</file>
         <file>resources/images/global/icon.jpg</file>
