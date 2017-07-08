@@ -95,6 +95,4 @@ void Finder::build_request(bool has_offset)
 
     emit send_request_signal(req, std::stoi(max));
 }
-// (affectedSoftware.name:"firefox" OR affectedPackage.packageName:"firefox" OR cpe:*firefox*"45") type:cve
-// AND affectedSoftware.version:
 // type:packetstorm
