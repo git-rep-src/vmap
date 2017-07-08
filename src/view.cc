@@ -28,6 +28,8 @@ View::~View()
 void View::show_data(std::string *ret, int max)
 {
     int n_total;
+    size_t n;
+    std::vector<std::string> cve;
     std::vector<std::string> cpe;
     std::vector<std::string> references;
 
@@ -46,19 +48,23 @@ void View::show_data(std::string *ret, int max)
     if (n_total != 0) {
         for (int i = 0; i < max; i++) {
             offset++;
+            std::vector<std::string>().swap(cve);
+            for (n = 0; n < js["data"]["search"][i]["_source"]["cvelist"].size(); n++)
+                cve.push_back(js["data"]["search"][i]["_source"]["cvelist"][n]);
             if (js["data"]["search"][i]["_source"]["type"] == "cve") {
                 std::vector<std::string>().swap(cpe);
                 std::vector<std::string>().swap(references);
-                for (size_t ii = 0; ii < js["data"]["search"][i]["_source"]["cpe"].size(); ii++)
-                    cpe.push_back(js["data"]["search"][i]["_source"]["cpe"][ii]);
-                for (size_t iii = 0; iii < js["data"]["search"][i]["_source"]["references"].size(); iii++)
-                    references.push_back(js["data"]["search"][i]["_source"]["references"][iii]);
+                for (n = 0; n < js["data"]["search"][i]["_source"]["cpe"].size(); n++)
+                    cpe.push_back(js["data"]["search"][i]["_source"]["cpe"][n]);
+                for (n = 0; n < js["data"]["search"][i]["_source"]["references"].size(); n++)
+                    references.push_back(js["data"]["search"][i]["_source"]["references"][n]);
                 response_vector.push_back(new Element(offset,
                                                       js["data"]["search"][i]["_source"]["published"],
                                                       js["data"]["search"][i]["flatDescription"],
                                                       js["data"]["search"][i]["_source"]["cvss"]["score"],
                                                       js["data"]["search"][i]["_source"]["description"],
                                                       js["data"]["search"][i]["_id"],
+                                                      cve,
                                                       js["data"]["search"][i]["_source"]["cvss"]["vector"],
                                                       cpe,
                                                       references,
@@ -71,7 +77,8 @@ void View::show_data(std::string *ret, int max)
                                                       js["data"]["search"][i]["_source"]["cvss"]["score"],
                                                       js["data"]["search"][i]["_source"]["description"],
                                                       js["data"]["search"][i]["_id"],
-                                                      "",
+                                                      cve,
+                                                      js["data"]["search"][i]["_source"]["cvss"]["vector"],
                                                       cpe,
                                                       references,
                                                       js["data"]["search"][i]["_source"]["sourceData"],
@@ -80,9 +87,13 @@ void View::show_data(std::string *ret, int max)
             ui->scroll_layout->addWidget(response_vector.last());
         }
         ui->scroll_layout->update();
-        ui->counter_label->setText(QString::number(offset) + "<span style=color:#808080>/</span>" + QString::number(n_total));
+        if (offset > n_total)
+            offset = n_total;
+        ui->counter_label->setText(QString::number(offset) +
+                                   "<span style=color:#808080>/</span>" +
+                                   QString::number(n_total));
         ui->counter_label->setVisible(true);
-        ui->request_button->setVisible(true);
+        ui->request_button->setVisible(offset != n_total);
     } else {
         ui->counter_label->setText("NO RESULT");
         ui->counter_label->setVisible(true);

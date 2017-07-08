@@ -3,9 +3,9 @@
 Element::Element(int number, std::string published,
                  std::string title, float score,
                  std::string description, std::string id,
-                 std::string vector, std::vector<std::string> cpe,
-                 std::vector<std::string> references, std::string sourcedata,
-                 QWidget *parent) :
+                 std::vector<std::string> cve, std::string cvss,
+                 std::vector<std::string> cpe, std::vector<std::string> references,
+                 std::string sourcedata, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Element)
 {
@@ -13,7 +13,7 @@ Element::Element(int number, std::string published,
 
     bool is_exploit = (sourcedata != "");
 
-    process(published, title, vector, cpe, references, is_exploit);
+    process(published, title, cve, cvss, cpe, references, is_exploit);
 
     ui->number_label->setText(QString("%1").arg(number, 5, 10, QChar('0')));
     ui->published_label->setText(QString::fromStdString(published));
@@ -25,23 +25,22 @@ Element::Element(int number, std::string published,
     ui->score_label->setText(QString::number(score));
     ui->description_label->setText(QString::fromStdString(description));
     ui->id_label->setText(ui->id_label->text() + QString::fromStdString(id));
-    ui->cvss_data_label->setText(QString::fromStdString(vector));
-    ui->source_textedit->setPlainText(QString::fromStdString(sourcedata));
-
+    ui->cvss_label->setText(ui->cvss_label->text() + QString::fromStdString(cvss));
     QObject::connect(ui->details_button, &QPushButton::pressed, [=] {
-        ui->description_label->setVisible(!ui->description_label->isVisible());
-        ui->id_label->setVisible(!ui->id_label->isVisible());
-        if (ui->description_label->isVisible())
+        if (!ui->description_label->isVisible())
             ui->details_button->setIcon(QIcon(":/icon-less"));
         else
             ui->details_button->setIcon(QIcon(":/icon-more"));
+        ui->description_label->setVisible(!ui->description_label->isVisible());
+        ui->id_label->setVisible(!ui->id_label->isVisible());
+        ui->cve_label->setVisible(!ui->cve_label->isVisible());
+        ui->cvss_label->setVisible(!ui->cvss_label->isVisible());
         if (is_exploit) {
+            ui->source_textedit->setPlainText(QString::fromStdString(sourcedata));
             ui->source_label->setVisible(!ui->source_label->isVisible());
             ui->source_save_button->setVisible(!ui->source_save_button->isVisible());
             ui->source_textedit->setVisible(!ui->source_textedit->isVisible());
         } else {
-            ui->cvss_label->setVisible(!ui->cvss_label->isVisible());
-            ui->cvss_data_label->setVisible(!ui->cvss_data_label->isVisible());
             ui->cpe_vendor_label->setVisible(!ui->cpe_vendor_label->isVisible());
             ui->cpe_product_label->setVisible(!ui->cpe_product_label->isVisible());
             ui->cpe_version_label->setVisible(!ui->cpe_version_label->isVisible());
@@ -56,8 +55,9 @@ Element::~Element()
 }
 
 void Element::process(std::string &published, std::string &title,
-                      std::string &vector, std::vector<std::string> &cpe,
-                      std::vector<std::string> &references, bool is_exploit)
+                      std::vector<std::string> &cve, std::string &cvss,
+                      std::vector<std::string> &cpe, std::vector<std::string> &references,
+                      bool is_exploit)
 {
     std::size_t i;
     std::size_t n;
@@ -70,6 +70,33 @@ void Element::process(std::string &published, std::string &title,
                                    (title.std::string::size() - (ui->title_label->width() - 3)),
                                    "...");
 
+    if (cve.size() != 0) {
+        for (i = 0; i < cve.size(); i++) {
+            if ((n = cve[i].std::string::find("CVE-")) != std::string::npos)
+                cve[i].std::string::erase(n, 4);
+            if (i != (cve.size() - 1))
+               cve[i].std::string::insert(cve[i].size(), "<br>");
+            ui->cve_label->setText(ui->cve_label->text() + QString::fromStdString(cve[i]));
+        }
+    } else {
+        ui->cve_label->setText(ui->cve_label->text() + "NONE");
+    }
+
+    if ((n = cvss.std::string::find("AV:")) != std::string::npos)
+        cvss.std::string::replace(n, 3, "<span style=color:#a5a5a5>VECTOR</span> ");
+    if ((n = cvss.std::string::find("/AC:")) != std::string::npos)
+        cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> ");
+    if ((n = cvss.std::string::find("/Au:")) != std::string::npos)
+        cvss.std::string::erase(n, (cvss.std::string::find("/C") - n));
+    if ((n = cvss.std::string::find("/C:")) != std::string::npos)
+        cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
+    if ((n = cvss.std::string::find("/I:")) != std::string::npos)
+        cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> ");
+    if ((n = cvss.std::string::find("/A:")) != std::string::npos)
+        cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> ");
+    if ((n = cvss.std::string::rfind("/")) != std::string::npos)
+        cvss.std::string::erase(n, 1);
+
     if (is_exploit) {
         bool has_quotes = false;
         for (i = 0; i < title.size(); i++) {
@@ -79,7 +106,7 @@ void Element::process(std::string &published, std::string &title,
                 title.std::string::replace(i, 1, "&gt;");
         }
         if ((n = title.std::string::rfind("'")) != std::string::npos) {
-            title.std::string::insert((n + 1), "<span style=color:#646464 style=background-color:#23262b> ");
+            title.std::string::insert((n + 1), "<span style=color:#505050> ");
             title.std::string::insert(title.std::string::size(), " </span>");
             title.std::string::replace(n, 1, " ");
             title.std::string::replace(title.std::string::find("'"), 1, " ");
@@ -87,29 +114,13 @@ void Element::process(std::string &published, std::string &title,
         }
         if ((n = title.std::string::rfind(" - ")) != std::string::npos) {
             if (!has_quotes) {
-                title.std::string::insert((n + 1), "<span style=color:#646464 style=background-color:#23262b> ");
+                title.std::string::insert((n + 1), "<span style=color:#505050> ");
                 title.std::string::insert(title.std::string::size(), " </span>");
             }
             title.std::string::replace(title.std::string::rfind(" - "), 2, " ");
         }
     } else {
         std::string buf;
-
-        if ((n = vector.std::string::find("AV:")) != std::string::npos)
-            vector.std::string::erase(n, 3);
-        if ((n = vector.std::string::find("/AC:")) != std::string::npos)
-            vector.std::string::replace(n, 4, "<hr>");
-        if ((n = vector.std::string::find("/Au:")) != std::string::npos)
-            vector.std::string::erase(n, (vector.std::string::find("/C") - n));
-        if ((n = vector.std::string::find("/C:")) != std::string::npos)
-            vector.std::string::replace(n, 3, "<hr>");
-        if ((n = vector.std::string::find("/I:")) != std::string::npos)
-            vector.std::string::replace(n, 3, "<hr>");
-        if ((n = vector.std::string::find("/A:")) != std::string::npos)
-            vector.std::string::replace(n, 3, "<hr>");
-        if ((n = vector.std::string::rfind("/")) != std::string::npos)
-            vector.std::string::erase(n, 1);
-
         for (i = 0; i < cpe.size(); i++) {
             buf.clear();
             if ((((n = cpe[i].std::string::find("cpe:/a:")) != std::string::npos) ||
@@ -142,8 +153,7 @@ void Element::process(std::string &published, std::string &title,
             if (((n = references[i].std::string::find("http://")) == std::string::npos) &&
                 ((n = references[i].std::string::find("https://")) == std::string::npos))
                 references[i].std::string::insert(0, "http://");
-            if (i != (references.size() - 1))
-                references[i].std::string::insert(references[i].size(), "<br>");
+            references[i].std::string::insert(references[i].size(), "<br>");
             ui->reference_label->setText(ui->reference_label->text() + QString::fromStdString(references[i]));
         }
     }
