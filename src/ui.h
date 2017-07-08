@@ -107,7 +107,7 @@ public:
         cve_lineedit->setMinimumHeight(30); // TODO: PERCENT
         cve_lineedit->setAlignment(Qt::AlignCenter);
         cve_lineedit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        cve_lineedit->setPlaceholderText("YYYY-0000");
+        cve_lineedit->setPlaceholderText("YYYY-NNNN");
 
         match_label = new QLabel(Finder);
         match_label->setProperty("type", "gray-dark");
@@ -117,13 +117,14 @@ public:
         match_label->setText("MATCH");
 
         match_combo = new QComboBox(Finder);
+        match_combo->setView(new QListView());
+        match_combo->view()->setFont(font);
         match_combo->setMinimumHeight(29); // TODO: PERCENT
         match_combo->setEditable(true);
-        match_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        match_combo->setView(new QListView());
         match_combo->lineEdit()->setReadOnly(true);
         match_combo->lineEdit()->setFont(font);
         match_combo->lineEdit()->setAlignment(Qt::AlignCenter);
+        match_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         match_combo->addItem("EXACT");
         match_combo->addItem("RELAX");
         for (int i = 0; i < match_combo->count(); ++i)
@@ -137,13 +138,14 @@ public:
         type_label->setText("TYPE");
 
         type_combo = new QComboBox(Finder);
+        type_combo->setView(new QListView());
+        type_combo->view()->setFont(font);
         type_combo->setMinimumHeight(29); // TODO: PERCENT
         type_combo->setEditable(true);
-        type_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        type_combo->setView(new QListView());
         type_combo->lineEdit()->setReadOnly(true);
         type_combo->lineEdit()->setFont(font);
         type_combo->lineEdit()->setAlignment(Qt::AlignCenter);
+        type_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         type_combo->addItem("CVE");
         type_combo->addItem("EXPLOIT");
         for (int i = 0; i < type_combo->count(); ++i)
@@ -170,13 +172,14 @@ public:
         date_label->setText("DATE");
 
         date_combo = new QComboBox(Finder);
+        date_combo->setView(new QListView());
+        date_combo->view()->setFont(font);
         date_combo->setMinimumHeight(29); // TODO: PERCENT
         date_combo->setEditable(true);
-        date_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        date_combo->setView(new QListView());
         date_combo->lineEdit()->setReadOnly(true);
         date_combo->lineEdit()->setFont(font);
         date_combo->lineEdit()->setAlignment(Qt::AlignCenter);
+        date_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         date_combo->addItem("ALL");
         date_combo->addItem("LAST 10 DAYS");
         date_combo->addItem("LAST MONTH");
@@ -193,13 +196,14 @@ public:
         order_label->setText("ORDER");
 
         order_combo = new QComboBox(Finder);
+        order_combo->setView(new QListView());
+        order_combo->view()->setFont(font);
         order_combo->setMinimumHeight(29); // TODO: PERCENT
         order_combo->setEditable(true);
-        order_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        order_combo->setView(new QListView());
         order_combo->lineEdit()->setReadOnly(true);
         order_combo->lineEdit()->setFont(font);
         order_combo->lineEdit()->setAlignment(Qt::AlignCenter);
+        order_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         order_combo->addItem("DATE");
         order_combo->addItem("SCORE");
         for (int i = 0; i < order_combo->count(); ++i)
@@ -213,14 +217,15 @@ public:
         max_label->setText("MAX");
 
         max_combo = new QComboBox(Finder);
+        max_combo->setView(new QListView());
+        max_combo->view()->setFont(font);
         max_combo->setMinimumWidth(78); // TODO: PERCENT
         max_combo->setMinimumHeight(29); // TODO: PERCENT
         max_combo->setEditable(true);
-        max_combo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        max_combo->setView(new QListView());
         max_combo->lineEdit()->setReadOnly(true);
         max_combo->lineEdit()->setFont(font);
         max_combo->lineEdit()->setAlignment(Qt::AlignCenter);
+        max_combo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         max_combo->addItem("1");
         max_combo->addItem("5");
         max_combo->addItem("10");
@@ -339,8 +344,8 @@ public:
     QLabel *score_label;
     QLabel *description_label;
     QLabel *id_label;
+    QLabel *cve_label;
     QLabel *cvss_label;
-    QLabel *cvss_data_label;
     QLabel *cpe_vendor_label;
     QLabel *cpe_product_label;
     QLabel *cpe_version_label;
@@ -350,7 +355,6 @@ public:
     QPushButton *details_button;
     QPushButton *source_save_button;
     Highlighter *highlighter;
-    QHBoxLayout *cvss_layout;
     QHBoxLayout *cpe_layout;
     QGridLayout *source_layout;
     QGridLayout *layout;
@@ -417,27 +421,22 @@ public:
         id_label->setWordWrap(true);
         id_label->setHidden(true);
 
+        cve_label = new QLabel(Element);
+        cve_label->setProperty("type", "white");
+        cve_label->setFont(font);
+        cve_label->setMargin(8); // TODO: PERCENT
+        cve_label->setText("<span style=color:#a5a5a5>"
+                           "CVE"
+                           "</span><hr>");
+        cve_label->setHidden(true);
+
         cvss_label = new QLabel(Element);
         cvss_label->setFont(font);
         cvss_label->setMargin(8); // TODO: PERCENT
         cvss_label->setText("<span style=color:#a5a5a5>"
-                            "VECTOR<hr>COMPLEXITY<hr>CONFIDENTIALITY<hr>"
-                            "INTEGRITY<hr>AVAILABILITY"
-                            "</span>");
+                            "CVSS"
+                            "</span><hr>");
         cvss_label->setHidden(true);
-
-        cvss_data_label = new QLabel(Element);
-        cvss_data_label->setProperty("type", "white");
-        cvss_data_label->setFont(font);
-        cvss_data_label->setMargin(8); // TODO: PERCENT
-        cvss_data_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        cvss_data_label->setHidden(true);
-
-        cvss_layout = new QHBoxLayout;
-        cvss_layout->setMargin(0);
-        cvss_layout->setSpacing(1);
-        cvss_layout->addWidget(cvss_label);
-        cvss_layout->addWidget(cvss_data_label);
 
         font.setCapitalization(QFont::AllUppercase);
 
@@ -470,7 +469,7 @@ public:
 
         cpe_layout = new QHBoxLayout;
         cpe_layout->setMargin(0);
-        cpe_layout->setSpacing(1);
+        cpe_layout->setSpacing(0);
         cpe_layout->addWidget(cpe_vendor_label);
         cpe_layout->addWidget(cpe_product_label);
         cpe_layout->addWidget(cpe_version_label);
@@ -489,11 +488,10 @@ public:
 
         source_label = new QLabel(Element);
         source_label->setFont(font);
-        source_label->setMargin(8); // TODO: PERCENT
-        source_label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        source_label->setContentsMargins(0, 8, 0, 8); // TODO: PERCENT
         source_label->setText("<span style=color:#a5a5a5>"
                               "SOURCE"
-                              "</span>");
+                              "</span><hr>");
         source_label->setHidden(true);
 
         source_save_button = new QPushButton(QIcon(":/icon-save"), NULL, Element);
@@ -507,18 +505,18 @@ public:
         source_textedit->setProperty("type", "source");
         source_textedit->setFont(font);
         source_textedit->setMinimumHeight(height - 233); // TODO: PERCENT
-        source_textedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        source_textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        source_textedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        source_textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         source_textedit->setHidden(true);
 
         highlighter = new Highlighter(source_textedit->document());
 
         source_layout = new QGridLayout;
-        source_layout->setHorizontalSpacing(5); // TODO: PERCENT
-        source_layout->setVerticalSpacing(1);
-        source_layout->addWidget(source_label, 0, 0, 1, 1);
-        source_layout->addWidget(source_save_button, 0, 1, 1, 1, Qt::AlignLeft);
-        source_layout->addWidget(source_textedit, 1, 0, 1, 2);
+        source_layout->setContentsMargins(8, 0, 8, 0); // TODO: PERCENT
+        source_layout->setSpacing(0);
+        source_layout->addWidget(source_label, 0, 0, 1, 2);
+        source_layout->addWidget(source_save_button, 1, 0, 1, 1);
+        source_layout->addWidget(source_textedit, 2, 0, 1, 1);
 
         layout = new QGridLayout(Element);
         layout->setMargin(0);
@@ -532,10 +530,11 @@ public:
         layout->addWidget(details_button, 0, 4, 1, 4);
         layout->addWidget(description_label, 1, 2, 1, 1);
         layout->addWidget(id_label, 2, 2, 1, 1);
-        layout->addLayout(cvss_layout, 3, 2, 1, 1);
-        layout->addLayout(cpe_layout, 4, 2, 1, 1);
-        layout->addWidget(reference_label, 5, 2, 1, 1);
-        layout->addLayout(source_layout, 3, 2, 1, 1);
+        layout->addWidget(cve_label, 3, 2, 1, 1);
+        layout->addWidget(cvss_label, 4, 2, 1, 1);
+        layout->addLayout(cpe_layout, 5, 2, 1, 1);
+        layout->addWidget(reference_label, 6, 2, 1, 1);
+        layout->addLayout(source_layout, 7, 2, 1, 1);
 
         Element->setMinimumWidth(width - 20); // TODO: PERCENT
         Element->setMaximumWidth(width - 20); // TODO: PERCENT
