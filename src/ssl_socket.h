@@ -1,10 +1,10 @@
 #ifndef SSL_SOCKET_H
 #define SSL_SOCKET_H
 
-#include <string>
-
 #include <openssl/ssl.h>
 #include <openssl/bio.h>
+
+#include <string>
 
 class SSL_socket
 {
