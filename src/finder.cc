@@ -40,72 +40,13 @@ Finder::~Finder()
 void Finder::request(bool has_offset)
 {
     if (!has_offset) {
-        if (ui->edit_cve->text() != "") {
-            query = "cvelist:" + ui->edit_cve->text().toStdString();
-        } else {
-            if ((ui->combo_match->currentText() == "MATCH") ||
-                (ui->combo_match->currentText() == "EXACT")) {
-                if ((ui->combo_type->currentText() == "TYPE") ||
-                    (ui->combo_type->currentText() == "CVE")) {
-                    if (ui->edit_version->text() != "")
-                        query = "cpe:*" +
-                                ui->edit_name->text().toStdString() +
-                                "*\"" + ui->edit_version->text().toStdString() + "\"";
-                    else
-                        query = "cpe:*" +
-                                ui->edit_name->text().toStdString() + "*";
-                } else if (ui->combo_type->currentText() == "EXPLOITDB") {
-                    query = "description:\"" +
-                            ui->edit_name->text().toStdString() +
-                            " " + ui->edit_version->text().toStdString() + "\"";
-                } else {
-                    query = ui->edit_name->text().toStdString() +
-                            " " + ui->edit_version->text().toStdString();
-                }
-            } else {
-                if (ui->combo_type->currentText() == "CVE") {
-                    query = "cpe:*" +
-                            ui->edit_name->text().toStdString() +
-                            " " + ui->edit_version->text().toStdString() + "*";
-                } else if (ui->combo_type->currentText() == "EXPLOITDB") {
-                    query = "\"" + ui->edit_name->text().toStdString() +
-                            " " + ui->edit_version->text().toStdString() + "\"";
-                } else {
-                    query = ui->edit_name->text().toStdString() +
-                            " " + ui->edit_version->text().toStdString();
-                }
-            }
-        }
-        if ((ui->combo_type->currentText() == "TYPE") ||
-            (ui->combo_type->currentText() == "CVE"))
-            type = "cve";
-        else if (ui->combo_type->currentText() == "EXPLOITDB")
-            type = "exploitdb";
-        else
-            type = "packetstorm";
-        if (ui->edit_score->text() != "") {
-            std::size_t n;
-            score = ui->edit_score->text().toStdString();
-            if ((n = score.std::string::find("-")) != std::string::npos)
-                score = "[" + score.std::string::replace(n, 1, " TO ") + "]";
-        } else {
-            score = "*";
-        }
-        if ((ui->combo_date->currentText() == "DATE") ||
-            (ui->combo_date->currentText() == "ANY"))
-            date = "";
-        else
-            date = ui->combo_date->currentText().toLower().toStdString();
-        if ((ui->combo_order->currentText() == "ORDER") ||
-            (ui->combo_order->currentText() == "DATE"))
-            order = "published";
-        else
-            order = "cvss.score";
-        if (ui->combo_max->currentText() == "MAX")
-            max = "20";
-        else
-            max = ui->combo_max->currentText().toStdString();
         offset = 0;
+        set_query();
+        set_type();
+        set_score();
+        set_date();
+        set_order();
+        set_max();
         req = "GET /api/v3/search/lucene/?query=" +
               query +
               " type:" + type +
@@ -132,4 +73,90 @@ void Finder::request(bool has_offset)
     }
 
     emit request_signal(req, std::stoi(max));
+}
+
+void Finder::set_query()
+{
+    if (ui->edit_cve->text() != "") {
+        query = "cvelist:" + ui->edit_cve->text().toStdString();
+    } else {
+        if ((ui->combo_match->currentText() == "MATCH") ||
+            (ui->combo_match->currentText() == "EXACT")) {
+            if ((ui->combo_type->currentText() == "TYPE") ||
+                (ui->combo_type->currentText() == "CVE")) {
+                if (ui->edit_version->text() != "")
+                    query = "cpe:*" +
+                            ui->edit_name->text().toStdString() +
+                            "*\"" + ui->edit_version->text().toStdString() + "\"";
+                else
+                    query = "cpe:*" +
+                            ui->edit_name->text().toStdString() + "*";
+            } else if (ui->combo_type->currentText() == "EXPLOITDB") {
+                query = "description:\"" +
+                        ui->edit_name->text().toStdString() +
+                        " " + ui->edit_version->text().toStdString() + "\"";
+            } else {
+                query = ui->edit_name->text().toStdString() +
+                        " " + ui->edit_version->text().toStdString();
+            }
+        } else {
+            if (ui->combo_type->currentText() == "CVE") {
+                query = "cpe:*" +
+                        ui->edit_name->text().toStdString() +
+                        " " + ui->edit_version->text().toStdString() + "*";
+            } else if (ui->combo_type->currentText() == "EXPLOITDB") {
+                query = "\"" + ui->edit_name->text().toStdString() +
+                        " " + ui->edit_version->text().toStdString() + "\"";
+            } else {
+                query = ui->edit_name->text().toStdString() +
+                        " " + ui->edit_version->text().toStdString();
+            }
+        }
+    }
+}
+
+void Finder::set_type()
+{
+    if (ui->combo_type->currentText() == "TYPE")
+        type = "cve";
+    else
+        type = ui->combo_type->currentText().toLower().toStdString();
+}
+
+void Finder::set_score()
+{
+    if (ui->edit_score->text() != "") {
+        std::size_t n;
+        score = ui->edit_score->text().toStdString();
+        if ((n = score.std::string::find("-")) != std::string::npos)
+            score = "[" + score.std::string::replace(n, 1, " TO ") + "]";
+    } else {
+        score = "*";
+    }
+}
+
+void Finder::set_date()
+{
+    if ((ui->combo_date->currentText() == "DATE") ||
+        (ui->combo_date->currentText() == "ANY"))
+        date = "";
+    else
+        date = ui->combo_date->currentText().toLower().toStdString();
+}
+
+void Finder::set_order()
+{
+    if ((ui->combo_order->currentText() == "ORDER") ||
+        (ui->combo_order->currentText() == "DATE"))
+        order = "published";
+    else
+        order = "cvss.score";
+}
+
+void Finder::set_max()
+{
+    if (ui->combo_max->currentText() == "MAX")
+        max = "20";
+    else
+        max = ui->combo_max->currentText().toStdString();
 }

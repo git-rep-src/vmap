@@ -35,6 +35,14 @@ private:
     std::string order;
     std::string max;
     std::string req;
+
+private slots:
+    void set_query();
+    void set_type();
+    void set_score();
+    void set_date();
+    void set_order();
+    void set_max();
 };
 
 #endif // FINDER_H
