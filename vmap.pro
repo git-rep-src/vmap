@@ -23,6 +23,7 @@ HEADERS  += src/vmap.h \
             src/element.h \
             src/highlighter.h \
             src/ssl_socket.h \
+            src/custompushbutton.h \
             src/ui.h
 
 RESOURCES = resources.qrc
