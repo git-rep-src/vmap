@@ -6,6 +6,8 @@
 #include "view.h"
 #include "ssl_socket.h"
 
+#include <QTimer>
+
 #include <string>
 
 namespace Ui {
@@ -28,9 +30,11 @@ private:
     SSL_socket *socket;
 
     std::string ret;
+    QTimer *status_timer;
 
 private slots:
     bool api(const std::string &req, int max);
+    void set_status(const QString &status);
 };
 
 #endif // VMAP_H
