@@ -6,9 +6,9 @@
 #include "view.h"
 #include "ssl_socket.h"
 
-#include <QTimer>
-
 #include <string>
+
+#include <QTimer>
 
 namespace Ui {
 class Vmap;
