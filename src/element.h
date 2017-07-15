@@ -19,18 +19,23 @@ public:
                      std::string title, float score,
                      std::string description, std::string id,
                      std::vector<std::string> cve, std::string cvss,
-                     std::vector<std::string> cpe, std::vector<std::string> references,
-                     std::string sourcedata, QWidget *parent);
+                     std::vector<std::string> cpe, std::string href,
+                     std::string source, QWidget *parent);
     ~Element();
+
+signals:
+    void send_status_signal(QString status);
 
 private:
     Ui::Element *ui;
 
 private slots:
     void process(std::string &published, std::string &title,
-                 std::vector<std::string> &cve, std::string &cvss,
-                 std::vector<std::string> &cpe, std::vector<std::string> &references,
-                 bool is_exploit);
+                 std::string &description, std::vector<std::string> &cve,
+                 std::string &cvss, std::vector<std::string> &cpe,
+                 std::string &href, std::string &source,
+                 bool is_exploitdb, bool is_packetstorm);
+    bool save(std::string id, const std::string &source);
 };
 
 #endif // ELEMENT_H
