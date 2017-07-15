@@ -355,6 +355,7 @@ public:
         label_title->setMinimumWidth(width - 1718); // TODO: PERCENT
         label_title->setMinimumHeight(30); // TODO: PERCENT
         label_title->setMargin(8); // TODO: PERCENT
+        label_title->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
         label_score = new QLabel(Element);
         label_score->setProperty("type", "score-low");
@@ -375,6 +376,7 @@ public:
         label_description->setMinimumHeight(30); // TODO: PERCENT
         label_description->setMargin(8); // TODO: PERCENT
         label_description->setWordWrap(true);
+        label_description->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label_description->setHidden(true);
 
         font.setItalic(false);
