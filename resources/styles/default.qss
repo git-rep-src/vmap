@@ -149,7 +149,7 @@ QScrollBar::sub-line:vertical {
 }
 
 QComboBox {
-    color: white;
+    color: rgb(160, 160, 160);
     background-color: rgb(30, 33, 37);
 }
 QComboBox:disabled {
@@ -165,8 +165,8 @@ QComboBox QAbstractItemView::item {
     min-height: 29px;
 }
 QListView::item:selected {
-    color: white;
-    background-color: rgb(165, 165, 165);
+    color: rgb(30, 33, 37);
+    background-color: white;
     min-height: 29px;
 }
 
