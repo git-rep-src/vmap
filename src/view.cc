@@ -46,7 +46,6 @@ void View::element(std::string *ret, int max)
         max = n_total - offset;
     if (n_total != 0) {
         for (int i = 0; i < max; i++) {
-            offset++;
             std::vector<std::string>().swap(cve);
             for (n = 0; n < js["data"]["search"][i]["highlight"]["cvelist"].size(); n++)
                 cve.push_back(js["data"]["search"][i]["highlight"]["cvelist"][n]);
@@ -54,49 +53,45 @@ void View::element(std::string *ret, int max)
                 std::vector<std::string>().swap(cpe);
                 for (n = 0; n < js["data"]["search"][i]["highlight"]["cpe"].size(); n++)
                     cpe.push_back(js["data"]["search"][i]["highlight"]["cpe"][n]);
-                element_vector.push_back(new Element(offset,
-                                                     js["data"]["search"][i]["_source"]["modified"],
-                                                     js["data"]["search"][i]["flatDescription"],
-                                                     js["data"]["search"][i]["_source"]["cvss"]["score"],
-                                                     js["data"]["search"][i]["_source"]["description"],
-                                                     js["data"]["search"][i]["_source"]["id"],
-                                                     cve,
-                                                     js["data"]["search"][i]["_source"]["cvss"]["vector"],
-                                                     cpe,
-                                                     js["data"]["search"][i]["_source"]["href"],
-                                                     "",
-                                                     this));
+                element_vector.push_back(new Element(true, this));
+                element_vector[offset]->set_number(offset + 1);
+                element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
+                element_vector[offset]->set_title(js["data"]["search"][i]["flatDescription"], true, false);
+                element_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
+                element_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, false);
+                element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
+                element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
+                element_vector[offset]->set_cpe(cpe);
+                element_vector[offset]->set_href(js["data"]["search"][i]["_source"]["href"]);
             } else if (js["data"]["search"][i]["_source"]["type"] == "exploitdb") {
-                element_vector.push_back(new Element(offset,
-                                                     js["data"]["search"][i]["_source"]["modified"],
-                                                     js["data"]["search"][i]["_source"]["title"],
-                                                     js["data"]["search"][i]["_source"]["cvss"]["score"],
-                                                     js["data"]["search"][i]["_source"]["description"],
-                                                     js["data"]["search"][i]["_source"]["id"],
-                                                     cve,
-                                                     js["data"]["search"][i]["_source"]["cvss"]["vector"],
-                                                     cpe,
-                                                     "",
-                                                     js["data"]["search"][i]["_source"]["sourceData"],
-                                                     this));
+                element_vector.push_back(new Element(false, this));
+                element_vector[offset]->set_number(offset + 1);
+                element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
+                element_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
+                element_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
+                element_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, true);
+                element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
+                element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
+                element_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], false);
+                QObject::connect(element_vector[offset], &Element::send_status_signal, [&] (QString status) {
+                    emit send_status_signal(status);
+                });
             } else {
-                element_vector.push_back(new Element(offset,
-                                                     js["data"]["search"][i]["_source"]["modified"],
-                                                     js["data"]["search"][i]["_source"]["title"],
-                                                     js["data"]["search"][i]["_source"]["cvss"]["score"],
-                                                     js["data"]["search"][i]["_source"]["title"],
-                                                     js["data"]["search"][i]["_source"]["id"],
-                                                     cve,
-                                                     js["data"]["search"][i]["_source"]["cvss"]["vector"],
-                                                     cpe,
-                                                     "",
-                                                     js["data"]["search"][i]["_source"]["sourceData"],
-                                                     this));
+                element_vector.push_back(new Element(false, this));
+                element_vector[offset]->set_number(offset + 1);
+                element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
+                element_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, false);
+                element_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
+                element_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["title"], cve, false);
+                element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
+                element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
+                element_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], true);
+                QObject::connect(element_vector[offset], &Element::send_status_signal, [&] (QString status) {
+                    emit send_status_signal(status);
+                });
             }
-            QObject::connect(element_vector[i], &Element::send_status_signal, [&] (QString status) {
-                emit send_status_signal(status);
-            });
             ui->layout_scroll->addWidget(element_vector.last());
+            offset++;
         }
         ui->layout_scroll->update();
         if (offset > n_total)
