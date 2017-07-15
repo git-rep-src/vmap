@@ -18,10 +18,10 @@ public:
     ~Finder();
 
 public slots:
-    void build_request(bool has_offset = false);
+    void request(bool has_offset = false);
 
 signals:
-    void send_request_signal(const std::string &req, int max);
+    void request_signal(const std::string &req, int max);
 
 private:
     Ui::Finder *ui;
