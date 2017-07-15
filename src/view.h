@@ -19,10 +19,11 @@ public:
     ~View();
 
 public slots:
-    void show_data(std::string *ret, int max);
+    void element(std::string *ret, int max);
 
 signals:
-    void build_request_signal();
+    void request_signal();
+    void send_status_signal(QString status);
 
 private:
     Ui::View *ui;
@@ -31,7 +32,7 @@ private:
 
     int offset;
 
-    QVector<Element*> response_vector;
+    QVector<Element*> element_vector;
 };
 
 #endif // VIEW_H

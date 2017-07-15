@@ -4,100 +4,112 @@
 
 #include <vector>
 
-#include <iostream>//
-
 View::View(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::View),
     has_offset(false)
 {
     ui->setupUi(this);
-    QObject::connect(ui->request_button, &QPushButton::pressed, [&]  {
+    QObject::connect(ui->button_request, &QPushButton::pressed, [&]  {
         has_offset = true;
-        emit build_request_signal();
+        emit request_signal();
     });
 }
 
 View::~View()
 {
-    for (int i = 0; i < response_vector.size(); i++)
-        delete response_vector[i];
+    for (int i = 0; i < element_vector.size(); i++)
+        delete element_vector[i];
     delete ui;
 }
 
-void View::show_data(std::string *ret, int max)
+void View::element(std::string *ret, int max)
 {
     int n_total;
     size_t n;
     std::vector<std::string> cve;
     std::vector<std::string> cpe;
-    std::vector<std::string> references;
 
     if (!has_offset) {
-        for (int i = 0; i < response_vector.size(); i++) {
-            ui->scroll_layout->removeWidget(response_vector[i]);
-            delete response_vector[i];
+        for (int i = 0; i < element_vector.size(); i++) {
+            ui->layout_scroll->removeWidget(element_vector[i]);
+            delete element_vector[i];
         }
-        response_vector.clear();
-        ui->scroll_layout->update();
+        element_vector.clear();
+        ui->layout_scroll->update();
         offset = 0;
     }
 
     nlohmann::json js = nlohmann::json::parse(ret->std::string::erase(0, (ret->std::string::find("\r\n\r\n") + 4)));
     n_total = js["data"]["total"];
+    if ((max + offset) > n_total)
+        max = n_total - offset;
     if (n_total != 0) {
         for (int i = 0; i < max; i++) {
             offset++;
             std::vector<std::string>().swap(cve);
-            for (n = 0; n < js["data"]["search"][i]["_source"]["cvelist"].size(); n++)
-                cve.push_back(js["data"]["search"][i]["_source"]["cvelist"][n]);
+            for (n = 0; n < js["data"]["search"][i]["highlight"]["cvelist"].size(); n++)
+                cve.push_back(js["data"]["search"][i]["highlight"]["cvelist"][n]);
             if (js["data"]["search"][i]["_source"]["type"] == "cve") {
                 std::vector<std::string>().swap(cpe);
-                std::vector<std::string>().swap(references);
-                for (n = 0; n < js["data"]["search"][i]["_source"]["cpe"].size(); n++)
-                    cpe.push_back(js["data"]["search"][i]["_source"]["cpe"][n]);
-                for (n = 0; n < js["data"]["search"][i]["_source"]["references"].size(); n++)
-                    references.push_back(js["data"]["search"][i]["_source"]["references"][n]);
-                response_vector.push_back(new Element(offset,
-                                                      js["data"]["search"][i]["_source"]["published"],
-                                                      js["data"]["search"][i]["flatDescription"],
-                                                      js["data"]["search"][i]["_source"]["cvss"]["score"],
-                                                      js["data"]["search"][i]["_source"]["description"],
-                                                      js["data"]["search"][i]["_id"],
-                                                      cve,
-                                                      js["data"]["search"][i]["_source"]["cvss"]["vector"],
-                                                      cpe,
-                                                      references,
-                                                      "",
-                                                      this));
+                for (n = 0; n < js["data"]["search"][i]["highlight"]["cpe"].size(); n++)
+                    cpe.push_back(js["data"]["search"][i]["highlight"]["cpe"][n]);
+                element_vector.push_back(new Element(offset,
+                                                     js["data"]["search"][i]["_source"]["modified"],
+                                                     js["data"]["search"][i]["flatDescription"],
+                                                     js["data"]["search"][i]["_source"]["cvss"]["score"],
+                                                     js["data"]["search"][i]["_source"]["description"],
+                                                     js["data"]["search"][i]["_source"]["id"],
+                                                     cve,
+                                                     js["data"]["search"][i]["_source"]["cvss"]["vector"],
+                                                     cpe,
+                                                     js["data"]["search"][i]["_source"]["href"],
+                                                     "",
+                                                     this));
             } else if (js["data"]["search"][i]["_source"]["type"] == "exploitdb") {
-                response_vector.push_back(new Element(offset,
-                                                      js["data"]["search"][i]["_source"]["published"],
-                                                      js["data"]["search"][i]["_source"]["title"],
-                                                      js["data"]["search"][i]["_source"]["cvss"]["score"],
-                                                      js["data"]["search"][i]["_source"]["description"],
-                                                      js["data"]["search"][i]["_id"],
-                                                      cve,
-                                                      js["data"]["search"][i]["_source"]["cvss"]["vector"],
-                                                      cpe,
-                                                      references,
-                                                      js["data"]["search"][i]["_source"]["sourceData"],
-                                                      this));
+                element_vector.push_back(new Element(offset,
+                                                     js["data"]["search"][i]["_source"]["modified"],
+                                                     js["data"]["search"][i]["_source"]["title"],
+                                                     js["data"]["search"][i]["_source"]["cvss"]["score"],
+                                                     js["data"]["search"][i]["_source"]["description"],
+                                                     js["data"]["search"][i]["_source"]["id"],
+                                                     cve,
+                                                     js["data"]["search"][i]["_source"]["cvss"]["vector"],
+                                                     cpe,
+                                                     "",
+                                                     js["data"]["search"][i]["_source"]["sourceData"],
+                                                     this));
+            } else {
+                element_vector.push_back(new Element(offset,
+                                                     js["data"]["search"][i]["_source"]["modified"],
+                                                     js["data"]["search"][i]["_source"]["title"],
+                                                     js["data"]["search"][i]["_source"]["cvss"]["score"],
+                                                     js["data"]["search"][i]["_source"]["title"],
+                                                     js["data"]["search"][i]["_source"]["id"],
+                                                     cve,
+                                                     js["data"]["search"][i]["_source"]["cvss"]["vector"],
+                                                     cpe,
+                                                     "",
+                                                     js["data"]["search"][i]["_source"]["sourceData"],
+                                                     this));
             }
-            ui->scroll_layout->addWidget(response_vector.last());
+            QObject::connect(element_vector[i], &Element::send_status_signal, [&] (QString status) {
+                emit send_status_signal(status);
+            });
+            ui->layout_scroll->addWidget(element_vector.last());
         }
-        ui->scroll_layout->update();
+        ui->layout_scroll->update();
         if (offset > n_total)
             offset = n_total;
-        ui->counter_label->setText(QString::number(offset) +
-                                   "<span style=color:#808080>/</span>" +
-                                   QString::number(n_total));
-        ui->counter_label->setVisible(true);
-        ui->request_button->setVisible(offset != n_total);
+        ui->label_counter->setText(QString::number(offset) +
+                                  "<span style=color:#808080>/</span>" +
+                                  QString::number(n_total));
+        ui->label_counter->setVisible(true);
+        ui->button_request->setVisible(offset != n_total);
     } else {
-        ui->counter_label->setText("NO RESULT");
-        ui->counter_label->setVisible(true);
-        ui->request_button->setHidden(true);
+        ui->label_counter->setText("0<span style=color:#808080>/</span>0");
+        ui->label_counter->setVisible(true);
+        ui->button_request->setHidden(true);
     }
 
     has_offset = false;
