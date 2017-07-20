@@ -3,6 +3,8 @@
         <file alias="icon-find">resources/images/global/icon-find.svg</file>
         <file alias="icon-more">resources/images/global/icon-more.svg</file>
         <file alias="icon-less">resources/images/global/icon-less.svg</file>
+        <file alias="icon-source-more">resources/images/global/icon-source-more.svg</file>
+        <file alias="icon-source-less">resources/images/global/icon-source-less.svg</file>
         <file alias="icon-save">resources/images/global/icon-save.svg</file>
         <file alias="icon-exit">resources/images/global/icon-exit.svg</file>
         <file alias="icon-vmap">resources/images/global/vmap.svg</file>
