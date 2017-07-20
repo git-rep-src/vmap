@@ -1,5 +1,7 @@
 #include "vmap.h"
 
+#include <thread>//
+
 Vmap::Vmap(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Vmap),
@@ -60,6 +62,10 @@ bool Vmap::api(const std::string &req, int max)
             return false;
         }
     }
+
+    //std::thread t(&SSL_socket::write_read, socket, req, &ret);
+    //t.detach();
+    //t.join();
 
     if (!socket->write_read(req, &ret))
         return false;
