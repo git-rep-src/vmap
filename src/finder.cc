@@ -9,6 +9,10 @@ Finder::Finder(QWidget *parent) :
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
         ui->combo_match->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
+    QObject::connect(ui->combo_vector,
+                     static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
+        ui->combo_vector->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
+    });
     QObject::connect(ui->combo_type,
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
         ui->combo_type->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
@@ -42,6 +46,7 @@ void Finder::request(bool has_offset)
     if (!has_offset) {
         offset = 0;
         set_query();
+        set_vector();
         set_type();
         set_score();
         set_date();
@@ -49,6 +54,7 @@ void Finder::request(bool has_offset)
         set_max();
         req = "GET /api/v3/search/lucene/?query=" +
               query +
+              " cvss.vector:" + vector +
               " type:" + type +
               " cvss.score:" + score +
               " " + date +
@@ -61,6 +67,7 @@ void Finder::request(bool has_offset)
         offset += std::stoi(max);
         req = "GET /api/v3/search/lucene/?query=" +
               query +
+              " cvss.vector:" + vector +
               " type:" + type +
               " cvss.score:" + score +
               " " + date +
@@ -79,7 +86,7 @@ void Finder::set_query()
 {
     if (ui->edit_cve->text() != "") {
         query = "cvelist:" + ui->edit_cve->text().toStdString();
-    } else {
+    } else if (ui->edit_name->text() != "") {
         if ((ui->combo_match->currentText() == "MATCH") ||
             (ui->combo_match->currentText() == "EXACT")) {
             if ((ui->combo_type->currentText() == "TYPE") ||
@@ -91,20 +98,23 @@ void Finder::set_query()
                 else
                     query = "cpe:*" +
                             ui->edit_name->text().toStdString() + "*";
-            } else if (ui->combo_type->currentText() == "EXPLOITDB") {
+            } else if ((ui->combo_type->currentText() == "EXPLOITDB") ||
+                       (ui->combo_type->currentText() == "WORDPRESSDB")) {
                 query = "description:\"" +
                         ui->edit_name->text().toStdString() +
                         " " + ui->edit_version->text().toStdString() + "\"";
             } else {
-                query = ui->edit_name->text().toStdString() +
-                        " " + ui->edit_version->text().toStdString();
+                query = "title:\"" +
+                        ui->edit_name->text().toStdString() +
+                        " " + ui->edit_version->text().toStdString() + "\"";
             }
         } else {
             if (ui->combo_type->currentText() == "CVE") {
                 query = "cpe:*" +
                         ui->edit_name->text().toStdString() +
                         " " + ui->edit_version->text().toStdString() + "*";
-            } else if (ui->combo_type->currentText() == "EXPLOITDB") {
+            } else if ((ui->combo_type->currentText() == "EXPLOITDB") ||
+                       (ui->combo_type->currentText() == "WORDPRESSDB")) {
                 query = "\"" + ui->edit_name->text().toStdString() +
                         " " + ui->edit_version->text().toStdString() + "\"";
             } else {
@@ -112,13 +122,29 @@ void Finder::set_query()
                         " " + ui->edit_version->text().toStdString();
             }
         }
+    } else {
+        query = "";
     }
+}
+
+void Finder::set_vector()
+{
+    if ((ui->combo_vector->currentText() == "VECTOR") ||
+        (ui->combo_vector->currentText() == "ANY"))
+        vector = "*";
+    else if (ui->combo_vector->currentText() == "REMOTE")
+        vector = "\"AV:NETWORK\"";
+    else
+        vector = "\"AV:" + ui->combo_vector->currentText().toStdString() + "\"";
 }
 
 void Finder::set_type()
 {
-    if (ui->combo_type->currentText() == "TYPE")
+    if ((ui->combo_type->currentText() == "TYPE") ||
+        (ui->combo_type->currentText() == "CVE"))
         type = "cve";
+    else if (ui->combo_type->currentText() == "WORDPRESSDB")
+        type = "wpvulndb";
     else
         type = ui->combo_type->currentText().toLower().toStdString();
 }

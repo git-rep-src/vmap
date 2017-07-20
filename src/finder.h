@@ -29,6 +29,7 @@ private:
     int offset;
 
     std::string query;
+    std::string vector;
     std::string type;
     std::string score;
     std::string date;
@@ -38,6 +39,7 @@ private:
 
 private slots:
     void set_query();
+    void set_vector();
     void set_type();
     void set_score();
     void set_date();
