@@ -53,7 +53,7 @@ void View::element(std::string *ret, int max)
                 std::vector<std::string>().swap(cpe);
                 for (n = 0; n < js["data"]["search"][i]["highlight"]["cpe"].size(); n++)
                     cpe.push_back(js["data"]["search"][i]["highlight"]["cpe"][n]);
-                element_vector.push_back(new Element(true, this));
+                element_vector.push_back(new Element(true, false, this));
                 element_vector[offset]->set_number(offset + 1);
                 element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
                 element_vector[offset]->set_title(js["data"]["search"][i]["flatDescription"], true, false);
@@ -64,7 +64,7 @@ void View::element(std::string *ret, int max)
                 element_vector[offset]->set_cpe(cpe);
                 element_vector[offset]->set_href(js["data"]["search"][i]["_source"]["href"]);
             } else if (js["data"]["search"][i]["_source"]["type"] == "exploitdb") {
-                element_vector.push_back(new Element(false, this));
+                element_vector.push_back(new Element(false, true, this));
                 element_vector[offset]->set_number(offset + 1);
                 element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
                 element_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
@@ -76,8 +76,8 @@ void View::element(std::string *ret, int max)
                 QObject::connect(element_vector[offset], &Element::send_status_signal, [&] (QString status) {
                     emit send_status_signal(status);
                 });
-            } else {
-                element_vector.push_back(new Element(false, this));
+            } else if (js["data"]["search"][i]["_source"]["type"] == "packetstorm") {
+                element_vector.push_back(new Element(false, true, this));
                 element_vector[offset]->set_number(offset + 1);
                 element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
                 element_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, false);
@@ -86,6 +86,19 @@ void View::element(std::string *ret, int max)
                 element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
                 element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
                 element_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], true);
+                QObject::connect(element_vector[offset], &Element::send_status_signal, [&] (QString status) {
+                    emit send_status_signal(status);
+                });
+            } else {
+                element_vector.push_back(new Element(false, false, this));
+                element_vector[offset]->set_number(offset + 1);
+                element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
+                element_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
+                element_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
+                element_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, false);
+                element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
+                element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
+                element_vector[offset]->set_href(js["data"]["search"][i]["_source"]["href"]);
                 QObject::connect(element_vector[offset], &Element::send_status_signal, [&] (QString status) {
                     emit send_status_signal(status);
                 });
