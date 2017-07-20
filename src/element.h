@@ -15,13 +15,13 @@ class Element : public QWidget
     Q_OBJECT
 
 public:
-    explicit Element(bool is_cve, QWidget *parent);
+    explicit Element(bool has_cpe , bool has_source, QWidget *parent);
     ~Element();
 
 public slots:
     void set_number(int number);
     void set_published(std::string published);
-    void set_title(std::string title, bool is_cve, bool is_exploitdb);
+    void set_title(std::string title, bool has_quotes, bool has_dash);
     void set_score(float score);
     void set_description_cve(std::string description, std::vector<std::string> cve, bool is_exploitdb);
     void set_id(std::string id);
@@ -37,7 +37,7 @@ private:
     Ui::Element *ui;
 
 private slots:
-    bool save();
+    bool save_source();
 };
 
 #endif // ELEMENT_H

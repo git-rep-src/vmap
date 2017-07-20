@@ -9,7 +9,7 @@
 
 #include <QDesktopServices>
 
-Element::Element(bool is_cve, QWidget *parent) :
+Element::Element(bool has_cpe, bool has_source, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Element)
 {
@@ -23,22 +23,35 @@ Element::Element(bool is_cve, QWidget *parent) :
         ui->label_id->setVisible(!ui->label_id->isVisible());
         ui->label_cve->setVisible(!ui->label_cve->isVisible());
         ui->label_cvss->setVisible(!ui->label_cvss->isVisible());
-        if (is_cve) {
-            ui->label_cpe_vendor->setVisible(!ui->label_cpe_vendor->isVisible());
-            ui->label_cpe_product->setVisible(!ui->label_cpe_product->isVisible());
-            ui->label_cpe_version->setVisible(!ui->label_cpe_version->isVisible());
+        if (!has_source) {
+            if (has_cpe) {
+                ui->label_cpe_vendor->setVisible(!ui->label_cpe_vendor->isVisible());
+                ui->label_cpe_product->setVisible(!ui->label_cpe_product->isVisible());
+                ui->label_cpe_version->setVisible(!ui->label_cpe_version->isVisible());
+            }
             ui->label_href->setVisible(!ui->label_href->isVisible());
         } else {
             ui->label_source->setVisible(!ui->label_source->isVisible());
-            ui->button_save->setVisible(!ui->button_save->isVisible());
-            ui->text_source->setVisible(!ui->text_source->isVisible());
+            ui->button_source_details->setVisible(!ui->button_source_details->isVisible());
+            ui->label_source_line->setVisible(!ui->label_source_line->isVisible());
+            if (ui->text_source->isVisible()) {
+                ui->text_source->setHidden(true);
+                ui->button_source_details->setIcon(QIcon(":/icon-source-more"));
+            }
         }
     });
     QObject::connect(ui->label_href, &QLabel::linkActivated, [&] (QString url) {
         QDesktopServices::openUrl(QUrl(url));
     });
-    QObject::connect(ui->button_save, &QPushButton::pressed, [=] {
-        if (save())
+    QObject::connect(ui->button_source_details, &QPushButton::pressed, [=] {
+        if (!ui->text_source->isVisible())
+            ui->button_source_details->setIcon(QIcon(":/icon-source-less"));
+        else
+            ui->button_source_details->setIcon(QIcon(":/icon-source-more"));
+        ui->text_source->setVisible(!ui->text_source->isVisible());
+    });
+    QObject::connect(ui->button_source_save, &QPushButton::pressed, [=] {
+        if (save_source())
             emit send_status_signal("<span style=color:#ffffff>FILE SAVED</span>");
         else
             emit send_status_signal("<span style=color:#5c181b>FILE SAVE ERROR</span>");
@@ -65,7 +78,7 @@ void Element::set_published(std::string published)
     ui->label_published->setText(QString::fromStdString(published));
 }
 
-void Element::set_title(std::string title, bool is_cve, bool is_exploitdb)
+void Element::set_title(std::string title, bool has_quotes, bool has_dash)
 {
     std::size_t n;
     std::regex re;
@@ -74,11 +87,11 @@ void Element::set_title(std::string title, bool is_cve, bool is_exploitdb)
         title.std::string::replace((ui->label_title->width() - 3),
                                    (title.std::string::size() - (ui->label_title->width() - 3)),
                                    "...");
-    if (is_cve) {
+    if (has_quotes) {
         re.assign("&quot;");
         title = std::regex_replace(title, re, "\"");
-    } else if (is_exploitdb) {
-        bool has_quotes = false;
+    } else if (has_dash) {
+        bool was_parsed = false;
         re.assign("<");
         title = std::regex_replace(title, re, "&lt;");
         re.assign(">");
@@ -88,10 +101,10 @@ void Element::set_title(std::string title, bool is_cve, bool is_exploitdb)
             title.std::string::insert(title.std::string::size(), " </span>");
             title.std::string::replace(n, 1, " ");
             title.std::string::replace(title.std::string::find("'"), 1, " ");
-            has_quotes = true;
+            was_parsed = true;
         }
         if ((n = title.std::string::rfind(" - ")) != std::string::npos) {
-            if (!has_quotes) {
+            if (!was_parsed) {
                 title.std::string::insert((n + 1), "<span style=color:#505050> ");
                 title.std::string::insert(title.std::string::size(), " </span>");
             }
@@ -119,14 +132,23 @@ void Element::set_description_cve(std::string description, std::vector<std::stri
     std::string buf;
     std::regex re("(<span class=\"vulners-highlight\">)|(</span>)");
 
-    if (cve.size() != 0) {
+    if (description != "")
+        ui->label_description->setText(QString::fromStdString(description));
+    else
+        ui->label_description->setText("NONE");
+
+    if (cve.size() > 0) {
         for (i = 0; i < cve.size(); i++) {
-            cve[i] = std::regex_replace(cve[i], re, "");
-            if ((n = cve[i].std::string::find("CVE-")) != std::string::npos)
-                cve[i].std::string::erase(n, 4);
-            if (i != (cve.size() - 1))
-               cve[i].std::string::insert(cve[i].size(), "<br>");
-            ui->label_cve->setText(ui->label_cve->text() + QString::fromStdString(cve[i]));
+            if (cve[i] != "") {
+                cve[i] = std::regex_replace(cve[i], re, "");
+                if ((n = cve[i].std::string::find("CVE-")) != std::string::npos)
+                    cve[i].std::string::erase(n, 4);
+                if (i != (cve.size() - 1))
+                   cve[i].std::string::insert(cve[i].size(), "<br>");
+                ui->label_cve->setText(ui->label_cve->text() + QString::fromStdString(cve[i]));
+            } else {
+                ui->label_cve->setText(ui->label_cve->text() + "NONE");
+            }
         }
     } else {
         if (is_exploitdb && ((n = description.std::string::find("CVE-")) != std::string::npos)) {
@@ -149,8 +171,6 @@ void Element::set_description_cve(std::string description, std::vector<std::stri
             ui->label_cve->setText(ui->label_cve->text() + "NONE");
         }
     }
-
-    ui->label_description->setText(QString::fromStdString(description));
 }
 
 void Element::set_id(std::string id)
@@ -167,7 +187,7 @@ void Element::set_cvss(std::string cvss)
     if ((n = cvss.std::string::find("/AC:")) != std::string::npos)
         cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> ");
     if ((n = cvss.std::string::find("/Au:")) != std::string::npos)
-        cvss.std::string::erase(n, (cvss.std::string::find("/C") - n));
+        cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> ");
     if ((n = cvss.std::string::find("/C:")) != std::string::npos)
         cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
     if ((n = cvss.std::string::find("/I:")) != std::string::npos)
@@ -182,56 +202,81 @@ void Element::set_cvss(std::string cvss)
 
 void Element::set_cpe(std::vector<std::string> cpe)
 {
-    std::size_t i;
-    std::size_t n;
-    std::string buf;
-    std::regex re("(<span class=\"vulners-highlight\">)|(</span>)");
-
-    for (i = 0; i < cpe.size(); i++) {
-        cpe[i] = std::regex_replace(cpe[i], re, "");
-        buf.clear();
-        if ((((n = cpe[i].std::string::find("cpe:/a:")) != std::string::npos) ||
-             ((n = cpe[i].std::string::find("cpe:/h:")) != std::string::npos) ||
-             ((n = cpe[i].std::string::find("cpe:/o:")) != std::string::npos))) {
-              cpe[i].std::string::erase(0, 7);
-              buf.append(cpe[i].std::string::substr(0, cpe[i].std::string::find(":")));
-              if (i != (cpe.size() - 1))
-                  buf.append("<br>");
-              ui->label_cpe_vendor->setText(ui->label_cpe_vendor->text() + QString::fromStdString(buf));
+    if (cpe.size() > 0) {
+        std::size_t i;
+        std::size_t n;
+        std::string buf;
+        std::regex re;
+        for (i = 0; i < cpe.size(); i++) {
+            re.assign("(<span class=\"vulners-highlight\">)|(</span>)");
+            cpe[i] = std::regex_replace(cpe[i], re, "");
+            buf.clear();
+            if ((cpe[i].std::string::find("cpe:/a:") != std::string::npos) ||
+                (cpe[i].std::string::find("cpe:/h:") != std::string::npos) ||
+                (cpe[i].std::string::find("cpe:/o:") != std::string::npos)) {
+                if ((n = cpe[i].std::string::find(":", 7)) != std::string::npos) {
+                    buf.append(cpe[i].std::string::substr(7, (n - 7)));
+                    if (i != (cpe.size() - 1))
+                        buf.append("<br>");
+                    ui->label_cpe_vendor->setText(ui->label_cpe_vendor->text() + QString::fromStdString(buf));
+                    cpe[i].std::string::erase(0, (n + 1));
+                }
+            }
+            buf.clear();
+            if ((n = cpe[i].std::string::find(":")) != std::string::npos) {
+                buf.append(cpe[i].std::string::substr(0, n));
+                if (i != (cpe.size() - 1))
+                    buf.append("<br>");
+                ui->label_cpe_product->setText(ui->label_cpe_product->text() + QString::fromStdString(buf));
+                cpe[i].std::string::erase(0, (n + 1));
+            } else {
+                buf.append(cpe[i].std::string::substr(0, cpe[i].size()));
+                if (i != (cpe.size() - 1))
+                    buf.append("<br>");
+                ui->label_cpe_product->setText(ui->label_cpe_product->text() + QString::fromStdString(buf));
+                cpe[i].std::string::erase(0, cpe[i].size());
+            }
+            buf.clear();
+            if (cpe[i].size() != 0) {
+                if (((n = cpe[i].std::string::find(":")) != std::string::npos) && (n == 0))
+                        cpe[i].std::string::erase(0, 1);
+                re.assign("(:)|(::)");
+                cpe[i] = std::regex_replace(cpe[i], re, "-");
+                buf.append(cpe[i].std::string::substr(0, cpe[i].size()));
+                if (i != (cpe.size() - 1))
+                    buf.append("<br>");
+                ui->label_cpe_version->setText(ui->label_cpe_version->text() + QString::fromStdString(buf));
+            } else {
+                if (i != (cpe.size() - 1))
+                    ui->label_cpe_version->setText(ui->label_cpe_version->text() + "-<br>");
+                else
+                    ui->label_cpe_version->setText(ui->label_cpe_version->text() + "-");
+            }
         }
-        buf.clear();
-        if ((n = cpe[i].std::string::find(":")) != std::string::npos) {
-            buf.append(cpe[i].std::string::substr((n + 1), (cpe[i].std::string::rfind(":") - (n + 1))));
-            if (i != (cpe.size() - 1))
-                buf.append("<br>");
-            ui->label_cpe_product->setText(ui->label_cpe_product->text() + QString::fromStdString(buf));
-        }
-        buf.clear();
-        if ((n = cpe[i].std::string::rfind(":")) != std::string::npos) {
-            buf.append(cpe[i].std::string::substr((n + 1), cpe[i].size()));
-            if (i != (cpe.size() - 1))
-                buf.append("<br>");
-            ui->label_cpe_version->setText(ui->label_cpe_version->text() + QString::fromStdString(buf));
-        }
+    } else {
+        ui->label_cpe_vendor->setText(ui->label_cpe_vendor->text() + "NONE");
+        ui->label_cpe_product->setText(ui->label_cpe_product->text() + "NONE");
+        ui->label_cpe_version->setText(ui->label_cpe_version->text() + "NONE");
     }
 }
 
 void Element::set_href(std::string href)
 {
-    std::regex re;
-
-    re.assign("www.");
-    href = std::regex_replace(href, re, "");
-    re.assign("(http://)|(https://)");
-    href = std::regex_replace(href, re, "www.");
-    re.assign("=");
-    href = std::regex_replace(href, re, "&#61;");
-    ui->label_href->setText(ui->label_href->text() +
-                            "<a href=" +
-                            QString::fromStdString(href) +
-                            " style=color:#3d4243; style=text-decoration:none>" +
-                            QString::fromStdString(href) +
-                            "</a><br>");
+    if (href != "") {
+        std::regex re;
+        re.assign("www.");
+        href = std::regex_replace(href, re, "");
+        re.assign("=");
+        href = std::regex_replace(href, re, "&#61;");
+        ui->label_href->setText(ui->label_href->text() +
+                                "<a href=" +
+                                QString::fromStdString(href) +
+                                " style=color:#3d4243; style=text-decoration:none>" +
+                                QString::fromStdString(href) +
+                                "</a><br>");
+    } else {
+        ui->label_href->setText(ui->label_href->text() + "NONE");
+    }
 }
 
 void Element::set_source(std::string source, bool is_packetstorm)
@@ -249,7 +294,7 @@ void Element::set_source(std::string source, bool is_packetstorm)
 }
 
 
-bool Element::save()
+bool Element::save_source()
 {
     std::size_t n;
     std::string id = ui->label_id->text().toStdString();
@@ -257,10 +302,6 @@ bool Element::save()
 
     if ((n = id.std::string::rfind(">")) != std::string::npos)
         id.erase(0, (n + 1));
-    if ((n = id.std::string::rfind("-ID")) != std::string::npos)
-        id.erase(n, 3);
-    if ((n = id.std::string::find(":")) != std::string::npos)
-        id.std::string::replace(n, 1, "-");
 
     passwd *pw = getpwuid(getuid());
     std::string home_path = pw->pw_dir;
