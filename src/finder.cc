@@ -86,41 +86,32 @@ void Finder::set_query()
 {
     if (ui->edit_cve->text() != "") {
         query = "cvelist:" + ui->edit_cve->text().toStdString();
-    } else if (ui->edit_name->text() != "") {
+    } else if ((ui->edit_name->text() != "") ||
+               (ui->edit_version->text() != "")) {
         if ((ui->combo_match->currentText() == "MATCH") ||
             (ui->combo_match->currentText() == "EXACT")) {
-            if ((ui->combo_type->currentText() == "TYPE") ||
-                (ui->combo_type->currentText() == "CVE")) {
-                if (ui->edit_version->text() != "")
-                    query = "cpe:*" +
-                            ui->edit_name->text().toStdString() +
-                            "*\"" + ui->edit_version->text().toStdString() + "\"";
-                else
-                    query = "cpe:*" +
-                            ui->edit_name->text().toStdString() + "*";
-            } else if ((ui->combo_type->currentText() == "EXPLOITDB") ||
-                       (ui->combo_type->currentText() == "WORDPRESSDB")) {
-                query = "description:\"" +
+            if (ui->combo_type->currentText() == "PACKETSTORM")
+                query = "title:(\"" +
                         ui->edit_name->text().toStdString() +
-                        " " + ui->edit_version->text().toStdString() + "\"";
-            } else {
-                query = "title:\"" +
+                        "\" AND \"" +
+                        ui->edit_version->text().toStdString() +
+                        "\")";
+            else
+                query = "description:(\"" +
                         ui->edit_name->text().toStdString() +
-                        " " + ui->edit_version->text().toStdString() + "\"";
-            }
+                        "\" AND \"" +
+                        ui->edit_version->text().toStdString() +
+                        "\")";
         } else {
-            if (ui->combo_type->currentText() == "CVE") {
-                query = "cpe:*" +
+            if (ui->combo_type->currentText() == "PACKETSTORM")
+                query = "title:" +
                         ui->edit_name->text().toStdString() +
-                        " " + ui->edit_version->text().toStdString() + "*";
-            } else if ((ui->combo_type->currentText() == "EXPLOITDB") ||
-                       (ui->combo_type->currentText() == "WORDPRESSDB")) {
-                query = "\"" + ui->edit_name->text().toStdString() +
-                        " " + ui->edit_version->text().toStdString() + "\"";
-            } else {
-                query = ui->edit_name->text().toStdString() +
                         " " + ui->edit_version->text().toStdString();
-            }
+            else
+                query = "description:" +
+                        ui->edit_name->text().toStdString() +
+                        " " +
+                        ui->edit_version->text().toStdString();
         }
     } else {
         query = "";
