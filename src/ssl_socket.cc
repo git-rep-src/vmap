@@ -19,9 +19,9 @@ bool SSL_socket::start()
 {
     if ((ctx != NULL) && (bio != NULL))
         cleanup();
-    
+
     OpenSSL_add_all_algorithms();
-    
+
     if (SSL_library_init() < 0)
         return false;
     if ((ctx = SSL_CTX_new(TLSv1_2_client_method())) == NULL)
@@ -38,12 +38,12 @@ bool SSL_socket::start()
         return false;
     if (BIO_do_handshake(bio) <= 0)
         return false;
-    
+
     is_started = true;
 
     return true;
 }
- 
+
 bool SSL_socket::write_read(std::string req, std::string *ret)
 {
     char buf[1024];

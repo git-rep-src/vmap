@@ -11,7 +11,7 @@ class SSL_socket
 public:
     SSL_socket();
     ~SSL_socket();
-    
+
     bool is_started;
 
     bool start();
