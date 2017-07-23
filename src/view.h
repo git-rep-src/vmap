@@ -2,7 +2,7 @@
 #define VIEW_H
 
 #include "ui.h"
-#include "element.h"
+#include "bulletin.h"
 
 #include <string>
 
@@ -19,11 +19,11 @@ public:
     ~View();
 
 public slots:
-    void element(std::string *ret, int max);
+    void build_bulletin(std::string *ret, int max);
 
 signals:
     void request_signal();
-    void send_status_signal(QString status);
+    void status_signal(QString status);
 
 private:
     Ui::View *ui;
@@ -32,7 +32,7 @@ private:
 
     int offset;
 
-    QVector<Element*> element_vector;
+    QVector<Bulletin*> bulletins_vector;
 };
 
 #endif // VIEW_H

@@ -18,12 +18,12 @@ View::View(QWidget *parent) :
 
 View::~View()
 {
-    for (int i = 0; i < element_vector.size(); i++)
-        delete element_vector[i];
+    for (int i = 0; i < bulletins_vector.size(); i++)
+        delete bulletins_vector[i];
     delete ui;
 }
 
-void View::element(std::string *ret, int max)
+void View::build_bulletin(std::string *ret, int max)
 {
     int n_total;
     size_t n;
@@ -31,11 +31,11 @@ void View::element(std::string *ret, int max)
     std::vector<std::string> cpe;
 
     if (!has_offset) {
-        for (int i = 0; i < element_vector.size(); i++) {
-            ui->layout_scroll->removeWidget(element_vector[i]);
-            delete element_vector[i];
+        for (int i = 0; i < bulletins_vector.size(); i++) {
+            ui->layout_scroll->removeWidget(bulletins_vector[i]);
+            delete bulletins_vector[i];
         }
-        element_vector.clear();
+        bulletins_vector.clear();
         ui->layout_scroll->update();
         offset = 0;
     }
@@ -53,65 +53,65 @@ void View::element(std::string *ret, int max)
                 std::vector<std::string>().swap(cpe);
                 for (n = 0; n < js["data"]["search"][i]["highlight"]["cpe"].size(); n++)
                     cpe.push_back(js["data"]["search"][i]["highlight"]["cpe"][n]);
-                element_vector.push_back(new Element(true, false, this));
-                element_vector[offset]->set_number(offset + 1);
-                element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
-                element_vector[offset]->set_title(js["data"]["search"][i]["flatDescription"], true, false);
-                element_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
-                element_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, false);
-                element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
-                element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
-                element_vector[offset]->set_cpe(cpe);
-                element_vector[offset]->set_href(js["data"]["search"][i]["_source"]["href"]);
+                bulletins_vector.push_back(new Bulletin(true, false, this));
+                bulletins_vector[offset]->set_number(offset + 1);
+                bulletins_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
+                bulletins_vector[offset]->set_title(js["data"]["search"][i]["flatDescription"], true, false);
+                bulletins_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
+                bulletins_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, false);
+                bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
+                bulletins_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
+                bulletins_vector[offset]->set_cpe(cpe);
+                bulletins_vector[offset]->set_href(js["data"]["search"][i]["_source"]["href"]);
             } else if (js["data"]["search"][i]["_source"]["type"] == "exploitdb") {
-                element_vector.push_back(new Element(false, true, this));
-                element_vector[offset]->set_number(offset + 1);
-                element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
-                element_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
-                element_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
-                element_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, true);
-                element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
-                element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
-                element_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], false);
-                QObject::connect(element_vector[offset], &Element::send_status_signal, [&] (QString status) {
-                    emit send_status_signal(status);
+                bulletins_vector.push_back(new Bulletin(false, true, this));
+                bulletins_vector[offset]->set_number(offset + 1);
+                bulletins_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
+                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
+                bulletins_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
+                bulletins_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, true);
+                bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
+                bulletins_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
+                bulletins_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], false);
+                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (QString status) {
+                    emit status_signal(status);
                 });
             } else if (js["data"]["search"][i]["_source"]["type"] == "packetstorm") {
-                element_vector.push_back(new Element(false, true, this));
-                element_vector[offset]->set_number(offset + 1);
-                element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
-                element_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, false);
-                element_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
-                element_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["title"], cve, false);
-                element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
-                element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
-                element_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], true);
-                QObject::connect(element_vector[offset], &Element::send_status_signal, [&] (QString status) {
-                    emit send_status_signal(status);
+                bulletins_vector.push_back(new Bulletin(false, true, this));
+                bulletins_vector[offset]->set_number(offset + 1);
+                bulletins_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
+                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, false);
+                bulletins_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
+                bulletins_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["title"], cve, false);
+                bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
+                bulletins_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
+                bulletins_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], true);
+                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (QString status) {
+                    emit status_signal(status);
                 });
             } else {
-                element_vector.push_back(new Element(false, false, this));
-                element_vector[offset]->set_number(offset + 1);
-                element_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
-                element_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
-                element_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
-                element_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, false);
-                element_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
-                element_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
-                element_vector[offset]->set_href(js["data"]["search"][i]["_source"]["href"]);
-                QObject::connect(element_vector[offset], &Element::send_status_signal, [&] (QString status) {
-                    emit send_status_signal(status);
+                bulletins_vector.push_back(new Bulletin(false, false, this));
+                bulletins_vector[offset]->set_number(offset + 1);
+                bulletins_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
+                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
+                bulletins_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
+                bulletins_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, false);
+                bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
+                bulletins_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
+                bulletins_vector[offset]->set_href(js["data"]["search"][i]["_source"]["href"]);
+                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (QString status) {
+                    emit status_signal(status);
                 });
             }
-            ui->layout_scroll->addWidget(element_vector.last());
+            ui->layout_scroll->addWidget(bulletins_vector.last());
             offset++;
         }
         ui->layout_scroll->update();
         if (offset > n_total)
             offset = n_total;
         ui->label_counter->setText(QString::number(offset) +
-                                  "<span style=color:#808080>/</span>" +
-                                  QString::number(n_total));
+                                   "<span style=color:#808080>/</span>" +
+                                   QString::number(n_total));
         ui->label_counter->setVisible(true);
         ui->button_request->setVisible(offset != n_total);
     } else {
