@@ -29,11 +29,11 @@ Finder::Finder(QWidget *parent) :
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
         ui->combo_max->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
-    QObject::connect(ui->edit_name, &QLineEdit::returnPressed, [&] { request(); });
-    QObject::connect(ui->edit_version, &QLineEdit::returnPressed, [&] { request(); });
-    QObject::connect(ui->edit_cve, &QLineEdit::returnPressed, [&] { request(); });
-    QObject::connect(ui->edit_score, &QLineEdit::returnPressed, [&] { request(); });
-    QObject::connect(ui->button_request, &QPushButton::pressed, [&] { request(); });
+    QObject::connect(ui->edit_name, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->edit_version, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->edit_cve, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->edit_score, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->button_request, &QPushButton::pressed, [&] { build_request(); });
 }
 
 Finder::~Finder()
@@ -41,7 +41,7 @@ Finder::~Finder()
     delete ui;
 }
 
-void Finder::request(bool has_offset)
+void Finder::build_request(bool has_offset)
 {
     if (!has_offset) {
         offset = 0;

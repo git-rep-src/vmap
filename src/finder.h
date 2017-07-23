@@ -18,7 +18,7 @@ public:
     ~Finder();
 
 public slots:
-    void request(bool has_offset = false);
+    void build_request(bool has_offset = false);
 
 signals:
     void request_signal(const std::string &req, int max);
