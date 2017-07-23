@@ -12,7 +12,7 @@ SOURCES += src/main.cc \
            src/vmap.cc \
            src/finder.cc \
            src/view.cc \
-           src/element.cc \
+           src/bulletin.cc \
            src/highlighter.cc \
            src/ssl_socket.cc \
            src/json.cc
@@ -20,7 +20,7 @@ SOURCES += src/main.cc \
 HEADERS  += src/vmap.h \
             src/finder.h \
             src/view.h \
-            src/element.h \
+            src/bulletin.h \
             src/highlighter.h \
             src/ssl_socket.h \
             src/custompushbutton.h \
