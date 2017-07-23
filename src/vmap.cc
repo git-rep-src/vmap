@@ -10,29 +10,30 @@ Vmap::Vmap(QWidget *parent) :
     socket(NULL)
 {
     ui->setupUi(this);
+    QObject::connect(ui->button_exit, &QPushButton::pressed, [&] {
+        qApp->quit();
+    });
 
     finder = new Finder(this);
+    QObject::connect(finder, &Finder::request_signal, [&] (const std::string &req, int max) {
+        set_status("GETTING...");
+        if (!api(req, max))
+            set_status("<span style=color:#5c181b>REQUEST ERROR</span>");
+    });
+
     view = new View(this);
+    QObject::connect(view, &View::request_signal, [&] {
+        finder->build_request(true);
+    });
+    QObject::connect(view, &View::status_signal, [&] (QString status) {
+        set_status(status);
+    });
 
     ui->layout->addWidget(finder);
     ui->layout->addSpacing(10); // TODO: PERCENT
     ui->layout->addWidget(view);
     ui->layout->addStretch();
     ui->layout->addWidget(ui->label_status);
-
-    QObject::connect(finder, &Finder::request_signal, [&] (const std::string &req, int max) {
-        if (!api(req, max))
-            set_status("<span style=color:#5c181b>REQUEST ERROR</span>");
-    });
-    QObject::connect(view, &View::request_signal, [&] {
-        finder->request(true);
-    });
-    QObject::connect(view, &View::send_status_signal, [&] (QString status) {
-        set_status(status);
-    });
-    QObject::connect(ui->button_exit, &QPushButton::pressed, [&] {
-        qApp->quit();
-    });
 
     status_timer = new QTimer(this);
     status_timer->setInterval(3000);
@@ -70,7 +71,7 @@ bool Vmap::api(const std::string &req, int max)
     if (!socket->write_read(req, &ret))
         return false;
 
-    view->element(&ret, max);
+    view->build_bulletin(&ret, max);
 
     ret.clear();
 
