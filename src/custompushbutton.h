@@ -8,7 +8,8 @@ class CustomPushButton : public QPushButton
     Q_OBJECT
 
 public:
-    CustomPushButton(const QIcon &icon, const QString &name, QWidget *parent) :
+    CustomPushButton(const QIcon &icon, const QString &name,
+                     QWidget *parent) :
     QPushButton(icon, name, parent) {}
     ~CustomPushButton() {}
 
