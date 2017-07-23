@@ -7,9 +7,8 @@
         <file alias="icon-source-less">resources/images/global/icon-source-less.svg</file>
         <file alias="icon-save">resources/images/global/icon-save.svg</file>
         <file alias="icon-exit">resources/images/global/icon-exit.svg</file>
-        <file alias="icon-vmap">resources/images/global/vmap.svg</file>
-        <file>resources/images/global/icon.ico</file>
-        <file>resources/images/global/icon.jpg</file>
+        <file>resources/images/global/vmap.ico</file>
+        <file>resources/images/global/vmap.jpg</file>
         <file>resources/images/global/icon.rc</file>
         <file alias="font-default">resources/fonts/default.ttf</file>
         <file alias="style-default">resources/styles/default.qss</file>
