@@ -1,17 +1,16 @@
-#include "element.h"
-
-#include <pwd.h>
-#include <unistd.h>
+#include "bulletin.h"
 
 #include <fstream>
 #include <sstream>
 #include <regex>
+#include <pwd.h>
+#include <unistd.h>
 
 #include <QDesktopServices>
 
-Element::Element(bool has_cpe, bool has_source, QWidget *parent) :
+Bulletin::Bulletin(bool has_cpe, bool has_source, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Element)
+    ui(new Ui::Bulletin)
 {
     ui->setupUi(this);
     QObject::connect(ui->button_details, &QPushButton::pressed, [=] {
@@ -52,33 +51,33 @@ Element::Element(bool has_cpe, bool has_source, QWidget *parent) :
     });
     QObject::connect(ui->button_source_save, &QPushButton::pressed, [=] {
         if (save_source())
-            emit send_status_signal("<span style=color:#ffffff>FILE SAVED</span>");
+            emit status_signal("<span style=color:#ffffff>FILE SAVED</span>");
         else
-            emit send_status_signal("<span style=color:#5c181b>FILE SAVE ERROR</span>");
+            emit status_signal("<span style=color:#5c181b>FILE SAVE ERROR</span>");
     });
 }
 
-Element::~Element()
+Bulletin::~Bulletin()
 {
     delete ui;
 }
 
-void Element::set_number(int number)
+void Bulletin::set_number(int number)
 {
     ui->label_number->setText(QString("%1").arg(number, 5, 10, QChar('0')));
 }
 
-void Element::set_published(std::string published)
+void Bulletin::set_published(std::string published)
 {
     std::size_t n;
 
-    if ((n =published.std::string::find("T")) != std::string::npos)
+    if ((n = published.std::string::find("T")) != std::string::npos)
         published.std::string::erase(n, published.std::string::size());
 
     ui->label_published->setText(QString::fromStdString(published));
 }
 
-void Element::set_title(std::string title, bool has_quotes, bool has_dash)
+void Bulletin::set_title(std::string title, bool has_quotes, bool has_dash)
 {
     std::size_t n;
     std::regex re;
@@ -115,7 +114,7 @@ void Element::set_title(std::string title, bool has_quotes, bool has_dash)
     ui->label_title->setText(QString::fromStdString(title));
 }
 
-void Element::set_score(float score)
+void Bulletin::set_score(float score)
 {
     if (score >= 7)
         ui->label_score->setProperty("type", "score-high");
@@ -125,7 +124,8 @@ void Element::set_score(float score)
     ui->label_score->setText(QString::number(score));
 }
 
-void Element::set_description_cve(std::string description, std::vector<std::string> cve, bool is_exploitdb)
+void Bulletin::set_description_cve(std::string description, std::vector<std::string> cve,
+                                  bool is_exploitdb)
 {
     std::size_t i;
     std::size_t n;
@@ -173,12 +173,12 @@ void Element::set_description_cve(std::string description, std::vector<std::stri
     }
 }
 
-void Element::set_id(std::string id)
+void Bulletin::set_id(std::string id)
 {
     ui->label_id->setText(ui->label_id->text() + QString::fromStdString(id));
 }
 
-void Element::set_cvss(std::string cvss)
+void Bulletin::set_cvss(std::string cvss)
 {
     std::size_t n;
 
@@ -200,7 +200,7 @@ void Element::set_cvss(std::string cvss)
     ui->label_cvss->setText(ui->label_cvss->text() + QString::fromStdString(cvss));
 }
 
-void Element::set_cpe(std::vector<std::string> cpe)
+void Bulletin::set_cpe(std::vector<std::string> cpe)
 {
     if (cpe.size() > 0) {
         std::size_t i;
@@ -260,7 +260,7 @@ void Element::set_cpe(std::vector<std::string> cpe)
     }
 }
 
-void Element::set_href(std::string href)
+void Bulletin::set_href(std::string href)
 {
     if (href != "") {
         std::regex re;
@@ -279,7 +279,7 @@ void Element::set_href(std::string href)
     }
 }
 
-void Element::set_source(std::string source, bool is_packetstorm)
+void Bulletin::set_source(std::string source, bool is_packetstorm)
 {
     std::size_t n;
 
@@ -294,7 +294,7 @@ void Element::set_source(std::string source, bool is_packetstorm)
 }
 
 
-bool Element::save_source()
+bool Bulletin::save_source()
 {
     std::size_t n;
     std::string id = ui->label_id->text().toStdString();
