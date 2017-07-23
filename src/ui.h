@@ -328,7 +328,7 @@ public:
     }
 };
 
-class Ui_Element
+class Ui_Bulletin
 {
 public:
     QLabel *label_number;
@@ -355,7 +355,7 @@ public:
     QVBoxLayout *layout_source;
     QGridLayout *layout;
 
-    void setupUi(QWidget *Element)
+    void setupUi(QWidget *Bulletin)
     {
         int height = QApplication::desktop()->screenGeometry().height();
         int width = QApplication::desktop()->screenGeometry().width();
@@ -363,21 +363,21 @@ public:
         QFont font(":/font-default");
         font.setPointSize(11); // TODO: PERCENT
 
-        label_number = new QLabel(Element);
+        label_number = new QLabel(Bulletin);
         label_number->setProperty("type", "gray-dark-bg");
         label_number->setFont(font);
         label_number->setMinimumWidth(75); // TODO: PERCENT
         label_number->setMinimumHeight(34); // TODO: PERCENT
         label_number->setAlignment(Qt::AlignCenter);
 
-        label_published = new QLabel(Element);
+        label_published = new QLabel(Bulletin);
         label_published->setProperty("type", "gray-bg");
         label_published->setFont(font);
         label_published->setMinimumWidth(116); // TODO: PERCENT
         label_published->setMinimumHeight(34); // TODO: PERCENT
         label_published->setAlignment(Qt::AlignCenter);
 
-        label_title = new QLabel(Element);
+        label_title = new QLabel(Bulletin);
         label_title->setProperty("type", "gray-light-bg");
         label_title->setFont(font);
         label_title->setMinimumWidth(width - 1718); // TODO: PERCENT
@@ -385,20 +385,20 @@ public:
         label_title->setMargin(8); // TODO: PERCENT
         label_title->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
-        label_score = new QLabel(Element);
+        label_score = new QLabel(Bulletin);
         label_score->setProperty("type", "score-low");
         label_score->setFont(font);
         label_score->setMinimumWidth(75); // TODO: PERCENT
         label_score->setMinimumHeight(34); // TODO: PERCENT
         label_score->setAlignment(Qt::AlignCenter);
 
-        button_details = new QPushButton(QIcon(":/icon-more"), NULL, Element);
+        button_details = new QPushButton(QIcon(":/icon-more"), NULL, Bulletin);
         button_details->setIconSize(QSize(12, 12)); // TODO: PERCENT
         button_details->setFlat(true);
 
         font.setItalic(true);
 
-        label_description = new QLabel(Element);
+        label_description = new QLabel(Bulletin);
         label_description->setProperty("type", "white-bg");
         label_description->setFont(font);
         label_description->setMinimumHeight(34); // TODO: PERCENT
@@ -409,7 +409,7 @@ public:
 
         font.setItalic(false);
 
-        label_id = new QLabel(Element);
+        label_id = new QLabel(Bulletin);
         label_id->setProperty("type", "white");
         label_id->setFont(font);
         label_id->setMargin(8); // TODO: PERCENT
@@ -417,7 +417,7 @@ public:
         label_id->setText("<span style=color:#998f46>ID</span><hr>");
         label_id->setHidden(true);
 
-        label_cve = new QLabel(Element);
+        label_cve = new QLabel(Bulletin);
         label_cve->setProperty("type", "white");
         label_cve->setFont(font);
         label_cve->setMargin(8); // TODO: PERCENT
@@ -425,7 +425,7 @@ public:
         label_cve->setText("<span style=color:#998f46>CVE</span><hr>");
         label_cve->setHidden(true);
 
-        label_cvss = new QLabel(Element);
+        label_cvss = new QLabel(Bulletin);
         label_cvss->setFont(font);
         label_cvss->setMargin(8); // TODO: PERCENT
         label_cvss->setText("<span style=color:#998f46>CVSS</span><hr>");
@@ -433,7 +433,7 @@ public:
 
         font.setCapitalization(QFont::AllUppercase);
 
-        label_cpe_vendor = new QLabel(Element);
+        label_cpe_vendor = new QLabel(Bulletin);
         label_cpe_vendor->setProperty("type", "white");
         label_cpe_vendor->setFont(font);
         label_cpe_vendor->setMargin(8); // TODO: PERCENT
@@ -441,7 +441,7 @@ public:
         label_cpe_vendor->setText("<span style=color:#998f46>VENDOR</span><hr>");
         label_cpe_vendor->setHidden(true);
 
-        label_cpe_product = new QLabel(Element);
+        label_cpe_product = new QLabel(Bulletin);
         label_cpe_product->setProperty("type", "white");
         label_cpe_product->setFont(font);
         label_cpe_product->setMargin(8); // TODO: PERCENT
@@ -449,7 +449,7 @@ public:
         label_cpe_product->setText("<span style=color:#998f46>PRODUCT</span><hr>");
         label_cpe_product->setHidden(true);
 
-        label_cpe_version = new QLabel(Element);
+        label_cpe_version = new QLabel(Bulletin);
         label_cpe_version->setProperty("type", "white");
         label_cpe_version->setFont(font);
         label_cpe_version->setMargin(8); // TODO: PERCENT
@@ -466,7 +466,7 @@ public:
 
         font.setCapitalization(QFont::MixedCase);
 
-        label_href = new QLabel(Element);
+        label_href = new QLabel(Bulletin);
         label_href->setFont(font);
         label_href->setMargin(8); // TODO: PERCENT
         label_href->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByMouse);
@@ -474,15 +474,15 @@ public:
         label_href->setText("<span style=color:#998f46>REFERENCES</span><hr>");
         label_href->setHidden(true);
 
-        label_source = new QLabel(Element);
+        label_source = new QLabel(Bulletin);
         label_source->setFont(font);
         label_source->setContentsMargins(0, 8, 0, 0); // TODO: PERCENT
         label_source->setText("<span style=color:#998f46>SOURCE</span>");
         label_source->setHidden(true);
 
-        button_source_details = new QPushButton(QIcon(":/icon-source-more"), NULL, Element);
+        button_source_details = new QPushButton(QIcon(":/icon-source-more"), NULL, Bulletin);
         button_source_details->setIconSize(QSize(12, 18)); // TODO: PERCENT
-        button_source_details->setMinimumSize(QSize(12, 18));
+        button_source_details->setMinimumSize(QSize(12, 18)); // TODO: PERCENT
         button_source_details->setFlat(true);
         button_source_details->setHidden(true);
 
@@ -493,12 +493,12 @@ public:
         layout_source_label->addWidget(button_source_details);
         layout_source_label->addStretch();
 
-        label_source_line = new QLabel(Element);
+        label_source_line = new QLabel(Bulletin);
         label_source_line->setFont(font);
         label_source_line->setText("<hr>");
         label_source_line->setHidden(true);
 
-        text_source = new QTextEdit(Element);
+        text_source = new QTextEdit(Bulletin);
         text_source->setProperty("type", "source");
         text_source->setFont(font);
         text_source->setMinimumHeight(height - 142); // TODO: PERCENT
@@ -523,7 +523,7 @@ public:
         layout_source->addWidget(label_source_line);
         layout_source->addWidget(text_source);
 
-        layout = new QGridLayout(Element);
+        layout = new QGridLayout(Bulletin);
         layout->setMargin(0);
         layout->setHorizontalSpacing(5); // TODO: PERCENT
         layout->setVerticalSpacing(15); // TODO: PERCENT
@@ -541,9 +541,9 @@ public:
         layout->addWidget(label_href, 6, 2, 1, 1);
         layout->addLayout(layout_source, 7, 2, 1, 1);
 
-        Element->setMinimumWidth(width - 20); // TODO: PERCENT
-        Element->setMaximumWidth(width - 20); // TODO: PERCENT
-        Element->setLayout(layout);
+        Bulletin->setMinimumWidth(width - 20); // TODO: PERCENT
+        Bulletin->setMaximumWidth(width - 20); // TODO: PERCENT
+        Bulletin->setLayout(layout);
     }
 };
 
@@ -551,7 +551,7 @@ namespace Ui {
     class Vmap: public Ui_Vmap {};
     class Finder: public Ui_Finder {};
     class View: public Ui_View {};
-    class Element: public Ui_Element {};
+    class Bulletin: public Ui_Bulletin {};
 }
 
 QT_END_NAMESPACE
