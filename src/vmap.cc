@@ -1,7 +1,5 @@
 #include "vmap.h"
 
-#include <thread>//
-
 Vmap::Vmap(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Vmap),
@@ -30,7 +28,7 @@ Vmap::Vmap(QWidget *parent) :
     });
 
     ui->layout->addWidget(finder);
-    ui->layout->addSpacing(10); // TODO: PERCENT
+    ui->layout->addSpacing(QApplication::desktop()->screenGeometry().height() / 108);
     ui->layout->addWidget(view);
     ui->layout->addStretch();
     ui->layout->addWidget(ui->label_status);
@@ -63,10 +61,6 @@ bool Vmap::api(const std::string &req, int max)
             return false;
         }
     }
-
-    //std::thread t(&SSL_socket::write_read, socket, req, &ret);
-    //t.detach();
-    //t.join();
 
     if (!socket->write_read(req, &ret))
         return false;

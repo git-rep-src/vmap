@@ -32,10 +32,12 @@ public:
 
     void setupUi(QWidget *Vmap)
     {
-        int width = QApplication::desktop()->screenGeometry().width();
+        int desktop_width = QApplication::desktop()->screenGeometry().width();
+        int base_size = (desktop_width / 192);
+        int base_margin = (desktop_width / 192);
 
         QFont font(":/font-default");
-        font.setPointSize(9); // TODO: PERCENT
+        font.setPointSize(desktop_width / 213.3);
 
         label_status = new QLabel(Vmap);
         label_status->setProperty("type", "gray-dark");
@@ -43,19 +45,19 @@ public:
         label_status->setAlignment(Qt::AlignCenter);
 
         button_exit = new CustomPushButton(QIcon(":/icon-exit"), NULL, Vmap);
-        button_exit->setIconSize(QSize(10, 10)); // TODO: PERCENT
-        button_exit->setMaximumSize(QSize(10, 10)); // TODO: PERCENT
-        button_exit->move((width - 10), 0); // TODO: PERCENT
+        button_exit->setIconSize(QSize(base_size, base_size));
+        button_exit->setMaximumSize(QSize(base_size, base_size));
+        button_exit->move((desktop_width - base_margin), 0);
         button_exit->setFlat(true);
         button_exit->setDisabled(true);
 
-        font.setPointSize(11); // TODO: PERCENT
+        font.setPointSize(desktop_width / 174.5);
 
         QToolTip::setFont(font);
 
         layout = new QVBoxLayout(Vmap);
-        layout->setMargin(10); // TODO: PERCENT
-        layout->setSpacing(0); // TODO: PERCENT
+        layout->setMargin(base_margin);
+        layout->setSpacing(0);
 
         Vmap->setLayout(layout);
     }
@@ -79,27 +81,32 @@ public:
 
     void setupUi(QWidget *Finder)
     {
+        int desktop_width = QApplication::desktop()->screenGeometry().width();
+        int desktop_height = QApplication::desktop()->screenGeometry().height();
+        int base_height = (desktop_height / 36);
+        int base_size = (desktop_width / 160);
+
         QFont font(":/font-default");
-        font.setPointSize(11); // TODO: PERCENT
+        font.setPointSize(desktop_width / 174.5);
         font.setCapitalization(QFont::AllUppercase);
 
         edit_name = new QLineEdit(Finder);
         edit_name->setFont(font);
-        edit_name->setMinimumHeight(30); // TODO: PERCENT
+        edit_name->setMinimumHeight(base_height);
         edit_name->setAlignment(Qt::AlignCenter);
         edit_name->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         edit_name->setPlaceholderText("NAME");
 
         edit_version = new QLineEdit(Finder);
         edit_version->setFont(font);
-        edit_version->setMinimumHeight(30); // TODO: PERCENT
+        edit_version->setMinimumHeight(base_height);
         edit_version->setAlignment(Qt::AlignCenter);
         edit_version->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         edit_version->setPlaceholderText("VERSION");
 
         edit_cve = new QLineEdit(Finder);
         edit_cve->setFont(font);
-        edit_cve->setMinimumHeight(30); // TODO: PERCENT
+        edit_cve->setMinimumHeight(base_height);
         edit_cve->setAlignment(Qt::AlignCenter);
         edit_cve->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         edit_cve->setPlaceholderText("CVE-YYYY-NNNN");
@@ -107,7 +114,7 @@ public:
         combo_match = new QComboBox(Finder);
         combo_match->setView(new QListView());
         combo_match->view()->setFont(font);
-        combo_match->setMinimumHeight(29); // TODO: PERCENT
+        combo_match->setMinimumHeight(base_height - 1);
         combo_match->setEditable(true);
         combo_match->lineEdit()->setReadOnly(true);
         combo_match->lineEdit()->setFont(font);
@@ -126,7 +133,7 @@ public:
         combo_vector = new QComboBox(Finder);
         combo_vector->setView(new QListView());
         combo_vector->view()->setFont(font);
-        combo_vector->setMinimumHeight(29); // TODO: PERCENT
+        combo_vector->setMinimumHeight(base_height - 1);
         combo_vector->setEditable(true);
         combo_vector->lineEdit()->setReadOnly(true);
         combo_vector->lineEdit()->setFont(font);
@@ -148,7 +155,7 @@ public:
         combo_type = new QComboBox(Finder);
         combo_type->setView(new QListView());
         combo_type->view()->setFont(font);
-        combo_type->setMinimumHeight(29); // TODO: PERCENT
+        combo_type->setMinimumHeight(base_height - 1);
         combo_type->setEditable(true);
         combo_type->lineEdit()->setReadOnly(true);
         combo_type->lineEdit()->setFont(font);
@@ -168,7 +175,7 @@ public:
 
         edit_score = new QLineEdit(Finder);
         edit_score->setFont(font);
-        edit_score->setMinimumHeight(30); // TODO: PERCENT
+        edit_score->setMinimumHeight(base_height);
         edit_score->setAlignment(Qt::AlignCenter);
         edit_score->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         edit_score->setPlaceholderText("SCORE MIN-MAX");
@@ -176,7 +183,7 @@ public:
         combo_date = new QComboBox(Finder);
         combo_date->setView(new QListView());
         combo_date->view()->setFont(font);
-        combo_date->setMinimumHeight(29); // TODO: PERCENT
+        combo_date->setMinimumHeight(base_height - 1);
         combo_date->setEditable(true);
         combo_date->lineEdit()->setReadOnly(true);
         combo_date->lineEdit()->setFont(font);
@@ -198,7 +205,7 @@ public:
         combo_order = new QComboBox(Finder);
         combo_order->setView(new QListView());
         combo_order->view()->setFont(font);
-        combo_order->setMinimumHeight(29); // TODO: PERCENT
+        combo_order->setMinimumHeight(base_height - 1);
         combo_order->setEditable(true);
         combo_order->lineEdit()->setReadOnly(true);
         combo_order->lineEdit()->setFont(font);
@@ -217,8 +224,8 @@ public:
         combo_max = new QComboBox(Finder);
         combo_max->setView(new QListView());
         combo_max->view()->setFont(font);
-        combo_max->setMinimumWidth(78); // TODO: PERCENT
-        combo_max->setMinimumHeight(29); // TODO: PERCENT
+        combo_max->setMinimumWidth(desktop_width / 24.6);
+        combo_max->setMinimumHeight(base_height - 1);
         combo_max->setEditable(true);
         combo_max->lineEdit()->setReadOnly(true);
         combo_max->lineEdit()->setFont(font);
@@ -240,12 +247,12 @@ public:
         it6->setSelectable(false);
 
         button_request = new QPushButton(QIcon(":/icon-find"), NULL, Finder);
-        button_request->setIconSize(QSize(12, 12)); // TODO: PERCENT
+        button_request->setIconSize(QSize(base_size, base_size));
         button_request->setFlat(true);
 
         layout = new QHBoxLayout(Finder);
         layout->setMargin(0);
-        layout->setSpacing(3); // TODO: PERCENT
+        layout->setSpacing(3);
         layout->addWidget(edit_name);
         layout->addWidget(edit_version);
         layout->addWidget(edit_cve);
@@ -275,27 +282,31 @@ public:
 
     void setupUi(QWidget *View)
     {
-        int height = QApplication::desktop()->screenGeometry().height();
+        int desktop_width = QApplication::desktop()->screenGeometry().width();
+        int desktop_height = QApplication::desktop()->screenGeometry().height();
+        int base_height = (desktop_height / 36);
+        int base_size = (desktop_width / 160);
+        int base_space = (desktop_width / 384);
 
         QFont font(":/font-default");
-        font.setPointSize(11); // TODO: PERCENT
+        font.setPointSize(desktop_width / 174.5);
 
         label_counter = new QLabel(View);
         label_counter->setProperty("type", "white-bg");
         label_counter->setFont(font);
-        label_counter->setMinimumWidth(75); // TODO: PERCENT
-        label_counter->setMinimumHeight(30); // TODO: PERCENT
+        label_counter->setMinimumWidth(desktop_width / 25.6);
+        label_counter->setMinimumHeight(base_height);
         label_counter->setAlignment(Qt::AlignCenter);
         label_counter->hide();
 
         button_request = new QPushButton(QIcon(":/icon-find"), NULL, View);
-        button_request->setIconSize(QSize(12, 12)); // TODO: PERCENT
+        button_request->setIconSize(QSize(base_size, base_size));
         button_request->setFlat(true);
         button_request->setHidden(true);
 
         layout_counter = new QHBoxLayout;
         layout_counter->setMargin(0);
-        layout_counter->setSpacing(5); // TODO: PERCENT
+        layout_counter->setSpacing(base_space);
         layout_counter->setAlignment(Qt::AlignLeft);
         layout_counter->addWidget(label_counter);
         layout_counter->addWidget(button_request);
@@ -310,7 +321,7 @@ public:
 
         layout_scroll = new QVBoxLayout;
         layout_scroll->setMargin(0);
-        layout_scroll->setSpacing(5); // TODO: PERCENT
+        layout_scroll->setSpacing(base_space);
         layout_scroll->setAlignment(Qt::AlignTop);
 
         widget_scroll->setLayout(layout_scroll);
@@ -318,12 +329,12 @@ public:
 
         layout = new QVBoxLayout(View);
         layout->setMargin(0);
-        layout->setSpacing(5); // TODO: PERCENT
+        layout->setSpacing(base_space);
         layout->addLayout(layout_counter);
         layout->addWidget(scrollarea);
 
-        View->setMinimumHeight(height - 65); // TODO: PERCENT
-        View->setMaximumHeight(height - 65); // TODO: PERCENT
+        View->setMinimumHeight(desktop_height - (desktop_height / 16.6));
+        View->setMaximumHeight(desktop_height - (desktop_height / 16.6));
         View->setLayout(layout);
     }
 };
@@ -357,43 +368,47 @@ public:
 
     void setupUi(QWidget *Bulletin)
     {
-        int height = QApplication::desktop()->screenGeometry().height();
-        int width = QApplication::desktop()->screenGeometry().width();
+        int desktop_width = QApplication::desktop()->screenGeometry().width();
+        int desktop_height = QApplication::desktop()->screenGeometry().height();
+        int base_height = (desktop_height / 31.7);
+        int base_size = (desktop_width / 160);
+        int base_margin = (desktop_width / 240);
+        int base_space = (desktop_width / 384);
 
         QFont font(":/font-default");
-        font.setPointSize(11); // TODO: PERCENT
+        font.setPointSize(desktop_width / 174.5);
 
         label_number = new QLabel(Bulletin);
         label_number->setProperty("type", "gray-dark-bg");
         label_number->setFont(font);
-        label_number->setMinimumWidth(75); // TODO: PERCENT
-        label_number->setMinimumHeight(34); // TODO: PERCENT
+        label_number->setMinimumWidth(desktop_width / 25.6);
+        label_number->setMinimumHeight(base_height);
         label_number->setAlignment(Qt::AlignCenter);
 
         label_published = new QLabel(Bulletin);
         label_published->setProperty("type", "gray-bg");
         label_published->setFont(font);
-        label_published->setMinimumWidth(116); // TODO: PERCENT
-        label_published->setMinimumHeight(34); // TODO: PERCENT
+        label_published->setMinimumWidth(desktop_width / 16.5);
+        label_published->setMinimumHeight(base_height);
         label_published->setAlignment(Qt::AlignCenter);
 
         label_title = new QLabel(Bulletin);
         label_title->setProperty("type", "gray-light-bg");
         label_title->setFont(font);
-        label_title->setMinimumWidth(width - 1718); // TODO: PERCENT
-        label_title->setMinimumHeight(34); // TODO: PERCENT
-        label_title->setMargin(8); // TODO: PERCENT
+        label_title->setMinimumWidth(desktop_width - (desktop_width / 1.1175));
+        label_title->setMinimumHeight(base_height);
+        label_title->setMargin(base_margin);
         label_title->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
         label_score = new QLabel(Bulletin);
         label_score->setProperty("type", "score-low");
         label_score->setFont(font);
-        label_score->setMinimumWidth(75); // TODO: PERCENT
-        label_score->setMinimumHeight(34); // TODO: PERCENT
+        label_score->setMinimumWidth(desktop_width / 25.6);
+        label_score->setMinimumHeight(base_height);
         label_score->setAlignment(Qt::AlignCenter);
 
         button_details = new QPushButton(QIcon(":/icon-more"), NULL, Bulletin);
-        button_details->setIconSize(QSize(12, 12)); // TODO: PERCENT
+        button_details->setIconSize(QSize(base_size, base_size));
         button_details->setFlat(true);
 
         font.setItalic(true);
@@ -401,8 +416,8 @@ public:
         label_description = new QLabel(Bulletin);
         label_description->setProperty("type", "white-bg");
         label_description->setFont(font);
-        label_description->setMinimumHeight(34); // TODO: PERCENT
-        label_description->setMargin(8); // TODO: PERCENT
+        label_description->setMinimumHeight(base_height);
+        label_description->setMargin(base_margin);
         label_description->setWordWrap(true);
         label_description->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label_description->setHidden(true);
@@ -412,7 +427,7 @@ public:
         label_id = new QLabel(Bulletin);
         label_id->setProperty("type", "white");
         label_id->setFont(font);
-        label_id->setMargin(8); // TODO: PERCENT
+        label_id->setMargin(base_margin);
         label_id->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label_id->setText("<span style=color:#998f46>ID</span><hr>");
         label_id->setHidden(true);
@@ -420,14 +435,14 @@ public:
         label_cve = new QLabel(Bulletin);
         label_cve->setProperty("type", "white");
         label_cve->setFont(font);
-        label_cve->setMargin(8); // TODO: PERCENT
+        label_cve->setMargin(base_margin);
         label_cve->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label_cve->setText("<span style=color:#998f46>CVE</span><hr>");
         label_cve->setHidden(true);
 
         label_cvss = new QLabel(Bulletin);
         label_cvss->setFont(font);
-        label_cvss->setMargin(8); // TODO: PERCENT
+        label_cvss->setMargin(base_margin);
         label_cvss->setText("<span style=color:#998f46>CVSS</span><hr>");
         label_cvss->setHidden(true);
 
@@ -436,7 +451,7 @@ public:
         label_cpe_vendor = new QLabel(Bulletin);
         label_cpe_vendor->setProperty("type", "white");
         label_cpe_vendor->setFont(font);
-        label_cpe_vendor->setMargin(8); // TODO: PERCENT
+        label_cpe_vendor->setMargin(base_margin);
         label_cpe_vendor->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label_cpe_vendor->setText("<span style=color:#998f46>VENDOR</span><hr>");
         label_cpe_vendor->setHidden(true);
@@ -444,7 +459,7 @@ public:
         label_cpe_product = new QLabel(Bulletin);
         label_cpe_product->setProperty("type", "white");
         label_cpe_product->setFont(font);
-        label_cpe_product->setMargin(8); // TODO: PERCENT
+        label_cpe_product->setMargin(base_margin);
         label_cpe_product->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label_cpe_product->setText("<span style=color:#998f46>PRODUCT</span><hr>");
         label_cpe_product->setHidden(true);
@@ -452,7 +467,7 @@ public:
         label_cpe_version = new QLabel(Bulletin);
         label_cpe_version->setProperty("type", "white");
         label_cpe_version->setFont(font);
-        label_cpe_version->setMargin(8); // TODO: PERCENT
+        label_cpe_version->setMargin(base_margin);
         label_cpe_version->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label_cpe_version->setText("<span style=color:#998f46>VERSION</span><hr>");
         label_cpe_version->setHidden(true);
@@ -468,7 +483,7 @@ public:
 
         label_href = new QLabel(Bulletin);
         label_href->setFont(font);
-        label_href->setMargin(8); // TODO: PERCENT
+        label_href->setMargin(base_margin);
         label_href->setTextInteractionFlags(Qt::TextBrowserInteraction | Qt::TextSelectableByMouse);
         label_href->setOpenExternalLinks(true);
         label_href->setText("<span style=color:#998f46>REFERENCES</span><hr>");
@@ -476,19 +491,19 @@ public:
 
         label_source = new QLabel(Bulletin);
         label_source->setFont(font);
-        label_source->setContentsMargins(0, 8, 0, 0); // TODO: PERCENT
+        label_source->setContentsMargins(0, base_margin, 0, 0);
         label_source->setText("<span style=color:#998f46>SOURCE</span>");
         label_source->setHidden(true);
 
         button_source_details = new QPushButton(QIcon(":/icon-source-more"), NULL, Bulletin);
-        button_source_details->setIconSize(QSize(12, 18)); // TODO: PERCENT
-        button_source_details->setMinimumSize(QSize(12, 18)); // TODO: PERCENT
+        button_source_details->setIconSize(QSize(base_size, (desktop_height / 60)));
+        button_source_details->setMinimumSize(QSize(base_size, (desktop_height / 60)));
         button_source_details->setFlat(true);
         button_source_details->setHidden(true);
 
         layout_source_label = new QHBoxLayout;
         layout_source_label->setMargin(0);
-        layout_source_label->setSpacing(5); // TODO: PERCENT
+        layout_source_label->setSpacing(base_space);
         layout_source_label->addWidget(label_source);
         layout_source_label->addWidget(button_source_details);
         layout_source_label->addStretch();
@@ -501,7 +516,7 @@ public:
         text_source = new QTextEdit(Bulletin);
         text_source->setProperty("type", "source");
         text_source->setFont(font);
-        text_source->setMinimumHeight(height - 142); // TODO: PERCENT
+        text_source->setMinimumHeight(desktop_height - (desktop_height / 7.6));
         text_source->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         text_source->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         text_source->setReadOnly(true);
@@ -510,14 +525,14 @@ public:
         highlighter = new Highlighter(text_source->document());
 
         button_source_save = new QPushButton(QIcon(":/icon-save"), NULL, text_source);
-        button_source_save->setIconSize(QSize(20, 20)); // TODO: PERCENT
-        button_source_save->setMaximumWidth(20); // TODO: PERCENT
-        button_source_save->move(1525, 5); // TODO: CALCULATE
+        button_source_save->setIconSize(QSize((desktop_width / 96), (desktop_width / 96)));
+        button_source_save->setMaximumWidth(desktop_width / 96);
+        button_source_save->move((desktop_width / 1.2590), base_space);
         button_source_save->setFlat(true);
         button_source_save->setToolTip("SAVE");
 
         layout_source = new QVBoxLayout;
-        layout_source->setContentsMargins(8, 0, 8, 0); // TODO: PERCENT
+        layout_source->setContentsMargins(base_margin, 0, base_margin, 0);
         layout_source->setSpacing(0);
         layout_source->addLayout(layout_source_label);
         layout_source->addWidget(label_source_line);
@@ -525,8 +540,8 @@ public:
 
         layout = new QGridLayout(Bulletin);
         layout->setMargin(0);
-        layout->setHorizontalSpacing(5); // TODO: PERCENT
-        layout->setVerticalSpacing(15); // TODO: PERCENT
+        layout->setHorizontalSpacing(base_space);
+        layout->setVerticalSpacing(desktop_height / 72);
         layout->setColumnStretch(2, 1);
         layout->addWidget(label_number, 0, 0, 1, 1);
         layout->addWidget(label_published, 0, 1, 1, 1);
@@ -541,8 +556,8 @@ public:
         layout->addWidget(label_href, 6, 2, 1, 1);
         layout->addLayout(layout_source, 7, 2, 1, 1);
 
-        Bulletin->setMinimumWidth(width - 20); // TODO: PERCENT
-        Bulletin->setMaximumWidth(width - 20); // TODO: PERCENT
+        Bulletin->setMinimumWidth(desktop_width - (desktop_width / 96));
+        Bulletin->setMaximumWidth(desktop_width - (desktop_width / 96));
         Bulletin->setLayout(layout);
     }
 };
