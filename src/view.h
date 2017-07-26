@@ -19,7 +19,8 @@ public:
     ~View();
 
 public slots:
-    void build_bulletin(std::string *ret, int max);
+    void build_bulletin(std::string *ret, const std::string &name,
+                        const std::string &version, int max);
 
 signals:
     void request_signal();

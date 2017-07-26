@@ -21,7 +21,9 @@ public:
 public slots:
     void set_number(int number);
     void set_published(std::string published);
-    void set_title(std::string title, bool has_quotes, bool has_dash);
+    void set_title(std::string title, std::string name,
+                   std::string version ,bool has_quotes,
+                   bool has_dash);
     void set_score(float score);
     void set_description_cve(std::string description, std::vector<std::string> cve,
                              bool is_exploitdb);

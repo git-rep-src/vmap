@@ -33,7 +33,8 @@ private:
     QTimer *status_timer;
 
 private slots:
-    bool api(const std::string &req, int max);
+    bool api(const std::string &req, const std::string &name,
+             const std::string &version, int max);
     void set_status(const QString &status);
 };
 

@@ -82,7 +82,8 @@ void Finder::build_request(bool has_offset)
               "Connection:Keep-Alive\r\n\r\n";
     }
 
-    emit request_signal(req, std::stoi(max));
+    emit request_signal(req, ui->edit_name->text().toStdString(),
+                        ui->edit_version->text().toStdString(), std::stoi(max));
 }
 
 void Finder::set_query()

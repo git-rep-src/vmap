@@ -23,7 +23,8 @@ View::~View()
     delete ui;
 }
 
-void View::build_bulletin(std::string *ret, int max)
+void View::build_bulletin(std::string *ret, const std::string &name,
+                          const std::string &version, int max)
 {
     int n_total;
     size_t n;
@@ -56,7 +57,7 @@ void View::build_bulletin(std::string *ret, int max)
                 bulletins_vector.push_back(new Bulletin(true, false, this));
                 bulletins_vector[offset]->set_number(offset + 1);
                 bulletins_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
-                bulletins_vector[offset]->set_title(js["data"]["search"][i]["flatDescription"], true, false);
+                bulletins_vector[offset]->set_title(js["data"]["search"][i]["flatDescription"], name, version, true, false);
                 bulletins_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
                 bulletins_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, false);
                 bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
@@ -67,7 +68,7 @@ void View::build_bulletin(std::string *ret, int max)
                 bulletins_vector.push_back(new Bulletin(false, true, this));
                 bulletins_vector[offset]->set_number(offset + 1);
                 bulletins_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
-                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
+                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], name, version, false, true);
                 bulletins_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
                 bulletins_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, true);
                 bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
@@ -80,7 +81,7 @@ void View::build_bulletin(std::string *ret, int max)
                 bulletins_vector.push_back(new Bulletin(false, true, this));
                 bulletins_vector[offset]->set_number(offset + 1);
                 bulletins_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
-                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, false);
+                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], name, version, false, false);
                 bulletins_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
                 bulletins_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["title"], cve, false);
                 bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
@@ -93,7 +94,7 @@ void View::build_bulletin(std::string *ret, int max)
                 bulletins_vector.push_back(new Bulletin(false, false, this));
                 bulletins_vector[offset]->set_number(offset + 1);
                 bulletins_vector[offset]->set_published(js["data"]["search"][i]["_source"]["modified"]);
-                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], false, true);
+                bulletins_vector[offset]->set_title(js["data"]["search"][i]["_source"]["title"], name, version, false, true);
                 bulletins_vector[offset]->set_score(js["data"]["search"][i]["_source"]["cvss"]["score"]);
                 bulletins_vector[offset]->set_description_cve(js["data"]["search"][i]["_source"]["description"], cve, false);
                 bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);

@@ -21,7 +21,8 @@ public slots:
     void build_request(bool has_offset = false);
 
 signals:
-    void request_signal(const std::string &req, int max);
+    void request_signal(const std::string &req, const std::string &name,
+                        const std::string &version, int max);
 
 private:
     Ui::Finder *ui;

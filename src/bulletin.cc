@@ -77,7 +77,9 @@ void Bulletin::set_published(std::string published)
     ui->label_published->setText(QString::fromStdString(published));
 }
 
-void Bulletin::set_title(std::string title, bool has_quotes, bool has_dash)
+void Bulletin::set_title(std::string title, std::string name,
+                         std::string version, bool has_quotes,
+                         bool has_dash)
 {
     std::size_t n;
     std::regex re;
@@ -86,6 +88,7 @@ void Bulletin::set_title(std::string title, bool has_quotes, bool has_dash)
         title.std::string::replace((ui->label_title->width() - 3),
                                    (title.std::string::size() - (ui->label_title->width() - 3)),
                                    "...");
+
     if (has_quotes) {
         re.assign("&quot;");
         title = std::regex_replace(title, re, "\"");
@@ -109,6 +112,15 @@ void Bulletin::set_title(std::string title, bool has_quotes, bool has_dash)
             }
             title.std::string::replace(title.std::string::rfind(" - "), 2, " ");
         }
+    }
+
+    if (name != "") {
+        re.assign(name, std::regex::icase);
+        title = std::regex_replace(title, re, "<span style=color:#ffffff; style=font-weight:bold>" + name + "</span>");
+    }
+    if (version != "") {
+        re.assign(version, std::regex::icase);
+        title = std::regex_replace(title, re, "<span style=color:#ffffff>" + version + "</span>");
     }
 
     ui->label_title->setText(QString::fromStdString(title));

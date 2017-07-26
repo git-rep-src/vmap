@@ -13,9 +13,10 @@ Vmap::Vmap(QWidget *parent) :
     });
 
     finder = new Finder(this);
-    QObject::connect(finder, &Finder::request_signal, [&] (const std::string &req, int max) {
+    QObject::connect(finder, &Finder::request_signal, [&] (const std::string &req, const std::string &name,
+                                                           const std::string &version, int max) {
         set_status("GETTING...");
-        if (!api(req, max))
+        if (!api(req, name, version, max))
             set_status("<span style=color:#5c181b>REQUEST ERROR</span>");
     });
 
@@ -51,7 +52,8 @@ Vmap::~Vmap()
     delete ui;
 }
 
-bool Vmap::api(const std::string &req, int max)
+bool Vmap::api(const std::string &req, const std::string &name,
+               const std::string &version, int max)
 {
     if (socket == NULL) {
         socket = new SSL_socket;
@@ -65,7 +67,7 @@ bool Vmap::api(const std::string &req, int max)
     if (!socket->write_read(req, &ret))
         return false;
 
-    view->build_bulletin(&ret, max);
+    view->build_bulletin(&ret, name, version, max);
 
     ret.clear();
 
