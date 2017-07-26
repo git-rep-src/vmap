@@ -66,9 +66,10 @@ public:
 class Ui_Finder
 {
 public:
+    QLineEdit *edit_id;
+    QLineEdit *edit_cve;
     QLineEdit *edit_name;
     QLineEdit *edit_version;
-    QLineEdit *edit_cve;
     QLineEdit *edit_score;
     QComboBox *combo_match;
     QComboBox *combo_vector;
@@ -90,6 +91,21 @@ public:
         font.setPointSize(desktop_width / 174.5);
         font.setCapitalization(QFont::AllUppercase);
 
+        edit_id = new QLineEdit(Finder);
+        edit_id->setFont(font);
+        edit_id->setMinimumHeight(base_height);
+        edit_id->setAlignment(Qt::AlignCenter);
+        edit_id->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        edit_id->setPlaceholderText("ID");
+
+        edit_cve = new QLineEdit(Finder);
+        edit_cve->setFont(font);
+        edit_cve->setMinimumHeight(base_height);
+        edit_cve->setAlignment(Qt::AlignCenter);
+        edit_cve->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        edit_cve->setPlaceholderText("CVE");
+        edit_cve->setToolTip("CVE-YYYY-NNNN");
+
         edit_name = new QLineEdit(Finder);
         edit_name->setFont(font);
         edit_name->setMinimumHeight(base_height);
@@ -103,13 +119,6 @@ public:
         edit_version->setAlignment(Qt::AlignCenter);
         edit_version->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         edit_version->setPlaceholderText("VERSION");
-
-        edit_cve = new QLineEdit(Finder);
-        edit_cve->setFont(font);
-        edit_cve->setMinimumHeight(base_height);
-        edit_cve->setAlignment(Qt::AlignCenter);
-        edit_cve->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        edit_cve->setPlaceholderText("CVE-YYYY-NNNN");
 
         combo_match = new QComboBox(Finder);
         combo_match->setView(new QListView());
@@ -178,7 +187,8 @@ public:
         edit_score->setMinimumHeight(base_height);
         edit_score->setAlignment(Qt::AlignCenter);
         edit_score->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        edit_score->setPlaceholderText("SCORE MIN-MAX");
+        edit_score->setPlaceholderText("SCORE");
+        edit_score->setToolTip("MIN-MAX");
 
         combo_date = new QComboBox(Finder);
         combo_date->setView(new QListView());
@@ -253,9 +263,10 @@ public:
         layout = new QHBoxLayout(Finder);
         layout->setMargin(0);
         layout->setSpacing(3);
+        layout->addWidget(edit_id);
+        layout->addWidget(edit_cve);
         layout->addWidget(edit_name);
         layout->addWidget(edit_version);
-        layout->addWidget(edit_cve);
         layout->addWidget(combo_match);
         layout->addWidget(combo_vector);
         layout->addWidget(combo_type);
@@ -292,7 +303,7 @@ public:
         font.setPointSize(desktop_width / 174.5);
 
         label_counter = new QLabel(View);
-        label_counter->setProperty("type", "white-bg");
+        label_counter->setProperty("type", "white");
         label_counter->setFont(font);
         label_counter->setMinimumWidth(desktop_width / 25.6);
         label_counter->setMinimumHeight(base_height);
@@ -307,7 +318,7 @@ public:
         layout_counter = new QHBoxLayout;
         layout_counter->setMargin(0);
         layout_counter->setSpacing(base_space);
-        layout_counter->setAlignment(Qt::AlignLeft);
+        layout_counter->setAlignment(Qt::AlignRight);
         layout_counter->addWidget(label_counter);
         layout_counter->addWidget(button_request);
 

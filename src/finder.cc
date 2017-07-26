@@ -29,9 +29,10 @@ Finder::Finder(QWidget *parent) :
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
         ui->combo_max->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
+    QObject::connect(ui->edit_id, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->edit_cve, &QLineEdit::returnPressed, [&] { build_request(); });
     QObject::connect(ui->edit_name, &QLineEdit::returnPressed, [&] { build_request(); });
     QObject::connect(ui->edit_version, &QLineEdit::returnPressed, [&] { build_request(); });
-    QObject::connect(ui->edit_cve, &QLineEdit::returnPressed, [&] { build_request(); });
     QObject::connect(ui->edit_score, &QLineEdit::returnPressed, [&] { build_request(); });
     QObject::connect(ui->button_request, &QPushButton::pressed, [&] { build_request(); });
 }
@@ -43,6 +44,8 @@ Finder::~Finder()
 
 void Finder::build_request(bool has_offset)
 {
+    has_id_cve = false;
+
     if (!has_offset) {
         offset = 0;
         set_query();
@@ -84,8 +87,17 @@ void Finder::build_request(bool has_offset)
 
 void Finder::set_query()
 {
-    if (ui->edit_cve->text() != "") {
-        query = "cvelist:" + ui->edit_cve->text().toStdString();
+    if (ui->edit_id->text() != "") {
+        query = "id:\"" +
+                ui->edit_id->text().toStdString() +
+                "\"";
+        has_id_cve = true;
+    } else if (ui->edit_cve->text() != "") {
+        if (!ui->edit_cve->text().contains("CVE-"))
+            query = "cvelist:CVE-" + ui->edit_cve->text().toStdString();
+        else
+            query = "cvelist:" + ui->edit_cve->text().toStdString();
+        has_id_cve = true;
     } else if ((ui->edit_name->text() != "") ||
                (ui->edit_version->text() != "")) {
         if ((ui->combo_match->currentText() == "MATCH") ||
@@ -121,7 +133,8 @@ void Finder::set_query()
 void Finder::set_vector()
 {
     if ((ui->combo_vector->currentText() == "VECTOR") ||
-        (ui->combo_vector->currentText() == "ANY"))
+        (ui->combo_vector->currentText() == "ANY") ||
+        has_id_cve)
         vector = "*";
     else if (ui->combo_vector->currentText() == "REMOTE")
         vector = "\"AV:NETWORK\"";
@@ -131,8 +144,10 @@ void Finder::set_vector()
 
 void Finder::set_type()
 {
-    if ((ui->combo_type->currentText() == "TYPE") ||
-        (ui->combo_type->currentText() == "CVE"))
+    if (has_id_cve)
+        type = "*";
+    else if ((ui->combo_type->currentText() == "TYPE") ||
+             (ui->combo_type->currentText() == "CVE"))
         type = "cve";
     else if (ui->combo_type->currentText() == "WORDPRESSDB")
         type = "wpvulndb";
@@ -142,7 +157,7 @@ void Finder::set_type()
 
 void Finder::set_score()
 {
-    if (ui->edit_score->text() != "") {
+    if ((ui->edit_score->text() != "") && !has_id_cve) {
         std::size_t n;
         score = ui->edit_score->text().toStdString();
         if ((n = score.std::string::find("-")) != std::string::npos)
@@ -155,7 +170,8 @@ void Finder::set_score()
 void Finder::set_date()
 {
     if ((ui->combo_date->currentText() == "DATE") ||
-        (ui->combo_date->currentText() == "ANY"))
+        (ui->combo_date->currentText() == "ANY") ||
+        has_id_cve)
         date = "";
     else
         date = ui->combo_date->currentText().toLower().toStdString();

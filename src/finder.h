@@ -26,6 +26,8 @@ signals:
 private:
     Ui::Finder *ui;
 
+    bool has_id_cve;
+
     int offset;
 
     std::string query;
