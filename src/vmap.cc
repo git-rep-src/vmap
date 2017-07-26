@@ -15,7 +15,6 @@ Vmap::Vmap(QWidget *parent) :
     finder = new Finder(this);
     QObject::connect(finder, &Finder::request_signal, [&] (const std::string &req, const std::string &name,
                                                            const std::string &version, int max) {
-        set_status("GETTING...");
         if (!api(req, name, version, max))
             set_status("<span style=color:#5c181b>REQUEST ERROR</span>");
     });
@@ -29,7 +28,7 @@ Vmap::Vmap(QWidget *parent) :
     });
 
     ui->layout->addWidget(finder);
-    ui->layout->addSpacing(QApplication::desktop()->screenGeometry().height() / 108);
+    ui->layout->addSpacing(QApplication::desktop()->screenGeometry().height() / 216);
     ui->layout->addWidget(view);
     ui->layout->addStretch();
     ui->layout->addWidget(ui->label_status);

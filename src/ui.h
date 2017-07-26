@@ -295,8 +295,8 @@ public:
     {
         int desktop_width = QApplication::desktop()->screenGeometry().width();
         int desktop_height = QApplication::desktop()->screenGeometry().height();
-        int base_height = (desktop_height / 36);
-        int base_size = (desktop_width / 160);
+        int base_height = (desktop_height / 31.7);
+        int base_size = (desktop_width / 76.8);
         int base_space = (desktop_width / 384);
 
         QFont font(":/font-default");
@@ -310,8 +310,9 @@ public:
         label_counter->setAlignment(Qt::AlignCenter);
         label_counter->hide();
 
-        button_request = new QPushButton(QIcon(":/icon-find"), NULL, View);
-        button_request->setIconSize(QSize(base_size, base_size));
+        button_request = new QPushButton("→", View);
+        button_request->setFont(font);
+        button_request->setMaximumSize(QSize(base_size, base_size));
         button_request->setFlat(true);
         button_request->setHidden(true);
 

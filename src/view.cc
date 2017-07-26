@@ -111,15 +111,15 @@ void View::build_bulletin(std::string *ret, const std::string &name,
         if (offset > n_total)
             offset = n_total;
         ui->label_counter->setText(QString::number(offset) +
-                                   "<span style=color:#808080>/</span>" +
+                                   "-" +
                                    QString::number(n_total));
-        ui->label_counter->setVisible(true);
-        ui->button_request->setVisible(offset != n_total);
+        ui->button_request->setEnabled(offset != n_total);
     } else {
-        ui->label_counter->setText("0<span style=color:#808080>/</span>0");
-        ui->label_counter->setVisible(true);
-        ui->button_request->setHidden(true);
+        ui->label_counter->setText("0-0");
+        ui->button_request->setDisabled(true);
     }
+    ui->label_counter->setVisible(true);
+    ui->button_request->setVisible(true);
 
     has_offset = false;
 }
