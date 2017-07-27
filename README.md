@@ -1,8 +1,6 @@
 # VMAP
 
-A vulnerability-exploit desktop finder.
-
-Vmap use the [vulners.com](https://vulners.com) API.
+A vulnerability-exploit desktop finder. Vmap use the [vulners](https://vulners.com/api/v3/) API.
 
 ## INSTALLATION
 
