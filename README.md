@@ -1,7 +1,8 @@
-## VMAP
+# VMAP
 
-A vulnerability-exploit desktop finder.\n
-Vmap use the [vulners](https://vulners.com/api/v3/) API.
+A vulnerability-exploit desktop finder.
+
+Vmap use the [vulners.com](https://vulners.com) API.
 
 ## INSTALLATION
 
@@ -12,5 +13,5 @@ openssl >= 1.1
 ```shell
 qmake
 make
-sudo make install
+make install
 ```
