@@ -10,8 +10,6 @@ qt      >= 5.x
 openssl >= 1.1
 ```
 ```shell
-git clone https://github.com/git-rep/vmap.git
-cd vmap
 qmake
 make
 sudo make install
