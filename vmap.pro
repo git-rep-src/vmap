@@ -1,8 +1,13 @@
 QT += core gui widgets
 
 unix {
-    CONFIG += link_pkgconfig c++11
+    CONFIG += release link_pkgconfig c++11
     LIBS += -L/usr/lib/ -lcrypto -lssl
+    target.path = /usr/local/bin
+    INSTALLS += target
+}
+win32 {
+    #TODO
 }
 
 TARGET = vmap
