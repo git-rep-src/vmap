@@ -178,6 +178,14 @@ QPushButton:disabled {
     color: rgb(61, 66, 77);
     background-color: rgb(18, 21, 25);
 }
+QPushButton[type = "file"] {
+    color: rgb(132, 133, 135);
+    background-color: rgb(29, 31, 34);
+}
+QPushButton[type = "file"]:disabled {
+    color: rgb(61, 66, 77);
+    background-color: rgb(18, 21, 25);
+}
 
 QToolTip {
     color: white;
