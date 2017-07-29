@@ -18,12 +18,15 @@ Vmap::Vmap(QWidget *parent) :
         if (!api(req, name, version, max))
             set_status("<span style=color:#5c181b>REQUEST ERROR</span>");
     });
+    QObject::connect(finder, &Finder::status_signal, [&] (const std::string status) {
+        set_status(status);
+    });
 
     view = new View(this);
     QObject::connect(view, &View::request_signal, [&] {
         finder->build_request(true);
     });
-    QObject::connect(view, &View::status_signal, [&] (QString status) {
+    QObject::connect(view, &View::status_signal, [&] (const std::string status) {
         set_status(status);
     });
 
@@ -73,8 +76,8 @@ bool Vmap::api(const std::string &req, const std::string &name,
     return true;
 }
 
-void Vmap::set_status(const QString &status)
+void Vmap::set_status(const std::string &status)
 {
-    ui->label_status->setText(status);
+    ui->label_status->setText(QString::fromStdString(status));
     status_timer->start();
 }

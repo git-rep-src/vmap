@@ -34,7 +34,7 @@ public slots:
     void set_source(std::string source, bool is_packetstorm);
 
 signals:
-    void status_signal(QString status);
+    void status_signal(const std::string &status);
 
 private:
     Ui::Bulletin *ui;

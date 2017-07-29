@@ -74,7 +74,7 @@ void View::build_bulletin(std::string *ret, const std::string &name,
                 bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
                 bulletins_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
                 bulletins_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], false);
-                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (QString status) {
+                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (const std::string status) {
                     emit status_signal(status);
                 });
             } else if (js["data"]["search"][i]["_source"]["type"] == "packetstorm") {
@@ -87,7 +87,7 @@ void View::build_bulletin(std::string *ret, const std::string &name,
                 bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
                 bulletins_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
                 bulletins_vector[offset]->set_source(js["data"]["search"][i]["_source"]["sourceData"], true);
-                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (QString status) {
+                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (const std::string status) {
                     emit status_signal(status);
                 });
             } else {
@@ -100,7 +100,7 @@ void View::build_bulletin(std::string *ret, const std::string &name,
                 bulletins_vector[offset]->set_id(js["data"]["search"][i]["_source"]["id"]);
                 bulletins_vector[offset]->set_cvss(js["data"]["search"][i]["_source"]["cvss"]["vector"]);
                 bulletins_vector[offset]->set_href(js["data"]["search"][i]["_source"]["href"]);
-                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (QString status) {
+                QObject::connect(bulletins_vector[offset], &Bulletin::status_signal, [&] (const std::string status) {
                     emit status_signal(status);
                 });
             }

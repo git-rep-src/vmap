@@ -24,7 +24,7 @@ public slots:
 
 signals:
     void request_signal();
-    void status_signal(QString status);
+    void status_signal(const std::string &status);
 
 private:
     Ui::View *ui;
