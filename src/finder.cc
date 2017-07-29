@@ -123,7 +123,10 @@ void Finder::set_query()
                 if (i != (terms.size() - 1))
                     buf.append(" OR ");
             }
-            query = "description:(" + buf + ")";
+            if (ui->combo_type->currentText() == "PACKETSTORM")
+                query = "title:(" + buf + ")";
+            else
+                query = "description:(" + buf + ")";
         } else {
             has_error = true;
             emit status_signal("<span style=color:#5c181b>NMAP FILE ERROR</span>");
@@ -148,7 +151,8 @@ void Finder::set_query()
             if (ui->combo_type->currentText() == "PACKETSTORM")
                 query = "title:" +
                         ui->edit_name->text().toStdString() +
-                        " " + ui->edit_version->text().toStdString();
+                        " " +
+                        ui->edit_version->text().toStdString();
             else
                 query = "description:" +
                         ui->edit_name->text().toStdString() +
