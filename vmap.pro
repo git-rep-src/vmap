@@ -1,7 +1,8 @@
 QT += core gui widgets
 
 unix {
-    CONFIG += release link_pkgconfig c++11
+    CONFIG += link_pkgconfig c++11 release
+    PKGCONFIG += libxml++-3.0
     LIBS += -L/usr/lib/ -lcrypto -lssl
     target.path = /usr/local/bin
     INSTALLS += target
