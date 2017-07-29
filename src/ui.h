@@ -68,6 +68,7 @@ class Ui_Finder
 public:
     QLineEdit *edit_id;
     QLineEdit *edit_cve;
+    QLineEdit *edit_nmap;
     QLineEdit *edit_name;
     QLineEdit *edit_version;
     QLineEdit *edit_score;
@@ -77,7 +78,9 @@ public:
     QComboBox *combo_date;
     QComboBox *combo_order;
     QComboBox *combo_max;
+    QPushButton *button_nmap;
     QPushButton *button_request;
+    QHBoxLayout *layout_nmap;
     QHBoxLayout *layout;
 
     void setupUi(QWidget *Finder)
@@ -105,6 +108,24 @@ public:
         edit_cve->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         edit_cve->setPlaceholderText("CVE");
         edit_cve->setToolTip("CVE-YYYY-NNNN");
+
+        edit_nmap = new QLineEdit(Finder);
+        edit_nmap->setFont(font);
+        edit_nmap->setMinimumHeight(base_height);
+        edit_nmap->setAlignment(Qt::AlignCenter);
+        edit_nmap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        edit_nmap->setPlaceholderText("NMAP");
+        edit_nmap->setToolTip("NMAP XML FILE");
+
+        button_nmap = new QPushButton("+", Finder);
+        button_nmap->setProperty("type", "file");
+        button_nmap->setMaximumSize(QSize((desktop_width / 87), base_height));
+
+        layout_nmap = new QHBoxLayout;
+        layout_nmap->setMargin(0);
+        layout_nmap->setSpacing(0);
+        layout_nmap->addWidget(edit_nmap);
+        layout_nmap->addWidget(button_nmap);
 
         edit_name = new QLineEdit(Finder);
         edit_name->setFont(font);
@@ -265,6 +286,7 @@ public:
         layout->setSpacing(3);
         layout->addWidget(edit_id);
         layout->addWidget(edit_cve);
+        layout->addLayout(layout_nmap);
         layout->addWidget(edit_name);
         layout->addWidget(edit_version);
         layout->addWidget(combo_match);

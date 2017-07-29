@@ -4,6 +4,7 @@
 #include "ui.h"
 
 #include <string>
+#include <vector>
 
 namespace Ui {
 class Finder;
@@ -23,13 +24,17 @@ public slots:
 signals:
     void request_signal(const std::string &req, const std::string &name,
                         const std::string &version, int max);
+    void status_signal(const std::string &status);
 
 private:
     Ui::Finder *ui;
 
-    bool has_id_cve;
+    bool is_blocked;
+    bool has_error;
 
     int offset;
+
+    QString last_dir;
 
     std::string query;
     std::string vector;
@@ -48,6 +53,8 @@ private slots:
     void set_date();
     void set_order();
     void set_max();
+    void open_file();
+    bool xml(std::vector<std::string> *terms);
 };
 
 #endif // FINDER_H
