@@ -98,6 +98,23 @@ void Finder::build_request(bool has_offset)
 
 void Finder::set_query()
 {
+    std::string buf;
+    std::vector<std::string> terms;
+    const std::vector<std::string> nmap_skip =
+    {
+        "microsoft",
+        "windows",
+        "linux",
+        "oracle",
+        "apache",
+        "http",
+        "ftp",
+        "ssh",
+        "net",
+        "wireless",
+        "wifi"
+    };
+
     has_error = false;
 
     if (ui->id_edit->text() != "") {
@@ -112,13 +129,17 @@ void Finder::set_query()
             query = "cvelist:" + ui->cve_edit->text().toStdString();
         is_blocked = true;
     } else if (ui->nmap_edit->text() != "") {
-        std::vector<std::string> terms;
         if (xml(&terms)) {
-            std::string buf;
             for (size_t i = 0; i < terms.size(); i++) {
-                buf = buf + "(" + terms[i] + ")";
-                if (i != (terms.size() - 1))
-                    buf.append(" OR ");
+                bool is_skipped = false;
+                for (size_t ii = 0; ii < nmap_skip.size(); ii++)
+                    if (terms[i] == nmap_skip[ii])
+                        is_skipped = true;
+                if (!is_skipped) {
+                    buf = buf + "(" + terms[i] + ")";
+                    if (i != (terms.size() - 1))
+                        buf.append(" OR ");
+                }
             }
             if (ui->type_combo->currentText() == "PACKETSTORM")
                 query = "title:(" + buf + ")";
@@ -285,18 +306,21 @@ bool Finder::xml(std::vector<std::string> *terms)
                         element = (xmlpp::Element *)node.at(i);
                         for (size_t ii = 1; ii <= 2; ii++) {
                             attribute = element->get_attribute(xattributes[ii]);
-                            if (attribute)
-                                buf =  buf + std::string(" ") + attribute->get_value();
+                            if (attribute) {
+                                if (ii == 1)
+                                    buf.append(attribute->get_value());
+                                else
+                                    buf.append(std::string(" ") + attribute->get_value());
+                            }
                         }
                         if (buf != "") {
-                            bool has_term = false;
-                            std::replace(buf.begin(), buf.end(), '/', ' ');
+                            bool is_repeated = false;
                             std::transform(buf.begin(), buf.end(), buf.begin(), ::tolower);
                             for (size_t iii = 0; iii < terms->size(); iii++) {
                                 if ((*terms)[iii].std::string::find(buf) != std::string::npos)
-                                    has_term = true;
+                                    is_repeated  = true;
                             }
-                            if (!has_term)
+                            if (!is_repeated)
                                 terms->push_back(buf);
                         }
                         buf.clear();
