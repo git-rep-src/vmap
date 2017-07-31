@@ -86,6 +86,15 @@ QLabel[type = "score-high"]:disabled {
     background-color: rgb(30, 33, 37);
 }
 
+QLabel[type = "border"] {
+    color: rgb(61, 66, 77);
+    background-color: rgb(26, 29, 33);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(128, 128, 128, 30);
+    border-radius: 1px;
+}
+
 QLineEdit {
     color: white;
     background-color: rgb(30, 33, 37);
@@ -162,12 +171,12 @@ QComboBox QAbstractItemView::item {
     border-style: solid;
     border-width: 1px;
     border-color: rgb(26, 29, 33);
-    min-height: 29px;
+    min-height: 34px;
 }
 QListView::item:selected {
     color: rgb(30, 33, 37);
     background-color: white;
-    min-height: 29px;
+    min-height: 34px;
 }
 
 QPushButton {
