@@ -13,43 +13,43 @@ Bulletin::Bulletin(bool has_cpe, bool has_source, QWidget *parent) :
     ui(new Ui::Bulletin)
 {
     ui->setupUi(this);
-    QObject::connect(ui->button_details, &QPushButton::pressed, [=] {
-        if (!ui->label_description->isVisible())
-            ui->button_details->setIcon(QIcon(":/icon-less"));
+    QObject::connect(ui->details_button, &QPushButton::pressed, [=] {
+        if (!ui->description_label->isVisible())
+            ui->details_button->setIcon(QIcon(":/icon-less"));
         else
-            ui->button_details->setIcon(QIcon(":/icon-more"));
-        ui->label_description->setVisible(!ui->label_description->isVisible());
-        ui->label_id->setVisible(!ui->label_id->isVisible());
-        ui->label_cve->setVisible(!ui->label_cve->isVisible());
-        ui->label_cvss->setVisible(!ui->label_cvss->isVisible());
+            ui->details_button->setIcon(QIcon(":/icon-more"));
+        ui->description_label->setVisible(!ui->description_label->isVisible());
+        ui->id_label->setVisible(!ui->id_label->isVisible());
+        ui->cve_label->setVisible(!ui->cve_label->isVisible());
+        ui->cvss_label->setVisible(!ui->cvss_label->isVisible());
         if (!has_source) {
             if (has_cpe) {
-                ui->label_cpe_vendor->setVisible(!ui->label_cpe_vendor->isVisible());
-                ui->label_cpe_product->setVisible(!ui->label_cpe_product->isVisible());
-                ui->label_cpe_version->setVisible(!ui->label_cpe_version->isVisible());
+                ui->cpe_vendor_label->setVisible(!ui->cpe_vendor_label->isVisible());
+                ui->cpe_product_label->setVisible(!ui->cpe_product_label->isVisible());
+                ui->cpe_version_label->setVisible(!ui->cpe_version_label->isVisible());
             }
-            ui->label_href->setVisible(!ui->label_href->isVisible());
+            ui->href_label->setVisible(!ui->href_label->isVisible());
         } else {
-            ui->label_source->setVisible(!ui->label_source->isVisible());
-            ui->button_source_details->setVisible(!ui->button_source_details->isVisible());
-            ui->label_source_line->setVisible(!ui->label_source_line->isVisible());
-            if (ui->text_source->isVisible()) {
-                ui->text_source->setHidden(true);
-                ui->button_source_details->setIcon(QIcon(":/icon-source-more"));
+            ui->source_label->setVisible(!ui->source_label->isVisible());
+            ui->source_details_button->setVisible(!ui->source_details_button->isVisible());
+            ui->source_line_label->setVisible(!ui->source_line_label->isVisible());
+            if (ui->source_text->isVisible()) {
+                ui->source_text->setHidden(true);
+                ui->source_details_button->setIcon(QIcon(":/icon-source-more"));
             }
         }
     });
-    QObject::connect(ui->label_href, &QLabel::linkActivated, [&] (QString url) {
+    QObject::connect(ui->href_label, &QLabel::linkActivated, [&] (QString url) {
         QDesktopServices::openUrl(QUrl(url));
     });
-    QObject::connect(ui->button_source_details, &QPushButton::pressed, [=] {
-        if (!ui->text_source->isVisible())
-            ui->button_source_details->setIcon(QIcon(":/icon-source-less"));
+    QObject::connect(ui->source_details_button, &QPushButton::pressed, [=] {
+        if (!ui->source_text->isVisible())
+            ui->source_details_button->setIcon(QIcon(":/icon-source-less"));
         else
-            ui->button_source_details->setIcon(QIcon(":/icon-source-more"));
-        ui->text_source->setVisible(!ui->text_source->isVisible());
+            ui->source_details_button->setIcon(QIcon(":/icon-source-more"));
+        ui->source_text->setVisible(!ui->source_text->isVisible());
     });
-    QObject::connect(ui->button_source_save, &QPushButton::pressed, [=] {
+    QObject::connect(ui->source_save_button, &QPushButton::pressed, [=] {
         if (save_source())
             emit status_signal("<span style=color:#ffffff>FILE SAVED</span>");
         else
@@ -64,7 +64,7 @@ Bulletin::~Bulletin()
 
 void Bulletin::set_number(int number)
 {
-    ui->label_number->setText(QString("%1").arg(number, 5, 10, QChar('0')));
+    ui->number_label->setText(QString("%1").arg(number, 5, 10, QChar('0')));
 }
 
 void Bulletin::set_published(std::string published)
@@ -74,7 +74,7 @@ void Bulletin::set_published(std::string published)
     if ((n = published.std::string::find("T")) != std::string::npos)
         published.std::string::erase(n, published.std::string::size());
 
-    ui->label_published->setText(QString::fromStdString(published));
+    ui->published_label->setText(QString::fromStdString(published));
 }
 
 void Bulletin::set_title(std::string title, std::string name,
@@ -84,9 +84,9 @@ void Bulletin::set_title(std::string title, std::string name,
     std::size_t n;
     std::regex re;
 
-    if (title.std::string::size() >= (size_t)ui->label_title->width())
-        title.std::string::replace((ui->label_title->width() - 3),
-                                   (title.std::string::size() - (ui->label_title->width() - 3)),
+    if (title.std::string::size() >= (size_t)ui->title_label->width())
+        title.std::string::replace((ui->title_label->width() - 3),
+                                   (title.std::string::size() - (ui->title_label->width() - 3)),
                                    "...");
 
     if (has_quotes) {
@@ -116,24 +116,25 @@ void Bulletin::set_title(std::string title, std::string name,
 
     if (name != "") {
         re.assign(name, std::regex::icase);
-        title = std::regex_replace(title, re, "<span style=color:#ffffff; style=font-weight:bold>" + name + "</span>");
+        title = std::regex_replace(title, re,
+                                   "<span style=color:#ffffff; style=font-weight:bold>" + name + "</span>");
     }
     if (version != "") {
         re.assign(version, std::regex::icase);
         title = std::regex_replace(title, re, "<span style=color:#ffffff>" + version + "</span>");
     }
 
-    ui->label_title->setText(QString::fromStdString(title));
+    ui->title_label->setText(QString::fromStdString(title));
 }
 
 void Bulletin::set_score(float score)
 {
     if (score >= 7)
-        ui->label_score->setProperty("type", "score-high");
+        ui->score_label->setProperty("type", "score-high");
     else if ((score >= 4) && (score < 7))
-        ui->label_score->setProperty("type", "score-medium");
+        ui->score_label->setProperty("type", "score-medium");
 
-    ui->label_score->setText(QString::number(score));
+    ui->score_label->setText(QString::number(score));
 }
 
 void Bulletin::set_description_cve(std::string description, std::vector<std::string> cve,
@@ -145,9 +146,9 @@ void Bulletin::set_description_cve(std::string description, std::vector<std::str
     std::regex re("(<span class=\"vulners-highlight\">)|(</span>)");
 
     if (description != "")
-        ui->label_description->setText(QString::fromStdString(description));
+        ui->description_label->setText(QString::fromStdString(description));
     else
-        ui->label_description->setText("NONE");
+        ui->description_label->setText("NONE");
 
     if (cve.size() > 0) {
         for (i = 0; i < cve.size(); i++) {
@@ -157,9 +158,9 @@ void Bulletin::set_description_cve(std::string description, std::vector<std::str
                     cve[i].std::string::erase(n, 4);
                 if (i != (cve.size() - 1))
                    cve[i].std::string::insert(cve[i].size(), "<br>");
-                ui->label_cve->setText(ui->label_cve->text() + QString::fromStdString(cve[i]));
+                ui->cve_label->setText(ui->cve_label->text() + QString::fromStdString(cve[i]));
             } else {
-                ui->label_cve->setText(ui->label_cve->text() + "NONE");
+                ui->cve_label->setText(ui->cve_label->text() + "NONE");
             }
         }
     } else {
@@ -168,26 +169,26 @@ void Bulletin::set_description_cve(std::string description, std::vector<std::str
             while (std::getline(ss, buf, ',')) {
                 if (((i = buf.std::string::find("-")) != std::string::npos)) {
                     if (buf.std::string::find(".") == std::string::npos)
-                        ui->label_cve->setText(ui->label_cve->text() +
+                        ui->cve_label->setText(ui->cve_label->text() +
                                                QString::fromStdString(buf.std::string::substr((i + 1),
                                                                                               (buf.size() - (i + 1)))) +
                                                                                               "<br>");
                     else
-                        ui->label_cve->setText(ui->label_cve->text() +
+                        ui->cve_label->setText(ui->cve_label->text() +
                                                QString::fromStdString(buf.std::string::substr((i + 1),
                                                                                               (buf.size() - (i + 2)))));
                 }
             }
             description.std::string::replace((n - 2), (ss.str().size() + 1), "");
         } else {
-            ui->label_cve->setText(ui->label_cve->text() + "NONE");
+            ui->cve_label->setText(ui->cve_label->text() + "NONE");
         }
     }
 }
 
 void Bulletin::set_id(std::string id)
 {
-    ui->label_id->setText(ui->label_id->text() + QString::fromStdString(id));
+    ui->id_label->setText(ui->id_label->text() + QString::fromStdString(id));
 }
 
 void Bulletin::set_cvss(std::string cvss)
@@ -209,7 +210,7 @@ void Bulletin::set_cvss(std::string cvss)
     if ((n = cvss.std::string::rfind("/")) != std::string::npos)
         cvss.std::string::erase(n, 1);
 
-    ui->label_cvss->setText(ui->label_cvss->text() + QString::fromStdString(cvss));
+    ui->cvss_label->setText(ui->cvss_label->text() + QString::fromStdString(cvss));
 }
 
 void Bulletin::set_cpe(std::vector<std::string> cpe)
@@ -230,7 +231,7 @@ void Bulletin::set_cpe(std::vector<std::string> cpe)
                     buf.append(cpe[i].std::string::substr(7, (n - 7)));
                     if (i != (cpe.size() - 1))
                         buf.append("<br>");
-                    ui->label_cpe_vendor->setText(ui->label_cpe_vendor->text() + QString::fromStdString(buf));
+                    ui->cpe_vendor_label->setText(ui->cpe_vendor_label->text() + QString::fromStdString(buf));
                     cpe[i].std::string::erase(0, (n + 1));
                 }
             }
@@ -239,13 +240,13 @@ void Bulletin::set_cpe(std::vector<std::string> cpe)
                 buf.append(cpe[i].std::string::substr(0, n));
                 if (i != (cpe.size() - 1))
                     buf.append("<br>");
-                ui->label_cpe_product->setText(ui->label_cpe_product->text() + QString::fromStdString(buf));
+                ui->cpe_product_label->setText(ui->cpe_product_label->text() + QString::fromStdString(buf));
                 cpe[i].std::string::erase(0, (n + 1));
             } else {
                 buf.append(cpe[i].std::string::substr(0, cpe[i].size()));
                 if (i != (cpe.size() - 1))
                     buf.append("<br>");
-                ui->label_cpe_product->setText(ui->label_cpe_product->text() + QString::fromStdString(buf));
+                ui->cpe_product_label->setText(ui->cpe_product_label->text() + QString::fromStdString(buf));
                 cpe[i].std::string::erase(0, cpe[i].size());
             }
             buf.clear();
@@ -257,18 +258,18 @@ void Bulletin::set_cpe(std::vector<std::string> cpe)
                 buf.append(cpe[i].std::string::substr(0, cpe[i].size()));
                 if (i != (cpe.size() - 1))
                     buf.append("<br>");
-                ui->label_cpe_version->setText(ui->label_cpe_version->text() + QString::fromStdString(buf));
+                ui->cpe_version_label->setText(ui->cpe_version_label->text() + QString::fromStdString(buf));
             } else {
                 if (i != (cpe.size() - 1))
-                    ui->label_cpe_version->setText(ui->label_cpe_version->text() + "-<br>");
+                    ui->cpe_version_label->setText(ui->cpe_version_label->text() + "-<br>");
                 else
-                    ui->label_cpe_version->setText(ui->label_cpe_version->text() + "-");
+                    ui->cpe_version_label->setText(ui->cpe_version_label->text() + "-");
             }
         }
     } else {
-        ui->label_cpe_vendor->setText(ui->label_cpe_vendor->text() + "NONE");
-        ui->label_cpe_product->setText(ui->label_cpe_product->text() + "NONE");
-        ui->label_cpe_version->setText(ui->label_cpe_version->text() + "NONE");
+        ui->cpe_vendor_label->setText(ui->cpe_vendor_label->text() + "NONE");
+        ui->cpe_product_label->setText(ui->cpe_product_label->text() + "NONE");
+        ui->cpe_version_label->setText(ui->cpe_version_label->text() + "NONE");
     }
 }
 
@@ -280,14 +281,14 @@ void Bulletin::set_href(std::string href)
         href = std::regex_replace(href, re, "");
         re.assign("=");
         href = std::regex_replace(href, re, "&#61;");
-        ui->label_href->setText(ui->label_href->text() +
+        ui->href_label->setText(ui->href_label->text() +
                                 "<a href=" +
                                 QString::fromStdString(href) +
                                 " style=color:#3d4243; style=text-decoration:none>" +
                                 QString::fromStdString(href) +
                                 "</a><br>");
     } else {
-        ui->label_href->setText(ui->label_href->text() + "NONE");
+        ui->href_label->setText(ui->href_label->text() + "NONE");
     }
 }
 
@@ -302,15 +303,14 @@ void Bulletin::set_source(std::string source, bool is_packetstorm)
             source.std::string::erase(n, 1);
     }
 
-    ui->text_source->setPlainText(QString::fromStdString(source));
+    ui->source_text->setPlainText(QString::fromStdString(source));
 }
-
 
 bool Bulletin::save_source()
 {
     std::size_t n;
-    std::string id = ui->label_id->text().toStdString();
-    std::string source = ui->text_source->toPlainText().toStdString();
+    std::string id = ui->id_label->text().toStdString();
+    std::string source = ui->source_text->toPlainText().toStdString();
 
     if ((n = id.std::string::rfind(">")) != std::string::npos)
         id.erase(0, (n + 1));
