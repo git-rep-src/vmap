@@ -19,11 +19,12 @@ public:
     ~Finder();
 
 public slots:
-    void build_request(bool has_offset = false);
+    void set_counter(int offset, int n_total);
 
 signals:
     void request_signal(const std::string &req, const std::string &name,
-                        const std::string &version, int max);
+                        const std::string &version, int max,
+                        bool has_offset);
     void status_signal(const std::string &status);
 
 private:
@@ -31,8 +32,6 @@ private:
 
     bool is_blocked;
     bool has_error;
-
-    int offset;
 
     QString last_dir;
 
@@ -46,6 +45,7 @@ private:
     std::string req;
 
 private slots:
+    void build_request(bool has_offset = false);
     void set_query();
     void set_vector();
     void set_type();

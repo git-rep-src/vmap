@@ -4,49 +4,47 @@
 
 #include <QFileDialog>
 
-#include <algorithm>
-
 Finder::Finder(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Finder),
     is_blocked(false),
     has_error(false),
-    offset(0),
     last_dir("")
 {
     ui->setupUi(this);
-    QObject::connect(ui->combo_match,
+    QObject::connect(ui->match_combo,
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
-        ui->combo_match->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
+        ui->match_combo->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
-    QObject::connect(ui->combo_vector,
+    QObject::connect(ui->vector_combo,
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
-        ui->combo_vector->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
+        ui->vector_combo->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
-    QObject::connect(ui->combo_type,
+    QObject::connect(ui->type_combo,
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
-        ui->combo_type->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
+        ui->type_combo->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
-    QObject::connect(ui->combo_date,
+    QObject::connect(ui->date_combo,
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
-        ui->combo_date->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
+        ui->date_combo->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
-    QObject::connect(ui->combo_order,
+    QObject::connect(ui->order_combo,
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
-        ui->combo_order->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
+        ui->order_combo->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
-    QObject::connect(ui->combo_max,
+    QObject::connect(ui->max_combo,
                      static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&] {
-        ui->combo_max->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
+        ui->max_combo->setStyleSheet("QComboBox { color: white; background-color: rgb(30, 33, 37); }");
     });
-    QObject::connect(ui->edit_id, &QLineEdit::returnPressed, [&] { build_request(); });
-    QObject::connect(ui->edit_cve, &QLineEdit::returnPressed, [&] { build_request(); });
-    QObject::connect(ui->edit_nmap, &QLineEdit::returnPressed, [&] { build_request(); });
-    QObject::connect(ui->button_nmap, &QPushButton::pressed, [&] { open_file(); });
-    QObject::connect(ui->edit_name, &QLineEdit::returnPressed, [&] { build_request(); });
-    QObject::connect(ui->edit_version, &QLineEdit::returnPressed, [&] { build_request(); });
-    QObject::connect(ui->edit_score, &QLineEdit::returnPressed, [&] { build_request(); });
-    QObject::connect(ui->button_request, &QPushButton::pressed, [&] { build_request(); });
+    QObject::connect(ui->id_edit, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->cve_edit, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->name_edit, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->version_edit, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->nmap_edit, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->nmap_button, &QPushButton::pressed, [&] { open_file(); });
+    QObject::connect(ui->score_edit, &QLineEdit::returnPressed, [&] { build_request(); });
+    QObject::connect(ui->request_button, &QPushButton::pressed, [&] { build_request(); });
+    QObject::connect(ui->request_offset_button, &QPushButton::pressed, [&] { build_request(true); });
 }
 
 Finder::~Finder()
@@ -59,7 +57,6 @@ void Finder::build_request(bool has_offset)
     is_blocked = false;
 
     if (!has_offset) {
-        offset = 0;
         set_query();
         set_vector();
         set_type();
@@ -79,7 +76,6 @@ void Finder::build_request(bool has_offset)
               "Host:vulners.com\r\n"
               "Connection:Keep-Alive\r\n\r\n";
     } else {
-        offset += std::stoi(max);
         req = "GET /api/v3/search/lucene/?query=" +
               query +
               " cvss.vector:" + vector +
@@ -88,33 +84,34 @@ void Finder::build_request(bool has_offset)
               " " + date +
               " sort:" + order +
               "&size=" + max +
-              "&skip=" + std::to_string(offset) +
+              "&skip=" + ui->counter_offset_label->text().toStdString() +
               " HTTP/1.1\r\n"
               "Host:vulners.com\r\n"
               "Connection:Keep-Alive\r\n\r\n";
     }
 
     if (!has_error)
-        emit request_signal(req, ui->edit_name->text().toStdString(),
-                            ui->edit_version->text().toStdString(), std::stoi(max));
+        emit request_signal(req, ui->name_edit->text().toStdString(),
+                            ui->version_edit->text().toStdString(), std::stoi(max),
+                            has_offset);
 }
 
 void Finder::set_query()
 {
     has_error = false;
 
-    if (ui->edit_id->text() != "") {
+    if (ui->id_edit->text() != "") {
         query = "id:\"" +
-                ui->edit_id->text().toStdString() +
+                ui->id_edit->text().toStdString() +
                 "\"";
         is_blocked = true;
-    } else if (ui->edit_cve->text() != "") {
-        if (!ui->edit_cve->text().contains("CVE-"))
-            query = "cvelist:CVE-" + ui->edit_cve->text().toStdString();
+    } else if (ui->cve_edit->text() != "") {
+        if (!ui->cve_edit->text().contains("CVE-"))
+            query = "cvelist:CVE-" + ui->cve_edit->text().toStdString();
         else
-            query = "cvelist:" + ui->edit_cve->text().toStdString();
+            query = "cvelist:" + ui->cve_edit->text().toStdString();
         is_blocked = true;
-    } else if (ui->edit_nmap->text() != "") {
+    } else if (ui->nmap_edit->text() != "") {
         std::vector<std::string> terms;
         if (xml(&terms)) {
             std::string buf;
@@ -123,7 +120,7 @@ void Finder::set_query()
                 if (i != (terms.size() - 1))
                     buf.append(" OR ");
             }
-            if (ui->combo_type->currentText() == "PACKETSTORM")
+            if (ui->type_combo->currentText() == "PACKETSTORM")
                 query = "title:(" + buf + ")";
             else
                 query = "description:(" + buf + ")";
@@ -131,33 +128,33 @@ void Finder::set_query()
             has_error = true;
             emit status_signal("<span style=color:#5c181b>NMAP FILE ERROR</span>");
         }
-    } else if ((ui->edit_name->text() != "") ||
-               (ui->edit_version->text() != "")) {
-        if ((ui->combo_match->currentText() == "MATCH") ||
-            (ui->combo_match->currentText() == "EXACT")) {
-            if (ui->combo_type->currentText() == "PACKETSTORM")
+    } else if ((ui->name_edit->text() != "") ||
+               (ui->version_edit->text() != "")) {
+        if ((ui->match_combo->currentText() == "MATCH") ||
+            (ui->match_combo->currentText() == "EXACT")) {
+            if (ui->type_combo->currentText() == "PACKETSTORM")
                 query = "title:(\"" +
-                        ui->edit_name->text().toStdString() +
+                        ui->name_edit->text().toStdString() +
                         "\" AND \"" +
-                        ui->edit_version->text().toStdString() +
+                        ui->version_edit->text().toStdString() +
                         "\")";
             else
                 query = "description:(\"" +
-                        ui->edit_name->text().toStdString() +
+                        ui->name_edit->text().toStdString() +
                         "\" AND \"" +
-                        ui->edit_version->text().toStdString() +
+                        ui->version_edit->text().toStdString() +
                         "\")";
         } else {
-            if (ui->combo_type->currentText() == "PACKETSTORM")
+            if (ui->type_combo->currentText() == "PACKETSTORM")
                 query = "title:" +
-                        ui->edit_name->text().toStdString() +
+                        ui->name_edit->text().toStdString() +
                         " " +
-                        ui->edit_version->text().toStdString();
+                        ui->version_edit->text().toStdString();
             else
                 query = "description:" +
-                        ui->edit_name->text().toStdString() +
+                        ui->name_edit->text().toStdString() +
                         " " +
-                        ui->edit_version->text().toStdString();
+                        ui->version_edit->text().toStdString();
         }
     } else {
         query = "";
@@ -166,34 +163,34 @@ void Finder::set_query()
 
 void Finder::set_vector()
 {
-    if ((ui->combo_vector->currentText() == "VECTOR") ||
-        (ui->combo_vector->currentText() == "ANY") ||
+    if ((ui->vector_combo->currentText() == "VECTOR") ||
+        (ui->vector_combo->currentText() == "ANY") ||
         is_blocked)
         vector = "*";
-    else if (ui->combo_vector->currentText() == "REMOTE")
+    else if (ui->vector_combo->currentText() == "REMOTE")
         vector = "\"AV:NETWORK\"";
     else
-        vector = "\"AV:" + ui->combo_vector->currentText().toStdString() + "\"";
+        vector = "\"AV:" + ui->vector_combo->currentText().toStdString() + "\"";
 }
 
 void Finder::set_type()
 {
     if (is_blocked)
         type = "*";
-    else if ((ui->combo_type->currentText() == "TYPE") ||
-             (ui->combo_type->currentText() == "CVE"))
+    else if ((ui->type_combo->currentText() == "TYPE") ||
+             (ui->type_combo->currentText() == "CVE"))
         type = "cve";
-    else if (ui->combo_type->currentText() == "WORDPRESSDB")
+    else if (ui->type_combo->currentText() == "WPVDB")
         type = "wpvulndb";
     else
-        type = ui->combo_type->currentText().toLower().toStdString();
+        type = ui->type_combo->currentText().toLower().toStdString();
 }
 
 void Finder::set_score()
 {
-    if ((ui->edit_score->text() != "") && !is_blocked) {
+    if ((ui->score_edit->text() != "") && !is_blocked) {
         std::size_t n;
-        score = ui->edit_score->text().toStdString();
+        score = ui->score_edit->text().toStdString();
         if ((n = score.std::string::find("-")) != std::string::npos)
             score = "[" + score.std::string::replace(n, 1, " TO ") + "]";
     } else {
@@ -203,18 +200,24 @@ void Finder::set_score()
 
 void Finder::set_date()
 {
-    if ((ui->combo_date->currentText() == "DATE") ||
-        (ui->combo_date->currentText() == "ANY") ||
+    if ((ui->date_combo->currentText() == "DATE") ||
+        (ui->date_combo->currentText() == "ANY") ||
         is_blocked)
         date = "";
+    else if (ui->date_combo->currentText() == "10 DAYS")
+        date = "last 10 days";
+    else if (ui->date_combo->currentText() == "1 MONTH")
+        date = "last month";
+    else if (ui->date_combo->currentText() == "6 MONTHS")
+        date = "last 6 month";
     else
-        date = ui->combo_date->currentText().toLower().toStdString();
+        date = "last year";
 }
 
 void Finder::set_order()
 {
-    if ((ui->combo_order->currentText() == "ORDER") ||
-        (ui->combo_order->currentText() == "DATE"))
+    if ((ui->order_combo->currentText() == "ORDER") ||
+        (ui->order_combo->currentText() == "DATE"))
         order = "published";
     else
         order = "cvss.score";
@@ -222,10 +225,10 @@ void Finder::set_order()
 
 void Finder::set_max()
 {
-    if (ui->combo_max->currentText() == "MAX")
+    if (ui->max_combo->currentText() == "MAX")
         max = "20";
     else
-        max = ui->combo_max->currentText().toStdString();
+        max = ui->max_combo->currentText().toStdString();
 }
 
 void Finder::open_file()
@@ -238,7 +241,7 @@ void Finder::open_file()
                                                      NULL, QFileDialog::ReadOnly);
     if (file_path != "") {
         last_dir = file_path.left(file_path.lastIndexOf('/'));
-        ui->edit_nmap->setText(file_path);
+        ui->nmap_edit->setText(file_path);
     }
 }
 
@@ -260,7 +263,7 @@ bool Finder::xml(std::vector<std::string> *terms)
 
     try {
         xmlpp::DomParser parser;
-        parser.parse_file(ui->edit_nmap->text().toStdString());
+        parser.parse_file(ui->nmap_edit->text().toStdString());
         xmlpp::Node *root = parser.get_document()->get_root_node();
 
         xmlpp::Node::NodeSet node;
@@ -306,4 +309,17 @@ bool Finder::xml(std::vector<std::string> *terms)
     }
 
     return true;
+}
+
+void Finder::set_counter(int offset, int n_total)
+{
+    ui->counter_offset_label->setText(QString::number(offset));
+    ui->counter_total_label->setText(QString::number(n_total));
+    if (offset != n_total) {
+        ui->request_offset_button->setIcon(QIcon(":/icon-find"));
+        ui->request_offset_button->setEnabled(true);
+    } else {
+        ui->request_offset_button->setIcon(QIcon(":/icon-find-disabled"));
+        ui->request_offset_button->setDisabled(true);
+    }
 }

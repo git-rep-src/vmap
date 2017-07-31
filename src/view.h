@@ -20,18 +20,18 @@ public:
 
 public slots:
     void build_bulletin(std::string *ret, const std::string &name,
-                        const std::string &version, int max);
+                        const std::string &version, int max,
+                        bool has_offset);
 
 signals:
-    void request_signal();
+    void counter_signal(int offset, int n_total);
     void status_signal(const std::string &status);
 
 private:
     Ui::View *ui;
 
-    bool has_offset;
-
     int offset;
+    int n_total;
 
     QVector<Bulletin*> bulletins_vector;
 };

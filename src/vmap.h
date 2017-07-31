@@ -34,7 +34,8 @@ private:
 
 private slots:
     bool api(const std::string &req, const std::string &name,
-             const std::string &version, int max);
+             const std::string &version, int max,
+             bool has_offset);
     void set_status(const std::string &status);
 };
 

@@ -6,14 +6,9 @@
 
 View::View(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::View),
-    has_offset(false)
+    ui(new Ui::View)
 {
     ui->setupUi(this);
-    QObject::connect(ui->button_request, &QPushButton::pressed, [&]  {
-        has_offset = true;
-        emit request_signal();
-    });
 }
 
 View::~View()
@@ -24,21 +19,22 @@ View::~View()
 }
 
 void View::build_bulletin(std::string *ret, const std::string &name,
-                          const std::string &version, int max)
+                          const std::string &version, int max,
+                          bool has_offset)
 {
-    int n_total;
     size_t n;
     std::vector<std::string> cve;
     std::vector<std::string> cpe;
 
     if (!has_offset) {
         for (int i = 0; i < bulletins_vector.size(); i++) {
-            ui->layout_scroll->removeWidget(bulletins_vector[i]);
+            ui->scroll_layout->removeWidget(bulletins_vector[i]);
             delete bulletins_vector[i];
         }
         bulletins_vector.clear();
-        ui->layout_scroll->update();
+        ui->scroll_layout->update();
         offset = 0;
+        n_total = 0;
     }
 
     nlohmann::json js = nlohmann::json::parse(ret->std::string::erase(0, (ret->std::string::find("\r\n\r\n") + 4)));
@@ -104,22 +100,14 @@ void View::build_bulletin(std::string *ret, const std::string &name,
                     emit status_signal(status);
                 });
             }
-            ui->layout_scroll->addWidget(bulletins_vector.last());
+            ui->scroll_layout->addWidget(bulletins_vector.last());
             offset++;
         }
-        ui->layout_scroll->update();
+        ui->scroll_layout->update();
         if (offset > n_total)
             offset = n_total;
-        ui->label_counter->setText(QString::number(offset) +
-                                   "-" +
-                                   QString::number(n_total));
-        ui->button_request->setEnabled(offset != n_total);
+        emit counter_signal(offset, n_total);
     } else {
-        ui->label_counter->setText("0-0");
-        ui->button_request->setDisabled(true);
+        emit counter_signal(0, 0);
     }
-    ui->label_counter->setVisible(true);
-    ui->button_request->setVisible(true);
-
-    has_offset = false;
 }
