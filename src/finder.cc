@@ -135,7 +135,6 @@ void Finder::set_query()
             query = "cvelist:CVE-" + ui->cve_edit->text().toStdString();
         else
             query = "cvelist:" + ui->cve_edit->text().toStdString();
-        is_blocked = true;
     } else if (ui->nmap_edit->text() != "") {
 #ifdef NMAP
         if (xml(&terms)) {
@@ -206,10 +205,8 @@ void Finder::set_vector()
 
 void Finder::set_type()
 {
-    if (is_blocked)
-        type = "*";
-    else if ((ui->type_combo->currentText() == "TYPE") ||
-             (ui->type_combo->currentText() == "CVE"))
+    if ((ui->type_combo->currentText() == "TYPE") ||
+        (ui->type_combo->currentText() == "CVE"))
         type = "cve";
     else if (ui->type_combo->currentText() == "WPVDB")
         type = "wpvulndb";
@@ -349,9 +346,13 @@ void Finder::set_counter(int offset, int n_total)
     ui->counter_offset_label->setText(QString::number(offset));
     ui->counter_total_label->setText(QString::number(n_total));
     if (offset != n_total) {
+        ui->counter_offset_label->setEnabled(true);
+        ui->counter_total_label->setEnabled(true);
         ui->request_offset_button->setIcon(QIcon(":/icon-find"));
         ui->request_offset_button->setEnabled(true);
     } else {
+        ui->counter_offset_label->setDisabled(true);
+        ui->counter_total_label->setDisabled(true);
         ui->request_offset_button->setIcon(QIcon(":/icon-find-disabled"));
         ui->request_offset_button->setDisabled(true);
     }
