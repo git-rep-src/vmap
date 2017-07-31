@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="icon-find">resources/images/global/icon-find.svg</file>
+        <file alias="icon-find-disabled">resources/images/global/icon-find-disabled.svg</file>
         <file alias="icon-more">resources/images/global/icon-more.svg</file>
         <file alias="icon-less">resources/images/global/icon-less.svg</file>
         <file alias="icon-source-more">resources/images/global/icon-source-more.svg</file>
