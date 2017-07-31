@@ -53,8 +53,10 @@ private slots:
     void set_date();
     void set_order();
     void set_max();
+#ifdef NMAP
     void open_file();
     bool xml(std::vector<std::string> *terms);
+#endif
 };
 
 #endif // FINDER_H

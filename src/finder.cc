@@ -1,6 +1,8 @@
 #include "finder.h"
 
+#ifdef NMAP
 #include <libxml++/libxml++.h>
+#endif
 
 #include <QFileDialog>
 
@@ -40,8 +42,13 @@ Finder::Finder(QWidget *parent) :
     QObject::connect(ui->cve_edit, &QLineEdit::returnPressed, [&] { build_request(); });
     QObject::connect(ui->name_edit, &QLineEdit::returnPressed, [&] { build_request(); });
     QObject::connect(ui->version_edit, &QLineEdit::returnPressed, [&] { build_request(); });
+#ifdef NMAP
     QObject::connect(ui->nmap_edit, &QLineEdit::returnPressed, [&] { build_request(); });
     QObject::connect(ui->nmap_button, &QPushButton::pressed, [&] { open_file(); });
+#else
+    ui->nmap_edit->setDisabled(true);
+    ui->nmap_button->setDisabled(true);
+#endif
     QObject::connect(ui->score_edit, &QLineEdit::returnPressed, [&] { build_request(); });
     QObject::connect(ui->request_button, &QPushButton::pressed, [&] { build_request(); });
     QObject::connect(ui->request_offset_button, &QPushButton::pressed, [&] { build_request(true); });
@@ -98,6 +105,7 @@ void Finder::build_request(bool has_offset)
 
 void Finder::set_query()
 {
+#ifdef NMAP
     std::string buf;
     std::vector<std::string> terms;
     const std::vector<std::string> nmap_skip =
@@ -114,7 +122,7 @@ void Finder::set_query()
         "wireless",
         "wifi"
     };
-
+#endif
     has_error = false;
 
     if (ui->id_edit->text() != "") {
@@ -129,6 +137,7 @@ void Finder::set_query()
             query = "cvelist:" + ui->cve_edit->text().toStdString();
         is_blocked = true;
     } else if (ui->nmap_edit->text() != "") {
+#ifdef NMAP
         if (xml(&terms)) {
             for (size_t i = 0; i < terms.size(); i++) {
                 bool is_skipped = false;
@@ -149,6 +158,7 @@ void Finder::set_query()
             has_error = true;
             emit status_signal("<span style=color:#5c181b>NMAP FILE ERROR</span>");
         }
+#endif
     } else if ((ui->name_edit->text() != "") ||
                (ui->version_edit->text() != "")) {
         if ((ui->match_combo->currentText() == "MATCH") ||
@@ -251,7 +261,7 @@ void Finder::set_max()
     else
         max = ui->max_combo->currentText().toStdString();
 }
-
+#ifdef NMAP
 void Finder::open_file()
 {
     QString file_path = QFileDialog::getOpenFileName(this, "", last_dir,
@@ -265,7 +275,6 @@ void Finder::open_file()
         ui->nmap_edit->setText(file_path);
     }
 }
-
 
 bool Finder::xml(std::vector<std::string> *terms)
 {
@@ -334,7 +343,7 @@ bool Finder::xml(std::vector<std::string> *terms)
 
     return true;
 }
-
+#endif
 void Finder::set_counter(int offset, int n_total)
 {
     ui->counter_offset_label->setText(QString::number(offset));
