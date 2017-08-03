@@ -10,8 +10,7 @@ openssl  >= 1.1
 libxml++ >= 3.0 # Optional for Nmap filter
 ```
 ```shell
-# qmake CONFIG+=NONMAP # To set disabled Nmap filter
-qmake
+qmake # CONFIG+=NONMAP to set disabled Nmap filter
 make
 make install
 ```
