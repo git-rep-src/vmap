@@ -14,7 +14,11 @@ qmake
 make
 make install
 ```
-Set disabled Nmap filter 
+
+* Set disabled Nmap filter:
+
+		qmake CONFIG+=NONMAP
+
 ```shell
 qmake CONFIG+=NONMAP
 ```
