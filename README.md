@@ -13,7 +13,8 @@ libxml++ >= 3.0 # Optional for Nmap filter.
 qmake 
 make
 make install
-
+```
+```shell
 # Set disabled Nmap filter
 qmake CONFIG+=NONMAP
 # Set custom path to OpenSSL on Linux
