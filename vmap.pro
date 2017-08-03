@@ -1,17 +1,30 @@
 QT += core gui widgets
 
 unix {
-    CONFIG     += link_pkgconfig c++11 release
-    LIBS       += -L/usr/lib/ -lcrypto -lssl
+    CONFIG += link_pkgconfig c++11 release
+    LIBS += -L/usr/lib/ -lcrypto -lssl
     target.path = /usr/local/bin
-    INSTALLS   += target
+    INSTALLS += target
     !NONMAP {
-        DEFINES   += "NMAP=1"
+        DEFINES += "NMAP=1"
         PKGCONFIG += libxml++-3.0
-    }#qmake CONFIG+=NONMAP
+    } # qmake CONFIG+=NONMAP
 }
 win32 {
-    #TODO
+    CONFIG += c++11 release
+    contains (QMAKE_TARGET.arch, i386) {
+        LIBS += -LC:\OpenSSL-Win32\lib -llibcrypto -llibssl
+        INCLUDEPATH += C:\OpenSSL-Win32\include
+    } else {
+        LIBS += -LC:\OpenSSL-Win64\lib -llibcrypto -llibssl
+        INCLUDEPATH += C:\OpenSSL-Win64\include
+    } # qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"
+    target.path = C:\vmap\
+    INSTALLS += target
+    !NONMAP {
+        DEFINES += "NMAP=1"
+        # TODO: libxml++-3.0
+    } # qmake CONFIG+=NONMAP
 }
 
 TARGET = vmap
@@ -38,13 +51,6 @@ HEADERS += src/vmap.h \
 RESOURCES = resources.qrc
 RC_FILE = resources/images/global/icon.rc
 
-unix {
-    OBJECTS_DIR = .build/obj
-    MOC_DIR     = .build/moc
-    RCC_DIR     = .build/rcc
-}
-win32 {
-    OBJECTS_DIR = _build/obj
-    MOC_DIR     = _build/moc
-    RCC_DIR     = _build/rcc
-}
+OBJECTS_DIR = .build/obj
+MOC_DIR = .build/moc
+RCC_DIR = .build/rcc
