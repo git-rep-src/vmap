@@ -14,13 +14,15 @@ qmake
 make
 make install
 ```
+Set disabled Nmap filter 
 ```shell
-# Set disabled Nmap filter 
 qmake CONFIG+=NONMAP
-
-# Set custom path to OpenSSL on Linux
+```
+Set custom paths to OpenSSL on Linux
+```shell
 qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"
-
-# Set custom path to OpenSSL on Windows
+```
+Set custom paths to OpenSSL on Windows
+```shell
 qmake LIBS+="-LPATH\lib -llibcrypto -llibssl" INCLUDEPATH+="PATH\include"
 ```
