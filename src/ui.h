@@ -294,6 +294,7 @@ public:
         counter_offset_label->setMinimumHeight(base_height);
         counter_offset_label->setAlignment(Qt::AlignCenter);
         counter_offset_label->setText("0");
+        counter_offset_label->setDisabled(true);
 
         counter_total_label = new QLabel(Finder);
         counter_total_label->setProperty("type", "border");
@@ -302,6 +303,7 @@ public:
         counter_total_label->setMinimumHeight(base_height);
         counter_total_label->setAlignment(Qt::AlignCenter);
         counter_total_label->setText("0");
+        counter_total_label->setDisabled(true);
 
         request_offset_button = new QPushButton(QIcon(":/icon-find-disabled"), NULL, Finder);
         request_offset_button->setIconSize(QSize(base_size, base_size));
