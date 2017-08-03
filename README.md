@@ -15,8 +15,7 @@ make
 make install
 ```
 ```shell
-# Nmap filter permit load a Nmap output XML file.
-# Set disabled Nmap filter
+# Nmap filter permit load a Nmap output XML file. To set it disabled
 qmake CONFIG+=NONMAP
 
 # Set custom path to OpenSSL on Linux
