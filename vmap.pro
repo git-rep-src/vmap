@@ -8,7 +8,7 @@ unix {
     !NONMAP {
         DEFINES += "NMAP=1"
         PKGCONFIG += libxml++-3.0
-    } # qmake CONFIG+=NONMAP
+    }
 }
 win32 {
     CONFIG += c++11 release
@@ -18,13 +18,13 @@ win32 {
     } else {
         LIBS += -LC:\OpenSSL-Win64\lib -llibcrypto -llibssl
         INCLUDEPATH += C:\OpenSSL-Win64\include
-    } # qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"
+    }
     target.path = C:\vmap\
     INSTALLS += target
     !NONMAP {
         DEFINES += "NMAP=1"
         # TODO: libxml++-3.0
-    } # qmake CONFIG+=NONMAP
+    }
 }
 
 TARGET = vmap
