@@ -15,12 +15,10 @@ make
 make install
 ```
 ```shell
-# Nmap filter permit load a Nmap output XML file. To set it disabled
+# Set disabled Nmap filter (It permit load a Nmap output XML file)
 qmake CONFIG+=NONMAP
-
 # Set custom path to OpenSSL on Linux
 qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"
-
 # Set custom path to OpenSSL on Windows
 qmake LIBS+="-LPATH\lib -llibcrypto -llibssl" INCLUDEPATH+="PATH\include"
 ```
