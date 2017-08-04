@@ -7,7 +7,9 @@ A vulnerability-exploit desktop finder. Vmap use the [vulners](https://vulners.c
 ```shell
 qt       >= 5.x
 openssl  >= 1.1
-libxml++ >= 3.0 # Optional for Nmap filter(load a Nmap output XML file)
+
+# Optional for Nmap filter(load a Nmap output XML file)
+libxml++ >= 3.0 
 ```
 
 ```shell
