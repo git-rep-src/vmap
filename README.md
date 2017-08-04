@@ -10,8 +10,12 @@ openssl  >= 1.1
 libxml++ >= 3.0 # Optional for Nmap filter(load a Nmap output XML file).
 ```
 
-## BUILD OPTIONS
+## CONFIGURATION
 
+##### Default #####
+```shell
+qmake
+```
 ##### Disabled Nmap filter #####
 ```shell
 qmake CONFIG+=NONMAP
@@ -25,10 +29,9 @@ qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"
 qmake LIBS+="-LPATH\lib -llibcrypto -llibssl" INCLUDEPATH+="PATH\include"
 ```
 
-## BUILD & INSTALL
+## BUILD
 
 ```shell
-qmake 
 make
 make install
 ```
