@@ -2,7 +2,7 @@
 
 A vulnerability-exploit desktop finder. Vmap use the [vulners](https://vulners.com/api/v3/) API.
 
-## DEPENDENCIES
+## INSTALL
 
 ```shell
 qt       >= 5.x
@@ -10,28 +10,17 @@ openssl  >= 1.1
 libxml++ >= 3.0 # Optional for Nmap filter(load a Nmap output XML file).
 ```
 
-## CONFIGURATION
-
-Default
 ```shell
+# default
 qmake
-```
-Set disabled Nmap filter
-```shell
-qmake CONFIG+=NONMAP
-```
-Set custom path to OpenSSL on Linux
-```shell
-qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"
-```
-Set custom path to OpenSSL on Windows
-```shell
-qmake LIBS+="-LPATH\lib -llibcrypto -llibssl" INCLUDEPATH+="PATH\include"
-```
 
-## INSTALL 
+# set disabled nmap filter
+# qmake CONFIG+=NONMAP
+# set custom path to openssl on linux
+# qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"
+# set custom path to openssl on windows
+# qmake LIBS+="-LPATH\lib -llibcrypto -llibssl" INCLUDEPATH+="PATH\include"
 
-```shell
 make
 make install
 ```
