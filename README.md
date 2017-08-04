@@ -12,9 +12,9 @@ libxml++ >= 3.0 # Optional for Nmap filter(load a Nmap output XML file)
 
 ```shell
 qmake
-# qmake CONFIG+=NONMAP                                                      Set disabled Nmap filter
-# qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"       Set custom path(OpenSSL-Linux)
-# qmake LIBS+="-LPATH\lib -llibcrypto -llibssl" INCLUDEPATH+="PATH\include" Set custom path(OpenSSL-Windows)
+# qmake CONFIG+=NONMAP                                                      # Set disabled Nmap filter
+# qmake LIBS+="-LPATH\lib -lcrypto -lssl" INCLUDEPATH+="PATH\include"       # Set custom path(OpenSSL-Linux)
+# qmake LIBS+="-LPATH\lib -llibcrypto -llibssl" INCLUDEPATH+="PATH\include" # Set custom path(OpenSSL-Windows)
 make
 make install
 ```
