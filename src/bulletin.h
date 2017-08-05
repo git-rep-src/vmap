@@ -40,7 +40,7 @@ private:
     Ui::Bulletin *ui;
 
 private slots:
-    bool save_source();
+    std::string save_source();
 };
 
 #endif // BULLETIN_H

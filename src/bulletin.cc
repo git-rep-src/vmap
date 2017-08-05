@@ -3,9 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include <regex>
-#include <pwd.h>
-#include <unistd.h>
 
+#include <QDir>
 #include <QDesktopServices>
 
 Bulletin::Bulletin(bool has_cpe, bool has_source, QWidget *parent) :
@@ -50,8 +49,9 @@ Bulletin::Bulletin(bool has_cpe, bool has_source, QWidget *parent) :
         ui->source_text->setVisible(!ui->source_text->isVisible());
     });
     QObject::connect(ui->source_save_button, &QPushButton::pressed, [=] {
-        if (save_source())
-            emit status_signal("<span style=color:#ffffff>FILE SAVED</span>");
+        std::string file_path = save_source();
+        if (file_path != "")
+            emit status_signal("<span style=color:#ffffff>FILE SAVED </span>" + file_path);
         else
             emit status_signal("<span style=color:#5c181b>FILE SAVE ERROR</span>");
     });
@@ -306,27 +306,24 @@ void Bulletin::set_source(std::string source, bool is_packetstorm)
     ui->source_text->setPlainText(QString::fromStdString(source));
 }
 
-bool Bulletin::save_source()
+std::string Bulletin::save_source()
 {
     std::size_t n;
     std::string id = ui->id_label->text().toStdString();
-    std::string source = ui->source_text->toPlainText().toStdString();
+    std::string source = ui->source_text->toPlainText().toStdString();   
 
     if ((n = id.std::string::rfind(">")) != std::string::npos)
         id.erase(0, (n + 1));
 
-    passwd *pw = getpwuid(getuid());
-    std::string home_path = pw->pw_dir;
-
     std::ofstream file;
-    file.open(home_path + "/" + id + ".vmap");
+    file.open(QDir::homePath().toStdString() + "/" + id + ".vmap");
     if (file.is_open()) {
         for (n = 0; n < source.size(); n++)
             file << source[n];
         file.close();
     } else {
-        return false;
+        return "";
     }
 
-    return true;
+    return QDir::homePath().toStdString() + "/" + id + ".vmap";
 }
