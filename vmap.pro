@@ -6,7 +6,7 @@ unix {
     target.path = /usr/local/bin
     INSTALLS += target
     !NONMAP {
-        DEFINES += "NMAP=1"
+        DEFINES += "NMAP"
         PKGCONFIG += libxml++-3.0
     }
 }
@@ -21,10 +21,6 @@ win32 {
     }
     target.path = C:\vmap\
     INSTALLS += target
-    !NONMAP {
-        DEFINES += "NMAP=1"
-        # TODO: libxml++-3.0
-    }
 }
 
 TARGET = vmap
