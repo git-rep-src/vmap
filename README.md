@@ -2,12 +2,16 @@
 
 A vulnerability-exploit desktop finder. Vmap use the [vulners](https://vulners.com/api/v3/) API.
 
+```
+<img width="720" height="480" src="https://ibb.co/iLqyhF">
+```
+
 ## INSTALL
 
 ```shell
 qt       >= 5.x
 openssl  >= 1.1
-libxml++ >= 3.0 # optional (Nmap filter)
+libxml++ >= 3.0 # optional Nmap filter (only Linux)
 ```
 
 ```shell
