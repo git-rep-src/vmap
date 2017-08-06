@@ -2,7 +2,7 @@
 
 A vulnerability-exploit desktop finder. Vmap use the [vulners](https://vulners.com/api/v3/) API.
 
-![alt tag](https://preview.ibb.co/d3TUpv/vmap.png)
+![alt tag](https://image.ibb.co/nK2ppv/vmap.png)
 
 ## INSTALL
 
