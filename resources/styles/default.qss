@@ -15,7 +15,7 @@ QLabel[type = "white-bg"] {
     background-color: rgb(30, 33, 37);
 }
 QLabel[type = "white-bg"]:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
@@ -24,7 +24,7 @@ QLabel[type = "gray-bg"] {
     background-color: rgb(30, 33, 37);
 }
 QLabel[type = "gray-bg"]:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
@@ -33,7 +33,7 @@ QLabel[type = "gray-light-bg"] {
     background-color: rgb(30, 33, 37);
 }
 QLabel[type = "gray-light-bg"]:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
@@ -46,7 +46,7 @@ QLabel[type = "gray-dark-bg"] {
     background-color: rgb(30, 33, 37);
 }
 QLabel[type = "gray-dark-bg"]:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
@@ -58,7 +58,7 @@ QLabel[type = "score-low"] {
     border-left-color: rgba(128, 128, 128, 70);
 }
 QLabel[type = "score-low"]:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
@@ -70,7 +70,7 @@ QLabel[type = "score-medium"] {
     border-left-color: rgba(255, 246, 0, 70);
 }
 QLabel[type = "score-medium"]:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
@@ -82,7 +82,7 @@ QLabel[type = "score-high"] {
     border-left-color: rgba(255, 0, 0, 70);
 }
 QLabel[type = "score-high"]:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
@@ -111,7 +111,7 @@ QLineEdit {
     border-color: rgb(26, 29, 33);
 }
 QLineEdit:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
     border-style: solid;
     border-width: 1px;
@@ -124,8 +124,8 @@ QTextEdit[type = "source"] {
     border: none;
 }
 QTextEdit[type = "source"]:disabled {
-    color: rgb(220, 220, 220);
-    background-color: rgb(30, 33, 37);
+    color: rgb(53, 59, 68);
+    background-color: rgb(27, 30, 35);
     border: none;
 }
 
@@ -170,7 +170,7 @@ QComboBox {
     background-color: rgb(30, 33, 37);
 }
 QComboBox:disabled {
-    color: rgb(26, 29, 33);
+    color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 QComboBox QAbstractItemView::item {
@@ -189,18 +189,18 @@ QListView::item:selected {
 
 QPushButton {
     color: white;
-    background-color: rgb(18, 21, 25);
+    background-color: rgb(26, 29, 33);
 }
 QPushButton:disabled {
     color: rgb(61, 66, 77);
-    background-color: rgb(18, 21, 25);
+    background-color: rgb(26, 29, 33);
 }
 QPushButton[type = "file"] {
     color: rgb(132, 133, 135);
     background-color: rgb(29, 31, 34);
 }
 QPushButton[type = "file"]:disabled {
-    color: rgb(61, 66, 77);
+    color: rgb(53, 59, 68);
     background-color: rgb(18, 21, 25);
 }
 
