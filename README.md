@@ -1,6 +1,6 @@
 # VMAP
 
-A Vulnerability/Exploit desktop finder. [Demo video](https://streamable.com/t2uld)
+A Vulnerability-Exploit desktop finder. [Demo video](https://streamable.com/t2uld)
 
 ![alt tag](https://image.ibb.co/nK2ppv/vmap.png)
 
