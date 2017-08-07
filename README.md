@@ -4,8 +4,6 @@ A vulnerability-exploit desktop finder. [Demo video](https://streamable.com/t2ul
 
 ![alt tag](https://image.ibb.co/nK2ppv/vmap.png)
 
-Vmap use the [vulners](https://vulners.com/api/v3/) API.
-
 ## INSTALLATION
 
 ```shell
@@ -23,3 +21,4 @@ make
 make install
 ```
 
+Vmap use the [vulners](https://vulners.com/api/v3/) API.
