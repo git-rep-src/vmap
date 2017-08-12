@@ -12,31 +12,11 @@ Bulletin::Bulletin(bool has_cpe, bool has_source, QWidget *parent) :
     ui(new Ui::Bulletin)
 {
     ui->setupUi(this);
+    QObject::connect(ui->title_label, &CustomLabel::clicked, [=] {
+        show_hide_details(has_cpe, has_source);
+    });
     QObject::connect(ui->details_button, &QPushButton::pressed, [=] {
-        if (!ui->description_label->isVisible())
-            ui->details_button->setIcon(QIcon(":/icon-less"));
-        else
-            ui->details_button->setIcon(QIcon(":/icon-more"));
-        ui->description_label->setVisible(!ui->description_label->isVisible());
-        ui->id_label->setVisible(!ui->id_label->isVisible());
-        ui->cve_label->setVisible(!ui->cve_label->isVisible());
-        ui->cvss_label->setVisible(!ui->cvss_label->isVisible());
-        if (!has_source) {
-            if (has_cpe) {
-                ui->cpe_vendor_label->setVisible(!ui->cpe_vendor_label->isVisible());
-                ui->cpe_product_label->setVisible(!ui->cpe_product_label->isVisible());
-                ui->cpe_version_label->setVisible(!ui->cpe_version_label->isVisible());
-            }
-            ui->href_label->setVisible(!ui->href_label->isVisible());
-        } else {
-            ui->source_label->setVisible(!ui->source_label->isVisible());
-            ui->source_details_button->setVisible(!ui->source_details_button->isVisible());
-            ui->source_line_label->setVisible(!ui->source_line_label->isVisible());
-            if (ui->source_text->isVisible()) {
-                ui->source_text->setHidden(true);
-                ui->source_details_button->setIcon(QIcon(":/icon-source-more"));
-            }
-        }
+        show_hide_details(has_cpe, has_source);
     });
     QObject::connect(ui->href_label, &QLabel::linkActivated, [&] (QString url) {
         QDesktopServices::openUrl(QUrl(url));
@@ -130,9 +110,9 @@ void Bulletin::set_title(std::string title, std::string name,
 void Bulletin::set_score(float score)
 {
     if (score >= 7)
-        ui->score_label->setProperty("type", "score-high");
+        ui->score_label->setProperty("style", "score-high");
     else if ((score >= 4) && (score < 7))
-        ui->score_label->setProperty("type", "score-medium");
+        ui->score_label->setProperty("style", "score-medium");
 
     ui->score_label->setText(QString::number(score));
 }
@@ -304,6 +284,34 @@ void Bulletin::set_source(std::string source, bool is_packetstorm)
     }
 
     ui->source_text->setPlainText(QString::fromStdString(source));
+}
+
+void Bulletin::show_hide_details(bool has_cpe, bool has_source)
+{
+    if (!ui->description_label->isVisible())
+        ui->details_button->setIcon(QIcon(":/icon-less"));
+    else
+        ui->details_button->setIcon(QIcon(":/icon-more"));
+    ui->description_label->setVisible(!ui->description_label->isVisible());
+    ui->id_label->setVisible(!ui->id_label->isVisible());
+    ui->cve_label->setVisible(!ui->cve_label->isVisible());
+    ui->cvss_label->setVisible(!ui->cvss_label->isVisible());
+    if (!has_source) {
+        if (has_cpe) {
+            ui->cpe_vendor_label->setVisible(!ui->cpe_vendor_label->isVisible());
+            ui->cpe_product_label->setVisible(!ui->cpe_product_label->isVisible());
+            ui->cpe_version_label->setVisible(!ui->cpe_version_label->isVisible());
+        }
+        ui->href_label->setVisible(!ui->href_label->isVisible());
+    } else {
+        ui->source_label->setVisible(!ui->source_label->isVisible());
+        ui->source_details_button->setVisible(!ui->source_details_button->isVisible());
+        ui->source_line_label->setVisible(!ui->source_line_label->isVisible());
+        if (ui->source_text->isVisible()) {
+            ui->source_text->setHidden(true);
+            ui->source_details_button->setIcon(QIcon(":/icon-source-more"));
+        }
+    }
 }
 
 std::string Bulletin::save_source()

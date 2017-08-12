@@ -40,6 +40,7 @@ private:
     Ui::Bulletin *ui;
 
 private slots:
+    void show_hide_details(bool has_cpe, bool has_source);
     std::string save_source();
 };
 
