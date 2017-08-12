@@ -41,6 +41,7 @@ HEADERS += src/vmap.h \
            src/bulletin.h \
            src/highlighter.h \
            src/ssl_socket.h \
+           src/customlabel.h \
            src/custompushbutton.h \
            src/ui.h
 
