@@ -149,7 +149,7 @@ void Finder::set_query()
                         buf.append(" OR ");
                 }
             }
-            if (ui->type_combo->currentText() == "PACKETSTORM")
+            if (ui->type_combo->currentText() == "PS")
                 query = "title:(" + buf + ")";
             else
                 query = "description:(" + buf + ")";
@@ -162,7 +162,7 @@ void Finder::set_query()
                (ui->version_edit->text() != "")) {
         if ((ui->match_combo->currentText() == "MATCH") ||
             (ui->match_combo->currentText() == "EXACT")) {
-            if (ui->type_combo->currentText() == "PACKETSTORM")
+            if (ui->type_combo->currentText() == "PS")
                 query = "title:(\"" +
                         ui->name_edit->text().toStdString() +
                         "\" AND \"" +
@@ -175,7 +175,7 @@ void Finder::set_query()
                         ui->version_edit->text().toStdString() +
                         "\")";
         } else {
-            if (ui->type_combo->currentText() == "PACKETSTORM")
+            if (ui->type_combo->currentText() == "PS")
                 query = "title:" +
                         ui->name_edit->text().toStdString() +
                         " " +
@@ -208,10 +208,12 @@ void Finder::set_type()
     if ((ui->type_combo->currentText() == "TYPE") ||
         (ui->type_combo->currentText() == "CVE"))
         type = "cve";
-    else if (ui->type_combo->currentText() == "WPVDB")
-        type = "wpvulndb";
+    else if (ui->type_combo->currentText() == "EDB")
+        type = "exploitdb";
+    else if (ui->type_combo->currentText() == "PS")
+        type = "packetstorm";
     else
-        type = ui->type_combo->currentText().toLower().toStdString();
+        type = "wpvulndb";
 }
 
 void Finder::set_score()
