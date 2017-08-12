@@ -1,6 +1,7 @@
 #ifndef UI_H
 #define UI_H
 
+#include "customlabel.h"
 #include "custompushbutton.h"
 #include "highlighter.h"
 
@@ -42,7 +43,7 @@ public:
         font.setPointSize(desktop_width / 174.5);
 
         status_label = new QLabel(Vmap);
-        status_label->setProperty("type", "gray-dark");
+        status_label->setProperty("style", "gray-dark");
         status_label->setFont(font);
         status_label->setMinimumHeight(base_height);
         status_label->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
@@ -137,7 +138,7 @@ public:
         nmap_edit->setToolTip("NMAP XML FILE");
 
         nmap_button = new QPushButton("+", Finder);
-        nmap_button->setProperty("type", "file");
+        nmap_button->setProperty("style", "file");
         nmap_button->setMaximumSize(QSize((desktop_width / 87), base_height));
 
         nmap_layout = new QHBoxLayout;
@@ -198,11 +199,15 @@ public:
         type_combo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         type_combo->addItem("TYPE");
         type_combo->addItem("CVE");
-        type_combo->addItem("EXPLOITDB");
-        type_combo->addItem("PACKETSTORM");
+        type_combo->addItem("EDB");
+        type_combo->addItem("PS");
         type_combo->addItem("WPVDB");
         for (int i = 0; i < type_combo->count(); ++i)
             type_combo->setItemData(i, Qt::AlignCenter, Qt::TextAlignmentRole);
+        type_combo->setItemData(1, "COMMON VULNERABILITIES AND EXPOSURES", Qt::ToolTipRole);
+        type_combo->setItemData(2, "EXPLOIT DATABASE", Qt::ToolTipRole);
+        type_combo->setItemData(3, "PACKET STORM", Qt::ToolTipRole);
+        type_combo->setItemData(4, "WORDPRESS VULNERABILITY DATABASE", Qt::ToolTipRole);
         QStandardItemModel *m3 = qobject_cast<QStandardItemModel*>(type_combo->model());
         QModelIndex i3 = m3->index(0, type_combo->modelColumn(), type_combo->rootModelIndex());
         QStandardItem *it3 = m3->itemFromIndex(i3);
@@ -288,7 +293,7 @@ public:
         request_button->setFlat(true);
 
         counter_offset_label = new QLabel(Finder);
-        counter_offset_label->setProperty("type", "border");
+        counter_offset_label->setProperty("style", "border");
         counter_offset_label->setFont(font);
         counter_offset_label->setMinimumWidth(desktop_width / 25.6);
         counter_offset_label->setMinimumHeight(base_height);
@@ -297,7 +302,7 @@ public:
         counter_offset_label->setDisabled(true);
 
         counter_total_label = new QLabel(Finder);
-        counter_total_label->setProperty("type", "border");
+        counter_total_label->setProperty("style", "border");
         counter_total_label->setFont(font);
         counter_total_label->setMinimumWidth(desktop_width / 25.6);
         counter_total_label->setMinimumHeight(base_height);
@@ -382,7 +387,7 @@ class Ui_Bulletin
 public:
     QLabel *number_label;
     QLabel *published_label;
-    QLabel *title_label;
+    CustomLabel *title_label;
     QLabel *score_label;
     QLabel *description_label;
     QLabel *id_label;
@@ -417,29 +422,30 @@ public:
         font.setPointSize(desktop_width / 174.5);
 
         number_label = new QLabel(Bulletin);
-        number_label->setProperty("type", "gray-dark-bg");
+        number_label->setProperty("style", "gray-dark-bg");
         number_label->setFont(font);
         number_label->setMinimumWidth(desktop_width / 25.6);
         number_label->setMinimumHeight(base_height);
         number_label->setAlignment(Qt::AlignCenter);
 
         published_label = new QLabel(Bulletin);
-        published_label->setProperty("type", "gray-bg");
+        published_label->setProperty("style", "gray-bg");
         published_label->setFont(font);
         published_label->setMinimumWidth(desktop_width / 16.5);
         published_label->setMinimumHeight(base_height);
         published_label->setAlignment(Qt::AlignCenter);
 
-        title_label = new QLabel(Bulletin);
-        title_label->setProperty("type", "gray-light-bg");
+        title_label = new CustomLabel(Bulletin);
+        title_label->setProperty("style", "custom-bg");
         title_label->setFont(font);
         title_label->setMinimumWidth(desktop_width / 9.51);
         title_label->setMinimumHeight(base_height);
         title_label->setMargin(base_margin);
         title_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        title_label->setDisabled(true);
 
         score_label = new QLabel(Bulletin);
-        score_label->setProperty("type", "score-low");
+        score_label->setProperty("style", "score-low");
         score_label->setFont(font);
         score_label->setMinimumWidth(desktop_width / 25.6);
         score_label->setMinimumHeight(base_height);
@@ -452,7 +458,7 @@ public:
         font.setItalic(true);
 
         description_label = new QLabel(Bulletin);
-        description_label->setProperty("type", "white-bg");
+        description_label->setProperty("style", "white-bg");
         description_label->setFont(font);
         description_label->setMinimumHeight(base_height);
         description_label->setMargin(base_margin);
@@ -463,7 +469,7 @@ public:
         font.setItalic(false);
 
         id_label = new QLabel(Bulletin);
-        id_label->setProperty("type", "white");
+        id_label->setProperty("style", "white");
         id_label->setFont(font);
         id_label->setMargin(base_margin);
         id_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -471,7 +477,7 @@ public:
         id_label->setHidden(true);
 
         cve_label = new QLabel(Bulletin);
-        cve_label->setProperty("type", "white");
+        cve_label->setProperty("style", "white");
         cve_label->setFont(font);
         cve_label->setMargin(base_margin);
         cve_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -487,7 +493,7 @@ public:
         font.setCapitalization(QFont::AllUppercase);
 
         cpe_vendor_label = new QLabel(Bulletin);
-        cpe_vendor_label->setProperty("type", "white");
+        cpe_vendor_label->setProperty("style", "white");
         cpe_vendor_label->setFont(font);
         cpe_vendor_label->setMargin(base_margin);
         cpe_vendor_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -495,7 +501,7 @@ public:
         cpe_vendor_label->setHidden(true);
 
         cpe_product_label = new QLabel(Bulletin);
-        cpe_product_label->setProperty("type", "white");
+        cpe_product_label->setProperty("style", "white");
         cpe_product_label->setFont(font);
         cpe_product_label->setMargin(base_margin);
         cpe_product_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -503,7 +509,7 @@ public:
         cpe_product_label->setHidden(true);
 
         cpe_version_label = new QLabel(Bulletin);
-        cpe_version_label->setProperty("type", "white");
+        cpe_version_label->setProperty("style", "white");
         cpe_version_label->setFont(font);
         cpe_version_label->setMargin(base_margin);
         cpe_version_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -552,7 +558,7 @@ public:
         source_line_label->setHidden(true);
 
         source_text = new QTextEdit(Bulletin);
-        source_text->setProperty("type", "source");
+        source_text->setProperty("style", "source");
         source_text->setFont(font);
         source_text->setMinimumHeight(desktop_height / 1.155);
         source_text->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);

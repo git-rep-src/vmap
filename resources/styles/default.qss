@@ -3,90 +3,90 @@ QWidget {
     background-color: rgb(26, 29, 33);
 }
 
-QLabel[type = "white"] {
+QLabel[style = "white"] {
     color: white;
 }
-QLabel[type = "white"]:disabled {
+QLabel[style = "white"]:disabled {
     color: rgb(61, 66, 77);
 }
 
-QLabel[type = "white-bg"] {
+QLabel[style = "white-bg"] {
     color: white;
     background-color: rgb(30, 33, 37);
 }
-QLabel[type = "white-bg"]:disabled {
+QLabel[style = "white-bg"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
-QLabel[type = "gray-bg"] {
+QLabel[style = "gray-bg"] {
     color: gray;
     background-color: rgb(30, 33, 37);
 }
-QLabel[type = "gray-bg"]:disabled {
+QLabel[style = "gray-bg"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
-QLabel[type = "gray-light-bg"] {
+QLabel[style = "gray-light-bg"] {
     color: rgb(165, 165, 165);
     background-color: rgb(30, 33, 37);
 }
-QLabel[type = "gray-light-bg"]:disabled {
+QLabel[style = "gray-light-bg"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
-QLabel[type = "gray-dark"] {
+QLabel[style = "gray-dark"] {
     color: rgb(61, 66, 77);
 }
 
-QLabel[type = "gray-dark-bg"] {
+QLabel[style = "gray-dark-bg"] {
     color: rgb(61, 66, 77);
     background-color: rgb(30, 33, 37);
 }
-QLabel[type = "gray-dark-bg"]:disabled {
+QLabel[style = "gray-dark-bg"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
-QLabel[type = "score-low"] {
+QLabel[style = "score-low"] {
     color: gray;
     background-color: rgb(30, 33, 37);
     border-style: solid;
     border-left-width: 1px;
     border-left-color: rgba(128, 128, 128, 70);
 }
-QLabel[type = "score-low"]:disabled {
+QLabel[style = "score-low"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
-QLabel[type = "score-medium"] {
+QLabel[style = "score-medium"] {
     color: gray;
     background-color: rgb(30, 33, 37);
     border-style: solid;
     border-left-width: 1px;
     border-left-color: rgba(255, 246, 0, 70);
 }
-QLabel[type = "score-medium"]:disabled {
+QLabel[style = "score-medium"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
-QLabel[type = "score-high"] {
+QLabel[style = "score-high"] {
     color: gray;
     background-color: rgb(30, 33, 37);
     border-style: solid;
     border-left-width: 1px;
     border-left-color: rgba(255, 0, 0, 70);
 }
-QLabel[type = "score-high"]:disabled {
+QLabel[style = "score-high"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(30, 33, 37);
 }
 
-QLabel[type = "border"] {
+QLabel[style = "border"] {
     color: gray;
     background-color: rgb(26, 29, 33);
     border-style: solid;
@@ -94,13 +94,22 @@ QLabel[type = "border"] {
     border-color: rgba(128, 128, 128, 30);
     border-radius: 1px;
 }
-QLabel[type = "border"]:disabled {
+QLabel[style = "border"]:disabled {
     color: rgb(61, 66, 77);
     background-color: rgb(26, 29, 33);
     border-style: solid;
     border-width: 1px;
     border-color: rgba(128, 128, 128, 30);
     border-radius: 1px;
+}
+
+QLabel[style = "custom-bg"] {
+    color: rgb(165, 165, 165);
+    background-color: rgb(36, 40, 45);
+}
+QLabel[style = "custom-bg"]:disabled {
+    color: rgb(165, 165, 165);
+    background-color: rgb(30, 33, 37);
 }
 
 QLineEdit {
@@ -118,12 +127,12 @@ QLineEdit:disabled {
     border-color: rgb(26, 29, 33);
 }
 
-QTextEdit[type = "source"] {
+QTextEdit[style = "source"] {
     color: rgb(220, 220, 220);
     background-color: rgb(27, 30, 35);
     border: none;
 }
-QTextEdit[type = "source"]:disabled {
+QTextEdit[style = "source"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(27, 30, 35);
     border: none;
@@ -195,11 +204,11 @@ QPushButton:disabled {
     color: rgb(61, 66, 77);
     background-color: rgb(26, 29, 33);
 }
-QPushButton[type = "file"] {
+QPushButton[style = "file"] {
     color: rgb(132, 133, 135);
     background-color: rgb(29, 31, 34);
 }
-QPushButton[type = "file"]:disabled {
+QPushButton[style = "file"]:disabled {
     color: rgb(53, 59, 68);
     background-color: rgb(18, 21, 25);
 }
