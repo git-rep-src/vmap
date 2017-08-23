@@ -4,6 +4,8 @@
 
 #include <vector>
 
+#include <QScrollBar>
+
 View::View(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::View)
@@ -103,6 +105,8 @@ void View::build_bulletin(std::string *ret, const std::string &name,
             ui->scroll_layout->addWidget(bulletins_vector.last());
             offset++;
         }
+        if (!has_offset)
+            ui->scroll_area->verticalScrollBar()->setValue(0);
         ui->scroll_layout->update();
         if (offset > n_total)
             offset = n_total;
