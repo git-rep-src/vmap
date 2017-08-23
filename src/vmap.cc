@@ -71,7 +71,10 @@ bool Vmap::api(const std::string &req, const std::string &name,
     if (!socket->write_read(req, &ret))
         return false;
 
-    view->build_bulletin(&ret, name, version, max, has_offset);
+    if (!ret.empty())
+        view->build_bulletin(&ret, name, version, max, has_offset);
+    else
+        return false;
 
     ret.clear();
 
