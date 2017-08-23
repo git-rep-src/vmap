@@ -205,7 +205,9 @@ void Finder::set_vector()
 
 void Finder::set_type()
 {
-    if ((ui->type_combo->currentText() == "TYPE") ||
+    if (is_blocked)
+        type = "*";
+    else if ((ui->type_combo->currentText() == "TYPE") ||
         (ui->type_combo->currentText() == "CVE"))
         type = "cve";
     else if (ui->type_combo->currentText() == "EDB")
