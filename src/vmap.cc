@@ -1,11 +1,16 @@
 #include "vmap.h"
 
+#include <curlpp/cURLpp.hpp>
+#include <curlpp/Easy.hpp>
+#include <curlpp/Options.hpp>
+
+#include <sstream>
+
 Vmap::Vmap(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Vmap),
     finder(NULL),
-    view(NULL),
-    socket(NULL)
+    view(NULL)
 {
     ui->setupUi(this);
     QObject::connect(ui->exit_button, &QPushButton::pressed, [&] {
@@ -50,34 +55,33 @@ Vmap::~Vmap()
         delete finder;
     if (view != NULL)
         delete view;
-    if (socket != NULL)
-        delete socket;
     delete ui;
 }
 
-bool Vmap::api(const std::string &req, const std::string &name,
+bool Vmap::api(const std::string &url, const std::string &name,
                const std::string &version, int max,
                bool has_offset)
 {
-    if (socket == NULL) {
-        socket = new SSL_socket;
-        if (!socket->start()) {
-            delete socket;
-            socket = NULL;
-            return false;
-        }
+    std::ostringstream ret;
+	
+    try {
+        curlpp::Cleanup cleanup;
+        curlpp::Easy request;
+        curlpp::options::Url u(url);
+        curlpp::options::WriteStream ws(&ret);
+        request.setOpt(u);
+        request.setOpt(ws);
+        request.perform();
     }
-
-    if (!socket->write_read(req, &ret))
+    catch(curlpp::RuntimeError & e) {
         return false;
-
-    if (!ret.empty())
-        view->build_bulletin(&ret, name, version, max, has_offset);
-    else
+    }
+    catch(curlpp::LogicError & e) {
         return false;
-
-    ret.clear();
-
+    }
+   
+    view->build_bulletin(&ret, name, version, max, has_offset);
+    
     return true;
 }
 
