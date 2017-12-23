@@ -11,12 +11,12 @@ A Vulnerability-Exploit desktop finder.
 ```shell
 qt         >= 5.x
 libcurlpp  >= 0.8
-# libxml++ >= 3.0  Optional Linux Nmap filter
+# libxml++ >= 3.0 Optional Linux Nmap filter
 ```
 Linux
 ```shell
 qmake
-# qmake CONFIG+=NONMAP  Nmap filter disabled
+# qmake CONFIG+=NONMAP Nmap filter disabled
 ```
 Windows 
 ```shell
