@@ -5,6 +5,7 @@
 #include "bulletin.h"
 
 #include <string>
+#include <sstream>
 
 namespace Ui {
 class View;
@@ -19,7 +20,7 @@ public:
     ~View();
 
 public slots:
-    void build_bulletin(std::string *ret, const std::string &name,
+    void build_bulletin(std::ostringstream *ret, const std::string &name,
                         const std::string &version, int max,
                         bool has_offset);
 
