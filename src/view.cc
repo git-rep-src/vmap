@@ -6,6 +6,7 @@
 
 #include <QScrollBar>
 
+
 View::View(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::View)
@@ -20,7 +21,7 @@ View::~View()
     delete ui;
 }
 
-void View::build_bulletin(std::string *ret, const std::string &name,
+void View::build_bulletin(std::ostringstream *ret, const std::string &name,
                           const std::string &version, int max,
                           bool has_offset)
 {
@@ -38,8 +39,9 @@ void View::build_bulletin(std::string *ret, const std::string &name,
         offset = 0;
         n_total = 0;
     }
-
-    nlohmann::json js = nlohmann::json::parse(ret->std::string::erase(0, (ret->std::string::find("\r\n\r\n") + 4)));
+   
+    nlohmann::json js = nlohmann::json::parse((*ret).str());
+     
     n_total = js["data"]["total"];
     if ((max + offset) > n_total)
         max = n_total - offset;
