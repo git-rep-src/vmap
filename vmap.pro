@@ -12,13 +12,6 @@ unix {
 }
 win32 {
     CONFIG += c++11 release
-    contains (QMAKE_TARGET.arch, i386) {
-        LIBS += -LC:\OpenSSL-Win32\lib -llibcrypto -llibssl
-        INCLUDEPATH += C:\OpenSSL-Win32\include
-    } else {
-        LIBS += -LC:\OpenSSL-Win64\lib -llibcrypto -llibssl
-        INCLUDEPATH += C:\OpenSSL-Win64\include
-    }
     target.path = C:\vmap\
     INSTALLS += target
 }
