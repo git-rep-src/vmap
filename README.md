@@ -6,6 +6,8 @@ A Vulnerability-Exploit desktop finder.
 
 ## INSTALLATION
 
+### BUILD
+
 ```shell
 qt        >= 5.x
 libcurlpp >= 0.8
