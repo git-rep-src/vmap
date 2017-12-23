@@ -23,18 +23,18 @@ Windows
 qmake LIBS+="-LOPENSSSL_PATH/lib -llibcrypto -llibssl" "-LCURLPP_PATH/lib -llibcurl -llibcurlpp"\
 INCLUDEPATH+="OPENSSL_PATH/include" "CURLPP_PATH/include"
 ```
-
 ```shell
 make
 make install
 ```
 ### PACKAGES
 
+Archlinux
 ```shell
-# Archlinux
 yaourt -S vmap
-
-# Blackarch
+```
+Blackarch
+```shell
 pacman -S vmap
 ```
 
