@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
          (argv[1] == std::string("--version")))) {
         std::cout << std::endl;
         std::cout << "A Vulnerability-Exploit desktop finder (https://github.com/git-rep/vmap)" << std::endl;
-        std::cout << "Version 0.2" << std::endl;
+        std::cout << "Version 0.3" << std::endl;
         std::cout << std::endl;
         return 0;
     }
