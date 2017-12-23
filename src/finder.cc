@@ -71,19 +71,16 @@ void Finder::build_request(bool has_offset)
         set_date();
         set_order();
         set_max();
-        req = "GET /api/v3/search/lucene/?query=" +
+        url = "https://vulners.com/api/v3/search/lucene/?query=" +
               query +
               " cvss.vector:" + vector +
               " type:" + type +
               " cvss.score:" + score +
               " " + date +
               " sort:" + order +
-              "&size=" + max +
-              " HTTP/1.1\r\n"
-              "Host:vulners.com\r\n"
-              "Connection:Keep-Alive\r\n\r\n";
+              "&size=" + max ;
     } else {
-        req = "GET /api/v3/search/lucene/?query=" +
+        url = "https://vulners.com/api/v3/search/lucene/?query=" +
               query +
               " cvss.vector:" + vector +
               " type:" + type +
@@ -91,14 +88,11 @@ void Finder::build_request(bool has_offset)
               " " + date +
               " sort:" + order +
               "&size=" + max +
-              "&skip=" + ui->counter_offset_label->text().toStdString() +
-              " HTTP/1.1\r\n"
-              "Host:vulners.com\r\n"
-              "Connection:Keep-Alive\r\n\r\n";
+              "&skip=" + ui->counter_offset_label->text().toStdString();
     }
 
     if (!has_error)
-        emit request_signal(req, ui->name_edit->text().toStdString(),
+        emit request_signal(url, ui->name_edit->text().toStdString(),
                             ui->version_edit->text().toStdString(), std::stoi(max),
                             has_offset);
 }
@@ -163,17 +157,27 @@ void Finder::set_query()
         if ((ui->match_combo->currentText() == "MATCH") ||
             (ui->match_combo->currentText() == "EXACT")) {
             if (ui->type_combo->currentText() == "PS")
-                query = "title:(\"" +
-                        ui->name_edit->text().toStdString() +
-                        "\" AND \"" +
-                        ui->version_edit->text().toStdString() +
-                        "\")";
+                if (ui->version_edit->text() != "")
+                    query = "title:(\"" +
+                            ui->name_edit->text().toStdString() +
+                            "\" AND \"" +
+                            ui->version_edit->text().toStdString() +
+                            "\")";
+                else
+                    query = "title:(\"" +
+                            ui->name_edit->text().toStdString() +
+                            "\")";
             else
-                query = "description:(\"" +
-                        ui->name_edit->text().toStdString() +
-                        "\" AND \"" +
-                        ui->version_edit->text().toStdString() +
-                        "\")";
+                if (ui->version_edit->text() != "")
+                    query = "description:(\"" +
+                            ui->name_edit->text().toStdString() +
+                            "\" AND \"" +
+                            ui->version_edit->text().toStdString() +
+                            "\")";
+                else
+                    query = "description:(\"" +
+                            ui->name_edit->text().toStdString() +
+                            "\")";
         } else {
             if (ui->type_combo->currentText() == "PS")
                 query = "title:" +

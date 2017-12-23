@@ -22,7 +22,7 @@ public slots:
     void set_counter(int offset, int n_total);
 
 signals:
-    void request_signal(const std::string &req, const std::string &name,
+    void request_signal(const std::string &url, const std::string &name,
                         const std::string &version, int max,
                         bool has_offset);
     void status_signal(const std::string &status);
@@ -42,7 +42,7 @@ private:
     std::string date;
     std::string order;
     std::string max;
-    std::string req;
+    std::string url;
 
 private slots:
     void build_request(bool has_offset = false);
