@@ -9,9 +9,9 @@ A Vulnerability-Exploit desktop finder.
 ### BUILD
 
 ```shell
-qt        >= 5.x
-libcurlpp >= 0.8
-# libxml++  >= 3.0  Optional Linux Nmap filter
+qt         >= 5.x
+libcurlpp  >= 0.8
+# libxml++ >= 3.0  Optional Linux Nmap filter
 ```
 Linux
 ```shell
