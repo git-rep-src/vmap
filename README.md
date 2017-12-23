@@ -14,9 +14,10 @@ libxml++ >= 3.0 # Optional Nmap filter (Linux only)
 
 ```shell
 qmake
-# Nmap filter disabled
+
+# NMAP FILTER DISABLED
 qmake CONFIG+=NONMAP 
-# Windows library path
+# WINDOWS LIBRARY PATH
 qmake LIBS+="-LOPENSSSL_PATH/lib -llibcrypto -llibssl" "-LCURLPP_PATH/lib -llibcurl -llibcurlpp"\
 INCLUDEPATH+="OPENSSL_PATH/include" "CURLPP_PATH/include"
 
