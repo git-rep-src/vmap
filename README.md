@@ -8,15 +8,16 @@ A Vulnerability-Exploit desktop finder. [Demo video](https://streamable.com/t2ul
 
 ```shell
 qt       >= 5.x
-openssl  >= 1.1
+curlpp   >= 0.8
 libxml++ >= 3.0 # Optional Nmap filter (Linux only)
 ```
 
 ```shell
 qmake
-# qmake CONFIG+=NONMAP                                                      Nmap filter disabled
-# qmake LIBS+="-LPATH/lib -lcrypto -lssl" INCLUDEPATH+="PATH/include"       OpenSSL custom path (Linux)
-# qmake LIBS+="-LPATH/lib -llibcrypto -llibssl" INCLUDEPATH+="PATH/include" OpenSSL custom path (Windows)
+# NMAP FILTER DISABLED
+# qmake CONFIG+=NONMAP 
+# WINDOWS LIBRARY PATH
+# qmake LIBS+="-LOPENSSSL_PATH/lib -llibcrypto -llibssl" "-LCURLPP_PATH/lib -llibcurl -llibcurlpp" INCLUDEPATH+="OPENSSL_PATH/include" "CURLPP_PATH/include"
 make
 make install
 ```
