@@ -26,5 +26,14 @@ INCLUDEPATH+="OPENSSL_PATH/include" "CURLPP_PATH/include"
 make
 make install
 ```
+### REPOSITORIES
+
+```shell
+# Archlinux
+yaourt -S vmap
+
+# Blackarch
+pacman -S vmap
+```
 
 Vmap use the [vulners](https://vulners.com/api/v3/) API.
