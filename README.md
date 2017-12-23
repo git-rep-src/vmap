@@ -9,11 +9,12 @@ A Vulnerability-Exploit desktop finder. [Demo video](https://streamable.com/t2ul
 ```shell
 qt       >= 5.x
 curlpp   >= 0.8
-libxml++ >= 3.0 # Optional Nmap filter (Linux only)
+libxml++ >= 3.0 # OPTIONAL NMAP FILTER (LINUX ONLY)
 ```
 
 ```shell
 qmake
+
 # NMAP FILTER DISABLED
 qmake CONFIG+=NONMAP 
 # WINDOWS LIBRARY PATH
