@@ -26,7 +26,7 @@ INCLUDEPATH+="OPENSSL_PATH/include" "CURLPP_PATH/include"
 make
 make install
 ```
-### REPOSITORIES
+### PACKAGE
 
 ```shell
 # Archlinux
