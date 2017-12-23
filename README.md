@@ -9,21 +9,21 @@ A Vulnerability-Exploit desktop finder.
 ### BUILD
 
 ```shell
-qt          >= 5.x
-libcurlpp   >= 0.8
-# libxml++  >= 3.0 Optional Linux Nmap filter
+qt        >= 5.x
+libcurlpp >= 0.8
+# libxml++  >= 3.0  Optional Linux Nmap filter
 ```
 Linux
 ```shell
 qmake
-qmake CONFIG+=NONMAP # Nmap filter disabled
-make
-make install
+# qmake CONFIG+=NONMAP  Nmap filter disabled
 ```
 Windows 
 ```shell
 qmake LIBS+="-LOPENSSSL_PATH/lib -llibcrypto -llibssl" "-LCURLPP_PATH/lib -llibcurl -llibcurlpp"\
 INCLUDEPATH+="OPENSSL_PATH/include" "CURLPP_PATH/include"
+```
+```shell
 make
 make install
 ```
