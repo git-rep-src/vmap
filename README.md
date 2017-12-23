@@ -14,7 +14,6 @@ libxml++ >= 3.0 # Optional Nmap filter (Linux only)
 
 ```shell
 qmake
-
 # NMAP FILTER DISABLED
 qmake CONFIG+=NONMAP 
 # WINDOWS LIBRARY PATH
