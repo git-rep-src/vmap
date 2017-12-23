@@ -2,7 +2,7 @@ QT += core gui widgets
 
 unix {
     CONFIG += link_pkgconfig c++11 release
-    LIBS += -L/usr/lib/ -lcrypto -lssl
+    LIBS += -L/usr/lib/ -lcurl -lcurlpp -lcrypto -lssl
     target.path = /usr/local/bin
     INSTALLS += target
     !NONMAP {
@@ -32,7 +32,6 @@ SOURCES += src/main.cc \
            src/view.cc \
            src/bulletin.cc \
            src/highlighter.cc \
-           src/ssl_socket.cc \
            src/json.cc
 
 HEADERS += src/vmap.h \
@@ -40,7 +39,6 @@ HEADERS += src/vmap.h \
            src/view.h \
            src/bulletin.h \
            src/highlighter.h \
-           src/ssl_socket.h \
            src/customlabel.h \
            src/custompushbutton.h \
            src/ui.h
