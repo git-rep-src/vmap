@@ -9,8 +9,7 @@ A Vulnerability-Exploit desktop finder. [Demo video](https://streamable.com/t2ul
 ```shell
 qt       >= 5.x
 curlpp   >= 0.8
-# OPTIONAL NMAP FILTER (LINUX ONLY)
-libxml++ >= 3.0 
+libxml++ >= 3.0 # OPTIONAL NMAP FILTER (LINUX ONLY)
 ```
 
 ```shell
