@@ -8,6 +8,7 @@ A Vulnerability-Exploit desktop finder.
 
 ### BUILD
 
+#### Dependencies
 ```shell
 qt         >= 5.x
 libcurl    >= 7.5
@@ -18,7 +19,7 @@ libcurl    >= 7.5
 qmake
 # qmake CONFIG+=NONMAP Nmap filter disabled
 ```
-Windows 
+#### Windows 
 ```shell
 qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include"
 ```
@@ -28,11 +29,11 @@ make install
 ```
 ### PACKAGES
 
-Archlinux
+#### Archlinux
 ```shell
 yaourt -S vmap
 ```
-Blackarch
+#### Blackarch
 ```shell
 pacman -S vmap
 ```
