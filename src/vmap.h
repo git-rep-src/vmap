@@ -4,6 +4,7 @@
 #include "ui.h"
 #include "finder.h"
 #include "view.h"
+#include "net.h"
 
 #include <string>
 
@@ -26,6 +27,7 @@ private:
 
     Finder *finder;
     View *view;
+    Net *net;
 
     QTimer *status_timer;
 

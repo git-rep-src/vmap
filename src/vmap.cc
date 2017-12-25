@@ -1,16 +1,13 @@
 #include "vmap.h"
 
-#include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
-
 #include <sstream>
 
 Vmap::Vmap(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Vmap),
     finder(NULL),
-    view(NULL)
+    view(NULL),
+    net(NULL)
 {
     ui->setupUi(this);
     QObject::connect(ui->exit_button, &QPushButton::pressed, [&] {
@@ -55,6 +52,8 @@ Vmap::~Vmap()
         delete finder;
     if (view != NULL)
         delete view;
+    if (net != NULL)
+        delete net;
     delete ui;
 }
 
@@ -62,24 +61,14 @@ bool Vmap::api(const std::string &url, const std::string &name,
                const std::string &version, int max,
                bool has_offset)
 {
-    std::ostringstream ret;
-	
-    try {
-        curlpp::Cleanup cleanup;
-        curlpp::Easy request;
-        curlpp::options::Url u(url);
-        curlpp::options::WriteStream ws(&ret);
-        request.setOpt(u);
-        request.setOpt(ws);
-        request.perform();
-    }
-    catch(curlpp::RuntimeError & e) {
+    std::stringstream ret;
+    
+    if (net == NULL)
+        net = new Net();
+    
+    if (!net->get(url, &ret))
         return false;
-    }
-    catch(curlpp::LogicError & e) {
-        return false;
-    }
-   
+    
     view->build_bulletin(&ret, name, version, max, has_offset);
     
     return true;
