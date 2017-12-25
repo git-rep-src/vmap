@@ -11,12 +11,12 @@ qt         >= 5.x
 libcurl    >= 7.5
 # libxml++ >= 3.0 Optional Linux Nmap filter
 ```
-#### Linux
+### Linux
 ```shell
 qmake
 # qmake CONFIG+=NONMAP Nmap filter disabled
 ```
-#### Windows 
+### Windows 
 ```shell
 qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include"
 ```
@@ -27,11 +27,11 @@ make install
 
 ## PACKAGES
 
-#### Archlinux
+### Archlinux
 ```shell
 yaourt -S vmap
 ```
-#### Blackarch
+### Blackarch
 ```shell
 pacman -S vmap
 ```
