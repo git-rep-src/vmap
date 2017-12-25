@@ -11,7 +11,7 @@ A Vulnerability-Exploit desktop finder.
 ```shell
 qt       >= 5.x
 libcurl  >= 7.5
-# libxml++ >= 3.0 Linux optional Nmap filter
+libxml++ >= 3.0 # Linux optional Nmap filter
 ```
 ```shell
 qmake
