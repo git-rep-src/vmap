@@ -15,19 +15,18 @@ libcurl    >= 7.5
 ```
 ```shell
 qmake
-# qmake CONFIG+=NONMAP                                                     Linux Nmap filter disabled
+# qmake CONFIG+=NONMAP Linux Nmap filter disabled
 # qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include" Windows libcurl path
-
 make
 make install
 ```
 ### PACKAGES
 
-#### Archlinux
+ Archlinux
 ```shell
 yaourt -S vmap
 ```
-#### Blackarch
+ Blackarch
 ```shell
 pacman -S vmap
 ```
