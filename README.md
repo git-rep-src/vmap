@@ -15,8 +15,8 @@ libxml++ >= 3.0 # Linux optional Nmap filter
 ```
 ```shell
 qmake
-qmake CONFIG+=NONMAP # Linux Nmap filter disabled
-qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include" # Windows libcurl path
+# qmake CONFIG+=NONMAP                                                     # Linux Nmap filter disabled
+# qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include" # Windows libcurl path
 make
 make install
 ```
