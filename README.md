@@ -4,7 +4,9 @@ A Vulnerability-Exploit desktop finder.
 
 ![alt tag](https://image.ibb.co/nK2ppv/vmap.png)
 
-## BUILD
+## INSTALLATION
+
+### BUILD
 
 ```shell
 qt       >= 5.x
@@ -18,7 +20,7 @@ qmake
 make
 make install
 ```
-## PACKAGES
+### PACKAGES
 
 ```shell
 yaourt -S vmap # Archlinux
