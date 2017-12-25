@@ -10,7 +10,7 @@ A Vulnerability-Exploit desktop finder.
 
 ```shell
 qt         >= 5.x
-libcurlpp  >= 0.8
+libcurl    >= 7.5
 # libxml++ >= 3.0 Optional Linux Nmap filter
 ```
 Linux
@@ -20,8 +20,7 @@ qmake
 ```
 Windows 
 ```shell
-qmake LIBS+="-LOPENSSSL_PATH/lib -llibcrypto -llibssl" "-LCURLPP_PATH/lib -llibcurl -llibcurlpp"\
-INCLUDEPATH+="OPENSSL_PATH/include" "CURLPP_PATH/include"
+qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include"
 ```
 ```shell
 make
