@@ -11,18 +11,13 @@ A Vulnerability-Exploit desktop finder.
 ```shell
 qt         >= 5.x
 libcurl    >= 7.5
-# libxml++ >= 3.0 Optional Linux Nmap filter
+# libxml++ >= 3.0 Linux optional Nmap filter
 ```
-#### Linux
 ```shell
 qmake
-# qmake CONFIG+=NONMAP Nmap filter disabled
-```
-#### Windows 
-```shell
-qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include"
-```
-```shell
+# qmake CONFIG+=NONMAP                                                     Linux Nmap filter disabled
+# qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include" Windows libcurl path
+
 make
 make install
 ```
