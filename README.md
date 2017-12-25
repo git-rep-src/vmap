@@ -13,7 +13,7 @@ qt         >= 5.x
 libcurl    >= 7.5
 # libxml++ >= 3.0 Optional Linux Nmap filter
 ```
-Linux
+#### Linux
 ```shell
 qmake
 # qmake CONFIG+=NONMAP Nmap filter disabled
