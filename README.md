@@ -4,11 +4,8 @@ A Vulnerability-Exploit desktop finder.
 
 ![alt tag](https://image.ibb.co/nK2ppv/vmap.png)
 
-## INSTALLATION
+## BUILD
 
-### BUILD
-
-#### Dependencies
 ```shell
 qt         >= 5.x
 libcurl    >= 7.5
@@ -27,7 +24,8 @@ qmake LIBS+="-LCURL_PATH/lib -llibcurl" INCLUDEPATH+="CURL_PATH/include"
 make
 make install
 ```
-### PACKAGES
+
+## PACKAGES
 
 #### Archlinux
 ```shell
