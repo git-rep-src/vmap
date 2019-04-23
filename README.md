@@ -26,4 +26,12 @@ make install
 yaourt -S vmap # Archlinux
 pacman -S vmap # Blackarch
 ```
-Vmap use the [vulners](https://vulners.com/api/v3/) API.
+
+### CONFIGURATION
+
+Vmap require a API Key from [vulners](https://vulners.com/api/v3/).
+
+```shell
+echo <YOUR-API-KEY> > ~/.vmap
+```
+
