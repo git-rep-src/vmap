@@ -15,8 +15,9 @@ class Finder : public QWidget
     Q_OBJECT
 
 public:
-    explicit Finder(QWidget *parent);
+    explicit Finder(std::string *api_key, QWidget *parent);
     ~Finder();
+
 
 public slots:
     void set_counter(int offset, int n_total);
@@ -29,6 +30,8 @@ signals:
 
 private:
     Ui::Finder *ui;
+
+    std::string *apikey;
 
     bool is_blocked;
     bool has_error;

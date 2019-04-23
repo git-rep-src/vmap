@@ -1,20 +1,27 @@
 #include "vmap.h"
 
+#include <fstream>
 #include <sstream>
+
+#include <unistd.h>
+#include <pwd.h>
 
 Vmap::Vmap(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Vmap),
     finder(NULL),
     view(NULL),
-    net(NULL)
+    net(NULL),
+    apikey("")
 {
     ui->setupUi(this);
     QObject::connect(ui->exit_button, &QPushButton::pressed, [&] {
         qApp->quit();
     });
+    
+    get_apikey();
 
-    finder = new Finder(this);
+    finder = new Finder(&apikey, this);
     QObject::connect(finder, &Finder::request_signal, [&] (const std::string &req, const std::string &name,
                                                            const std::string &version, int max,
                                                            bool has_offset) {
@@ -40,10 +47,13 @@ Vmap::Vmap(QWidget *parent) :
     ui->layout->addWidget(ui->status_label);
 
     status_timer = new QTimer(this);
-    status_timer->setInterval(3000);
+    status_timer->setInterval(5000);
     QObject::connect(status_timer, &QTimer::timeout, [&] {
         ui->status_label->clear();
     });
+    
+    if (apikey == "")
+        set_status("<span style=color:#5c181b>API KEY ERROR</span>");
 }
 
 Vmap::~Vmap()
@@ -78,4 +88,15 @@ void Vmap::set_status(const std::string &status)
 {
     ui->status_label->setText(QString::fromStdString(status));
     status_timer->start();
+}
+
+void Vmap::get_apikey()
+{
+    passwd *pw = getpwuid(getuid());
+    
+    std::ifstream file(std::string(pw->pw_dir) + "/.vmap");
+    if (file.is_open()) {
+        getline(file, apikey);
+        file.close();
+    }
 }

@@ -28,6 +28,8 @@ private:
     Finder *finder;
     View *view;
     Net *net;
+    
+    std::string apikey;
 
     QTimer *status_timer;
 
@@ -36,6 +38,7 @@ private slots:
              const std::string &version, int max,
              bool has_offset);
     void set_status(const std::string &status);
+    void get_apikey();
 };
 
 #endif // VMAP_H

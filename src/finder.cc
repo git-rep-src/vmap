@@ -6,9 +6,10 @@
 
 #include <QFileDialog>
 
-Finder::Finder(QWidget *parent) :
+Finder::Finder(std::string *api_key, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Finder),
+    apikey(api_key),
     is_blocked(false),
     has_error(false),
     last_dir("")
@@ -78,7 +79,8 @@ void Finder::build_request(bool has_offset)
               " cvss.score:" + score +
               " " + date +
               " sort:" + order +
-              "&size=" + max ;
+              "&size=" + max +
+              "&apiKey=" + *apikey;
     } else {
         url = "https://vulners.com/api/v3/search/lucene/?query=" +
               query +
@@ -88,6 +90,7 @@ void Finder::build_request(bool has_offset)
               " " + date +
               " sort:" + order +
               "&size=" + max +
+              "&apiKey=" + *apikey +
               "&skip=" + ui->counter_offset_label->text().toStdString();
     }
 
