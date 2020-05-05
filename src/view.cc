@@ -2,9 +2,9 @@
 
 #include "json.cc"
 
-#include <vector>
-
 #include <QScrollBar>
+
+#include <vector>
 
 View::View(QWidget *parent) :
     QWidget(parent),
