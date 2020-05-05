@@ -20,7 +20,8 @@
 #include <QStandardItemModel>
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QGuiApplication>
+#include <QScreen>
 
 QT_BEGIN_NAMESPACE
 
@@ -33,14 +34,14 @@ public:
 
     void setupUi(QWidget *Vmap)
     {
-        int desktop_width = QApplication::desktop()->screenGeometry().width();
-        int desktop_height = QApplication::desktop()->screenGeometry().height();
-        int base_height = (desktop_height / 54);
-        int base_size = (desktop_width / 192);
-        int base_margin = (desktop_width / 192);
+        const int screen_width = QGuiApplication::primaryScreen()->availableGeometry().width();
+        const int screen_height = QGuiApplication::primaryScreen()->availableGeometry().height();
+        int base_height = (screen_height / 54);
+        int base_size = (screen_width / 192);
+        int base_margin = (screen_width / 192);
 
         QFont font(":/font-default");
-        font.setPointSize(desktop_width / 174.5);
+        font.setPointSize(screen_width / 174.5);
 
         status_label = new QLabel(Vmap);
         status_label->setProperty("style", "gray-dark");
@@ -51,7 +52,7 @@ public:
         exit_button = new CustomPushButton(QIcon(":/icon-exit"), NULL, Vmap);
         exit_button->setIconSize(QSize(base_size, base_size));
         exit_button->setMaximumSize(QSize(base_size, base_size));
-        exit_button->move((desktop_width - base_margin), 0);
+        exit_button->move((screen_width - base_margin), 0);
         exit_button->setFlat(true);
         exit_button->setDisabled(true);
 
@@ -90,14 +91,14 @@ public:
 
     void setupUi(QWidget *Finder)
     {
-        int desktop_width = QApplication::desktop()->screenGeometry().width();
-        int desktop_height = QApplication::desktop()->screenGeometry().height();
-        int base_height = (desktop_height / 30.85);
-        int base_size = (desktop_width / 160);
+        const int screen_width = QGuiApplication::primaryScreen()->availableGeometry().width();
+        const int screen_height = QGuiApplication::primaryScreen()->availableGeometry().height();
+        int base_height = (screen_height / 30.85);
+        int base_size = (screen_width / 160);
         int base_space = 1;
 
         QFont font(":/font-default");
-        font.setPointSize(desktop_width / 174.5);
+        font.setPointSize(screen_width / 174.5);
         font.setCapitalization(QFont::AllUppercase);
 
         id_edit = new QLineEdit(Finder);
@@ -139,7 +140,7 @@ public:
 
         nmap_button = new QPushButton("+", Finder);
         nmap_button->setProperty("style", "file");
-        nmap_button->setMaximumSize(QSize((desktop_width / 87), base_height));
+        nmap_button->setMaximumSize(QSize((screen_width / 87), base_height));
 
         nmap_layout = new QHBoxLayout;
         nmap_layout->setMargin(0);
@@ -215,7 +216,7 @@ public:
 
         score_edit = new QLineEdit(Finder);
         score_edit->setFont(font);
-        score_edit->setMaximumWidth(desktop_width / 29.5);
+        score_edit->setMaximumWidth(screen_width / 29.5);
         score_edit->setMinimumHeight(base_height);
         score_edit->setAlignment(Qt::AlignCenter);
         score_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -266,7 +267,7 @@ public:
         max_combo = new QComboBox(Finder);
         max_combo->setView(new QListView());
         max_combo->view()->setFont(font);
-        max_combo->setMinimumWidth(desktop_width / 24.6);
+        max_combo->setMinimumWidth(screen_width / 24.6);
         max_combo->setMinimumHeight(base_height);
         max_combo->setEditable(true);
         max_combo->lineEdit()->setReadOnly(true);
@@ -295,7 +296,7 @@ public:
         counter_offset_label = new QLabel(Finder);
         counter_offset_label->setProperty("style", "border");
         counter_offset_label->setFont(font);
-        counter_offset_label->setMinimumWidth(desktop_width / 25.6);
+        counter_offset_label->setMinimumWidth(screen_width / 25.6);
         counter_offset_label->setMinimumHeight(base_height);
         counter_offset_label->setAlignment(Qt::AlignCenter);
         counter_offset_label->setText("0");
@@ -304,7 +305,7 @@ public:
         counter_total_label = new QLabel(Finder);
         counter_total_label->setProperty("style", "border");
         counter_total_label->setFont(font);
-        counter_total_label->setMinimumWidth(desktop_width / 25.6);
+        counter_total_label->setMinimumWidth(screen_width / 25.6);
         counter_total_label->setMinimumHeight(base_height);
         counter_total_label->setAlignment(Qt::AlignCenter);
         counter_total_label->setText("0");
@@ -332,9 +333,9 @@ public:
         layout->addWidget(max_combo);
         layout->addWidget(request_button);
         layout->addWidget(counter_offset_label);
-        layout->addSpacing(desktop_width / 480);
+        layout->addSpacing(screen_width / 480);
         layout->addWidget(counter_total_label);
-        layout->addSpacing(desktop_width / 480);
+        layout->addSpacing(screen_width / 480);
         layout->addWidget(request_offset_button);
 
         Finder->setLayout(layout);
@@ -351,9 +352,9 @@ public:
 
     void setupUi(QWidget *View)
     {
-        int desktop_width = QApplication::desktop()->screenGeometry().width();
-        int desktop_height = QApplication::desktop()->screenGeometry().height();
-        int base_space = (desktop_width / 384);
+        const int screen_width = QGuiApplication::primaryScreen()->availableGeometry().width();
+        const int screen_height = QGuiApplication::primaryScreen()->availableGeometry().height();
+        int base_space = (screen_width / 384);
 
         scroll_widget = new QWidget(View);
 
@@ -376,8 +377,8 @@ public:
         layout->setSpacing(base_space);
         layout->addWidget(scroll_area);
 
-        View->setMinimumHeight(desktop_height / 1.125);
-        View->setMaximumHeight(desktop_height / 1.125);
+        View->setMinimumHeight(screen_height / 1.125);
+        View->setMaximumHeight(screen_height / 1.125);
         View->setLayout(layout);
     }
 };
@@ -411,34 +412,34 @@ public:
 
     void setupUi(QWidget *Bulletin)
     {
-        int desktop_width = QApplication::desktop()->screenGeometry().width();
-        int desktop_height = QApplication::desktop()->screenGeometry().height();
-        int base_height = (desktop_height / 30.85);
-        int base_size = (desktop_width / 160);
-        int base_margin = (desktop_width / 240);
-        int base_space = (desktop_width / 384);
+        const int screen_width = QGuiApplication::primaryScreen()->availableGeometry().width();
+        const int screen_height = QGuiApplication::primaryScreen()->availableGeometry().height();
+        int base_height = (screen_height / 30.85);
+        int base_size = (screen_width / 160);
+        int base_margin = (screen_width / 240);
+        int base_space = (screen_width / 384);
 
         QFont font(":/font-default");
-        font.setPointSize(desktop_width / 174.5);
+        font.setPointSize(screen_width / 174.5);
 
         number_label = new QLabel(Bulletin);
         number_label->setProperty("style", "gray-dark-bg");
         number_label->setFont(font);
-        number_label->setMinimumWidth(desktop_width / 25.6);
+        number_label->setMinimumWidth(screen_width / 25.6);
         number_label->setMinimumHeight(base_height);
         number_label->setAlignment(Qt::AlignCenter);
 
         published_label = new QLabel(Bulletin);
         published_label->setProperty("style", "gray-bg");
         published_label->setFont(font);
-        published_label->setMinimumWidth(desktop_width / 16.5);
+        published_label->setMinimumWidth(screen_width / 16.5);
         published_label->setMinimumHeight(base_height);
         published_label->setAlignment(Qt::AlignCenter);
 
         title_label = new CustomLabel(Bulletin);
         title_label->setProperty("style", "custom-bg");
         title_label->setFont(font);
-        title_label->setMinimumWidth(desktop_width / 9.51);
+        title_label->setMinimumWidth(screen_width / 9.51);
         title_label->setMinimumHeight(base_height);
         title_label->setMargin(base_margin);
         title_label->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -447,7 +448,7 @@ public:
         score_label = new QLabel(Bulletin);
         score_label->setProperty("style", "score-low");
         score_label->setFont(font);
-        score_label->setMinimumWidth(desktop_width / 25.6);
+        score_label->setMinimumWidth(screen_width / 25.6);
         score_label->setMinimumHeight(base_height);
         score_label->setAlignment(Qt::AlignCenter);
 
@@ -540,8 +541,8 @@ public:
         source_label->setHidden(true);
 
         source_details_button = new QPushButton(QIcon(":/icon-source-more"), NULL, Bulletin);
-        source_details_button->setIconSize(QSize(base_size, (desktop_height / 60)));
-        source_details_button->setMinimumSize(QSize(base_size, (desktop_height / 60)));
+        source_details_button->setIconSize(QSize(base_size, (screen_height / 60)));
+        source_details_button->setMinimumSize(QSize(base_size, (screen_height / 60)));
         source_details_button->setFlat(true);
         source_details_button->setHidden(true);
 
@@ -560,7 +561,7 @@ public:
         source_text = new QTextEdit(Bulletin);
         source_text->setProperty("style", "source");
         source_text->setFont(font);
-        source_text->setMinimumHeight(desktop_height / 1.155);
+        source_text->setMinimumHeight(screen_height / 1.155);
         source_text->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         source_text->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         source_text->setReadOnly(true);
@@ -569,9 +570,9 @@ public:
         highlighter = new Highlighter(source_text->document());
 
         source_save_button = new QPushButton(QIcon(":/icon-save"), NULL, source_text);
-        source_save_button->setIconSize(QSize((desktop_width / 96), (desktop_width / 96)));
-        source_save_button->setMaximumWidth(desktop_width / 96);
-        source_save_button->move((desktop_width / 1.2590), base_space);
+        source_save_button->setIconSize(QSize((screen_width / 96), (screen_width / 96)));
+        source_save_button->setMaximumWidth(screen_width / 96);
+        source_save_button->move((screen_width / 1.2590), base_space);
         source_save_button->setFlat(true);
         source_save_button->setToolTip("SAVE");
 
@@ -585,7 +586,7 @@ public:
         layout = new QGridLayout(Bulletin);
         layout->setMargin(0);
         layout->setHorizontalSpacing(base_space);
-        layout->setVerticalSpacing(desktop_height / 72);
+        layout->setVerticalSpacing(screen_height / 72);
         layout->setColumnStretch(2, 1);
         layout->addWidget(number_label, 0, 0, 1, 1);
         layout->addWidget(published_label, 0, 1, 1, 1);
@@ -600,8 +601,8 @@ public:
         layout->addWidget(href_label, 6, 2, 1, 1);
         layout->addLayout(source_layout, 7, 2, 1, 1);
 
-        Bulletin->setMinimumWidth(desktop_width / 1.0105);
-        Bulletin->setMaximumWidth(desktop_width / 1.0105);
+        Bulletin->setMinimumWidth(screen_width / 1.0105);
+        Bulletin->setMaximumWidth(screen_width / 1.0105);
         Bulletin->setLayout(layout);
     }
 };
