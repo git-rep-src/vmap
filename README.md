@@ -1,8 +1,8 @@
 # VMAP
 
-A Vulnerability-Exploit desktop finder.
+A Vulnerability-Exploit desktop finder
 
-![alt tag](https://image.ibb.co/nK2ppv/vmap.png)
+![](https://image.ibb.co/nK2ppv/vmap.png)
 
 ## INSTALLATION
 
@@ -29,9 +29,9 @@ pacman -S vmap # Blackarch
 
 ### CONFIGURATION
 
-Vmap require a API Key from [vulners](https://vulners.com/api/v3/).
+Vmap require a API Key from [vulners](https://vulners.com/api/v3/)
 
 ```shell
-echo <YOUR-API-KEY> > ~/.vmap
+echo <API-KEY> > ~/.vmap
 ```
 
