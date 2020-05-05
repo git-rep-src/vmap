@@ -1,10 +1,10 @@
 #include "vmap.h"
 
-#include <string>
-#include <iostream>
-
 #include <QApplication>
 #include <QFile>
+
+#include <string>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
          (argv[1] == std::string("--version")))) {
         std::cout << std::endl;
         std::cout << "A Vulnerability-Exploit desktop finder (https://gitlab.com/git-rep/vmap)" << std::endl;
-        std::cout << "Version 0.4" << std::endl;
+        std::cout << "Version 0.5" << std::endl;
         std::cout << std::endl;
         return 0;
     }
