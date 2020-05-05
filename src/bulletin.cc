@@ -1,11 +1,11 @@
 #include "bulletin.h"
 
+#include <QDir>
+#include <QDesktopServices>
+
 #include <fstream>
 #include <sstream>
 #include <regex>
-
-#include <QDir>
-#include <QDesktopServices>
 
 Bulletin::Bulletin(bool has_cpe, bool has_source, QWidget *parent) :
     QWidget(parent),
@@ -175,20 +175,203 @@ void Bulletin::set_cvss(std::string cvss)
 {
     std::size_t n;
 
-    if ((n = cvss.std::string::find("AV:")) != std::string::npos)
-        cvss.std::string::replace(n, 3, "<span style=color:#a5a5a5>VECTOR</span> ");
-    if ((n = cvss.std::string::find("/AC:")) != std::string::npos)
-        cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> ");
-    if ((n = cvss.std::string::find("/Au:")) != std::string::npos)
-        cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> ");
-    if ((n = cvss.std::string::find("/C:")) != std::string::npos)
-        cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
-    if ((n = cvss.std::string::find("/I:")) != std::string::npos)
-        cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> ");
-    if ((n = cvss.std::string::find("/A:")) != std::string::npos)
-        cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> ");
+    if ((n = cvss.std::string::find("AV:L")) != std::string::npos) {
+        if (cvss.std::string::find("AV:LOCAL") != std::string::npos)
+            cvss.std::string::replace(n, 3, "<span style=color:#a5a5a5>VECTOR</span> ");
+        else
+            cvss.std::string::replace(n, 4, "<span style=color:#a5a5a5>VECTOR</span> LOCAL");
+    } else if ((n = cvss.std::string::find("AV:A")) != std::string::npos) {
+        if (cvss.std::string::find("AV:ADJACENT NETWORK") != std::string::npos)
+            cvss.std::string::replace(n, 19, "<span style=color:#a5a5a5>VECTOR</span> ADJACENT");
+        else if (cvss.std::string::find("AV:ADJACENT") != std::string::npos)
+            cvss.std::string::replace(n, 3, "<span style=color:#a5a5a5>VECTOR</span> ");
+        else
+            cvss.std::string::replace(n, 4, "<span style=color:#a5a5a5>VECTOR</span> ADJACENT");
+    } else if ((n = cvss.std::string::find("AV:N")) != std::string::npos) {
+        if (cvss.std::string::find("AV:NETWORK") != std::string::npos)
+            cvss.std::string::replace(n, 3, "<span style=color:#a5a5a5>VECTOR</span> ");
+        else
+            cvss.std::string::replace(n, 4, "<span style=color:#a5a5a5>VECTOR</span> NETWORK");
+    } else if ((n = cvss.std::string::find("AV:P")) != std::string::npos) {
+        if (cvss.std::string::find("AV:PHYSICAL") != std::string::npos)
+            cvss.std::string::replace(n, 3, "<span style=color:#a5a5a5>VECTOR</span> ");
+        else
+            cvss.std::string::replace(n, 4, "<span style=color:#a5a5a5>VECTOR</span> PHYSICAL");
+    } else if ((n = cvss.std::string::find("AV:U")) != std::string::npos) {
+        if (cvss.std::string::find("AV:UNKNOWN") != std::string::npos)
+            cvss.std::string::replace(n, 3, "<span style=color:#a5a5a5>VECTOR</span> ");
+        else
+            cvss.std::string::replace(n, 4, "<span style=color:#a5a5a5>VECTOR</span> UNKNOWN");
+    }
+    if ((n = cvss.std::string::find("/AC:L")) != std::string::npos) {
+        if (cvss.std::string::find("/AC:LOW") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> LOW");
+    } else if ((n = cvss.std::string::find("/AC:M")) != std::string::npos) {
+        if (cvss.std::string::find("/AC:MEDIUM") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> MEDIUM");
+    } else if ((n = cvss.std::string::find("/AC:H")) != std::string::npos) {
+        if (cvss.std::string::find("/AC:HIGH") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> HIGH");
+    } else if ((n = cvss.std::string::find("/AC:U")) != std::string::npos) {
+        if (cvss.std::string::find("/AC:UNKNOWN") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>COMPLEXITY</span> UNKNOWN");
+    }
+    if ((n = cvss.std::string::find("/Au:N")) != std::string::npos) {
+        if (cvss.std::string::find("/Au:NONE") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> NONE");
+    } else if ((n = cvss.std::string::find("/Au:S")) != std::string::npos) {
+        if (cvss.std::string::find("/Au:SINGLE") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> SINGLE");
+    } else if ((n = cvss.std::string::find("/Au:M")) != std::string::npos) {
+        if (cvss.std::string::find("/Au:MULTIPLE") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> MULTIPLE");
+    } else if ((n = cvss.std::string::find("/Au:L")) != std::string::npos) {
+        if (cvss.std::string::find("/Au:LOW") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> LOW");
+    } else if ((n = cvss.std::string::find("/Au:H")) != std::string::npos) {
+        if (cvss.std::string::find("/Au:HIGH") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> HIGH");
+    } else if ((n = cvss.std::string::find("/Au:U")) != std::string::npos) {
+        if (cvss.std::string::find("/Au:UNKNOWN") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> ");
+        else        
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>AUTHENTICATION</span> UNKNOWN");
+    }
+    if ((n = cvss.std::string::find("/PR:N")) != std::string::npos) {
+        if (cvss.std::string::find("/PR:NONE") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>PRIVILEGES</span> ");
+        else
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>PRIVILEGES</span> NONE");
+    } else if ((n = cvss.std::string::find("/PR:L")) != std::string::npos) {
+        if (cvss.std::string::find("/PR:LOW") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>PRIVILEGES</span> ");
+        else
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>PRIVILEGES</span> LOW");
+    } else if ((n = cvss.std::string::find("/PR:H")) != std::string::npos) {
+        if (cvss.std::string::find("/PR:HIGH") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>PRIVILEGES</span> ");
+        else
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>PRIVILEGES</span> HIGH");
+    } else if ((n = cvss.std::string::find("/PR:U")) != std::string::npos) {
+        if (cvss.std::string::find("/PR:UNKNOWN") != std::string::npos)
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>PRIVILEGES</span> ");
+        else
+            cvss.std::string::replace(n, 5, "&nbsp;&nbsp;<span style=color:#a5a5a5>PRIVILEGES</span> UNKNOWN");
+    }
+    if ((n = cvss.std::string::find("/C:N")) != std::string::npos) {
+        if (cvss.std::string::find("/C:NONE") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> NONE");
+    } else if ((n = cvss.std::string::find("/C:P")) != std::string::npos) {
+        if (cvss.std::string::find("/C:PARTIAL") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> PARTIAL");
+    } else if ((n = cvss.std::string::find("/C:C")) != std::string::npos) {
+        if (cvss.std::string::find("/C:COMPLETE") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> COMPLETE");
+    } else if ((n = cvss.std::string::find("/C:L")) != std::string::npos) {
+        if (cvss.std::string::find("/C:LOW") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> LOW");
+    } else if ((n = cvss.std::string::find("/C:H")) != std::string::npos) {
+        if (cvss.std::string::find("/C:HIGH") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> HIGH");
+    } else if ((n = cvss.std::string::find("/C:U")) != std::string::npos) {
+        if (cvss.std::string::find("/C:UNKNOWN") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>CONFIDENTIALITY</span> UNKNOWN");
+    }
+    if ((n = cvss.std::string::find("/I:N")) != std::string::npos) {
+        if (cvss.std::string::find("/I:NONE") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> NONE");
+    } else if ((n = cvss.std::string::find("/I:P")) != std::string::npos) {
+        if (cvss.std::string::find("/I:PARTIAL") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> PARTIAL");
+    } else if ((n = cvss.std::string::find("/I:C")) != std::string::npos) {
+        if (cvss.std::string::find("/I:COMPLETE") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> COMPLETE");
+    } else if ((n = cvss.std::string::find("/I:L")) != std::string::npos) {
+        if (cvss.std::string::find("/I:LOW") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> LOW");
+    } else if ((n = cvss.std::string::find("/I:H")) != std::string::npos) {
+        if (cvss.std::string::find("/I:HIGH") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> HIGH");
+    } else if ((n = cvss.std::string::find("/I:U")) != std::string::npos) {
+        if (cvss.std::string::find("/I:UNKNOWN") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>INTEGRITY</span> UNKNOWN");
+    }
+    if ((n = cvss.std::string::find("/A:N")) != std::string::npos) {
+        if (cvss.std::string::find("/A:NONE") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> NONE");
+    } else if ((n = cvss.std::string::find("/A:P")) != std::string::npos) {
+        if (cvss.std::string::find("/A:PARTIAL") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> PARTIAL");
+    } else if ((n = cvss.std::string::find("/A:C")) != std::string::npos) {
+        if (cvss.std::string::find("/A:COMPLETE") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> COMPLETE");
+    } else if ((n = cvss.std::string::find("/A:L")) != std::string::npos) {
+        if (cvss.std::string::find("/A:LOW") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> LOW");
+    } else if ((n = cvss.std::string::find("/A:H")) != std::string::npos) {
+        if (cvss.std::string::find("/A:HIGH") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> HIGH");
+    } else if ((n = cvss.std::string::find("/A:U")) != std::string::npos) {
+        if (cvss.std::string::find("/A:UNKNOWN") != std::string::npos)
+            cvss.std::string::replace(n, 3, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> ");
+        else
+            cvss.std::string::replace(n, 4, "&nbsp;&nbsp;<span style=color:#a5a5a5>AVAILABILITY</span> UNKNOWN");
+    }
     if ((n = cvss.std::string::rfind("/")) != std::string::npos)
-        cvss.std::string::erase(n, 1);
+        if (n == (cvss.std::string::length() - 1))
+            cvss.std::string::erase(n, 1);
 
     ui->cvss_label->setText(ui->cvss_label->text() + QString::fromStdString(cvss));
 }
