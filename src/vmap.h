@@ -6,9 +6,9 @@
 #include "view.h"
 #include "net.h"
 
-#include <string>
-
 #include <QTimer>
+
+#include <string>
 
 namespace Ui {
 class Vmap;

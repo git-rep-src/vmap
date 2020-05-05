@@ -1,10 +1,10 @@
 #include "vmap.h"
 
-#include <fstream>
-#include <sstream>
-
 #include <unistd.h>
 #include <pwd.h>
+
+#include <fstream>
+#include <sstream>
 
 Vmap::Vmap(QWidget *parent) :
     QWidget(parent),
@@ -41,7 +41,7 @@ Vmap::Vmap(QWidget *parent) :
     });
 
     ui->layout->addWidget(finder);
-    ui->layout->addSpacing(QApplication::desktop()->screenGeometry().height() / 30.85);
+    ui->layout->addSpacing(QGuiApplication::primaryScreen()->availableGeometry().height() / 30.85);
     ui->layout->addWidget(view);
     ui->layout->addStretch();
     ui->layout->addWidget(ui->status_label);
